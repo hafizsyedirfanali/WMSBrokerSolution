@@ -1,7 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WMSBrokerProject.Models;
 
-namespace WMSBrokerProject.Models
+namespace WMSBrokerProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
