@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="json.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Controllers\" />
   </ItemGroup>
 

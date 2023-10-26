@@ -1,4 +1,6 @@
-﻿namespace WMSBrokerProject.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WMSBrokerProject.Models;
 
 public class TaskIndicationRequestModel
 {
