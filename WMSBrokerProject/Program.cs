@@ -1,8 +1,11 @@
+using WMSBrokerProject.Interfaces;
+using WMSBrokerProject.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddTransient<IGoEfficientService, GoEfficientServiceImplementation>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
