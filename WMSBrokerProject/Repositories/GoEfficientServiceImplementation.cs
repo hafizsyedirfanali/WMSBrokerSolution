@@ -774,14 +774,14 @@ namespace WMSBrokerProject.Repositories
                 string? requestUri = _configuration.GetSection("GoEfficient:EndPointUrl").Value;
 
                 string xmlRequest6 = @$"<Request>
-                                        {GetXMLHeader(model.AanvraagId)}
+                                        {GetXMLHeader(model.InId)}
                                         <Body>
                                             <ReadOperation>
                                                 <Fields>
                                                     <Field>PRO.PRO_ID</Field>
                                                 </Fields>
                                                 <Conditions>
-                                                    <Condition RightVariableType=""LiteralValue"" RightValue=""{model.AanvraagId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_PATH""/>
+                                                    <Condition RightVariableType=""LiteralValue"" RightValue=""{model.InId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_PATH""/>
                                                     <Condition RightVariableType=""LiteralValue"" RightValue=""1533"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_UDF_ID""/>
                                                     <Condition RightVariableType=""LiteralValue"" RightValue=""(0)"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""PRO.PRO_PASSIVE_EFF""/>
                                                 </Conditions>
@@ -852,156 +852,5 @@ namespace WMSBrokerProject.Repositories
         }
     }
 
-    public class DumpCode
-    {
-        public void Test()
-        {
-            #region StaticCode
-            ////Object Id
-            //var objectIDRow = xdoc.Descendants("Row")
-            //            .FirstOrDefault(row => row.Elements("Value")
-            //                                      .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.ObjectId.Right));
-            //if(objectIDRow is not null)
-            //{
-            //    template.ObjectId = objectIDRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.ObjectId = res2Mapping.ObjectId.Right;
-            //}
-            ////AanvraagId
-            //var aanvraagIdRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.AanvraagId.Right));
-            //if (aanvraagIdRow is not null)
-            //{
-            //    template.AanvraagId = aanvraagIdRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.AanvraagId = res2Mapping.AanvraagId.Right;
-            //}
-            ////TelefoonnummerMobiel
-            //var telefoonnummerMobielRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.TelefoonnummerMobiel.Right));
-            //if (telefoonnummerMobielRow is not null)
-            //{
-            //    template.TelefoonnummerMobiel = telefoonnummerMobielRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.TelefoonnummerMobiel = res2Mapping.TelefoonnummerMobiel.Right;
-            //}
-            ////Voorletters
-            //var voorlettersRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.Voorletters.Right));
-            //if (voorlettersRow is not null)
-            //{
-            //    template.Voorletters = voorlettersRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.Voorletters = res2Mapping.Voorletters.Right;
-            //}
-            ////Tussenvoegsels
-            //var tussenvoegselsRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.Tussenvoegsels.Right));
-            //if (tussenvoegselsRow is not null)
-            //{
-            //    template.Tussenvoegsels = tussenvoegselsRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.Tussenvoegsels = res2Mapping.Tussenvoegsels.Right;
-            //}
-            ////Achternaam
-            // var achternaamRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.Achternaam.Right));
-            //if (achternaamRow is not null)
-            //{
-            //    template.Achternaam = achternaamRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.Achternaam = res2Mapping.Achternaam.Right;
-            //}
-            ////Emailadres
-            //var emailadresRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.Emailadres.Right));
-            //if (emailadresRow is not null)
-            //{
-            //    template.Emailadres = emailadresRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.Emailadres = res2Mapping.Emailadres.Right;
-            //}
-            ////AanvraagDatum
-            //var aanvraagDatumRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.AanvraagDatum.Right));
-            //if (aanvraagDatumRow is not null)
-            //{
-            //    template.AanvraagDatum = aanvraagDatumRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.AanvraagDatum = res2Mapping.AanvraagDatum.Right;
-            //}
-            ////WensJaar
-            //var wensJaarRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.WensJaar.Right));
-            //if (wensJaarRow is not null)
-            //{
-            //    template.WensJaar = wensJaarRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.WensJaar = res2Mapping.WensJaar.Right;
-            //}
-            ////WensWeek
-            //var wensWeekRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.WensWeek.Right));
-            //if (wensWeekRow is not null)
-            //{
-            //    template.WensWeek = wensWeekRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.WensWeek = res2Mapping.WensWeek.Right;
-            //}
-            ////ObjectType
-            //var objectTypeRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.ObjectType.Right));
-            //if (objectTypeRow is not null)
-            //{
-            //    template.ObjectType = objectTypeRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.ObjectType = res2Mapping.ObjectType.Right;
-            //}
-            ////Plaats
-            //var plaatsRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.Plaats.Right));
-            //if (plaatsRow is not null)
-            //{
-            //    template.Plaats = plaatsRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.Plaats = res2Mapping.Plaats.Right;
-            //}
-            ////Postcode
-            //var postcodeRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.Postcode.Right));
-            //if (postcodeRow is not null)
-            //{
-            //    template.Postcode = postcodeRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.Postcode = res2Mapping.Postcode.Right;
-            //}
-            ////Huisnummer
-            //var huisnummerRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.Huisnummer.Right));
-            //if (huisnummerRow is not null)
-            //{
-            //    template.Huisnummer = huisnummerRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template.Huisnummer = res2Mapping.Huisnummer.Right;
-            //}
-            //// HuisnummerToevoeging
-            //var huisnummerToevoegingRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.HuisnummerToevoeging.Right));
-            //if (huisnummerToevoegingRow is not null)
-            //{
-            //    template.HuisnummerToevoeging = huisnummerToevoegingRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template. HuisnummerToevoeging = res2Mapping. HuisnummerToevoeging.Right;
-            //}
-            //// Straat
-            //var StraatRow = xdoc.Descendants("Row")
-            //           .FirstOrDefault(row => row.Elements("Value")
-            //                                     .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" && e.Value == res2Mapping.Straat.Right));
-            //if (StraatRow is not null)
-            //{
-            //    template.Straat = StraatRow.Elements("Value").FirstOrDefault(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME")?.Value;
-            //    //template. Straat = res2Mapping. Straat.Right;
-            //}
-            #endregion
-        }
-    }
+   
 }
