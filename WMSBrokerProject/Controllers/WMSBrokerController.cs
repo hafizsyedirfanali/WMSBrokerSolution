@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.IO.Pipelines;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
 
@@ -45,8 +46,13 @@ namespace WMSBrokerProject.Controllers
                     {
                         InId = inId
                     }).ConfigureAwait(false);
+					if (!responseREQ6.IsSuccess) { }
+					if (!responseREQ6.Result.IsRecordExist)
+					{
 
-                }
+                    }
+                    
+				}
             }
 
             ///Request 3 onwardas
