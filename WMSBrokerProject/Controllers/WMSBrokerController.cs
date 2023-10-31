@@ -20,17 +20,15 @@ namespace WMSBrokerProject.Controllers
         [HttpPost]
         public async Task<IActionResult> BeginProcess([FromBody] TaskIndicationRequestModel model)
         {
+            ///Request 1 
             if(model is null || string.IsNullOrEmpty(model.inId))
             {
                 return BadRequest("The 'inId' is required.");
             }
 
             inId = model.inId;
-            return Ok();
-        }
-        [HttpGet]
-        public async Task<IActionResult> TaskFetch()
-        {
+
+            ///Request 2
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
@@ -51,7 +49,13 @@ namespace WMSBrokerProject.Controllers
                 }
             }
 
+            ///Request 3 onwardas
+
+
+
+
             return Ok();
         }
+        
     }
 }
