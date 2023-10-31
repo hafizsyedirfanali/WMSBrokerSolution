@@ -45,7 +45,13 @@ namespace WMSBrokerProject.Controllers
         [SwaggerOperation("TaskFetch")]
         [SwaggerResponse(statusCode: 200, type: typeof(TaskType), description: "Success")]
         [SwaggerResponse(statusCode: 400, type: typeof(string), description: "Bad Request")]
-        public virtual IActionResult TaskFetch([FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId, [FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId, [FromHeader][StringLength(36, MinimumLength = 1)] string xRequestID, [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID, [FromHeader] bool? xWMSTest, [FromHeader][StringLength(8, MinimumLength = 1)] string xWMSAPIVersion)
+        public virtual IActionResult TaskFetch(
+            [FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId, 
+            [FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId, 
+            [FromHeader][StringLength(36, MinimumLength = 1)] string xRequestID, 
+            [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID, 
+            [FromHeader] bool? xWMSTest, 
+            [FromHeader][StringLength(8, MinimumLength = 1)] string xWMSAPIVersion)
         {
             #region Circet_Implementation
             string strFinLogMemo = "", strError = "";

@@ -16,9 +16,9 @@ namespace WMSBrokerProject.Controllers
         {
             this.goEfficientService = goEfficientService;
         }
-
+        [Route("TaskIndication")]
         [HttpPost]
-        public async Task<IActionResult> TaskIndication([FromBody] TaskIndicationRequestModel model)
+        public async Task<IActionResult> BeginProcess([FromBody] TaskIndicationRequestModel model)
         {
             if(model is null || string.IsNullOrEmpty(model.inId))
             {
