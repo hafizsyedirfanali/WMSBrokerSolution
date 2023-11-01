@@ -1,13 +1,36 @@
 {
   "Actions": {
-    "Action1": {
-      "InID": "InIDValue1",
-      "HuurderId": "HuurderIdValue1"
+    "FULL": {
+      "HuurderId": "1462"
     },
-    "Action2": {
-      "InID": "InIDValue2",
-      "HuurderId": "HuurderIdValue2"
+    "PATCH": {
+      "HuurderId": "1462"
+    },
+    "CONNECTION_INCIDENT": {
+      "HuurderId": "1462"
+    },
+    "PORT_MIGRATION": {
+      "HuurderId": "1462"
+    },
+    "NEW_CONNECTION": {
+      "HuurderId": "1462"
+    },
+    "AFTER_CONNECT": {
+      "HuurderId": "1462"
+    },
+    "FTU_REPLACEMENT": {
+      "HuurderId": "1462"
+    },
+    "FTU_DISPLACEMENT": {
+      "HuurderId": "1462"
+    },
+    "NETWORK_INCIDENT": {
+      "HuurderId": "1462"
+    },
+    "TELCO_MIGRATION": {
+      "HuurderId": "1462"
     }
+
     // Add more action types as needed
   }
 }

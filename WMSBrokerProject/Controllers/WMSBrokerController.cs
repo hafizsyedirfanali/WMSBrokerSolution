@@ -52,7 +52,7 @@ namespace WMSBrokerProject.Controllers
 					_actionOptions.Value.TryGetValue(taskFetchResponse.action, out var actionConfiguration);
                     var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
                     {
-                        InId = inId,
+                        InId = taskFetchResponse.inId,
 						HuurderId = actionConfiguration.HuurderId
                     }).ConfigureAwait(false);
 					if (!responseREQ6.IsSuccess) { }
@@ -68,7 +68,7 @@ namespace WMSBrokerProject.Controllers
 						var houseNumberSuffix = "";
 						var res4Result = await goEfficientService.REQ4_GetProIDAsync(new Models.REQ4Model
 						{
-							InId = inId,
+							InId = taskFetchResponse.inId,
 							CityName = cityName != null ? cityName.ToString()! : "",
 							StreetName = street != null ? street.ToString()! : "",
 							HouseNumber = houseNumber != null ? houseNumber.ToString()! : "",
@@ -87,7 +87,7 @@ namespace WMSBrokerProject.Controllers
 						///Here we have to pass the responseGoEfficientFileAttr
 						var res4aResult = await goEfficientService.REQ4a_GetTemplateFromGoEfficient(new Models.REQ4aModel
 						{
-							InId = inId,
+							InId = taskFetchResponse.inId,
 							ProId = proId,
 							Username = "",
 							Password = "",
@@ -113,7 +113,7 @@ namespace WMSBrokerProject.Controllers
 						{
 							Username = "",
 							Password = "",
-							InId = inId,
+							InId = taskFetchResponse.inId,
 							PRO_ID_3 = proId,
 							RES4aTemplate = responseFilledDataResult.Result,
 							GoEfficientTemplateValues = goEfficientTemplateValues
@@ -128,7 +128,7 @@ namespace WMSBrokerProject.Controllers
 							#region REQ5a RHS Save Addresses
 							var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
 							{
-								InId = inId,
+								InId = taskFetchResponse.inId,
 								PRO_ID_3 = proId,
 								Username = "",
 								Password = "",

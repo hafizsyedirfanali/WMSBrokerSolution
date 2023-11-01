@@ -1,0 +1,35 @@
+{
+  "GoEfficient": {
+    "EndPointUrl": "http://10.10.1.50/GoEfficientWebService/XMLInterface.aspx"
+    //"EndPointUrl": ""
+  },
+  //Don't use colon : in keys
+  //Destination : Mapping Name
+  "GoEfficientAttributes": {
+    "MA.nl-ObjectID": "ObjectId",
+    "MA.nl-AanvraagID": "AanvraagID",
+    "Naam-aanvrager": "Naam-aanvrager",
+    "Mobiel aanvrager": "TelefoonnummerMobiel",
+    "E-mail aanvrager": "Emailadres",
+    "Datum aanvraag ontvangen": "AanvraagDatum",
+    "Aanvraag ontvangen via?": "RequestReceived",
+    "Wensdatum": "WensJaar",
+    "Betreft het een Hoog Laag of een Duplex woning?": "ObjectType",
+    "plattegrond": "plattegrond",
+    "situatieschets": "situatieschets",
+    "AanvragPDF": "AANSLUITING.NL OPDRACHT",
+    "ADRESS.ADRESS_TOWN": "Plaats",
+    "ADRESS.ADRESS_ZIPCODE": "Postcode",
+    "ADRESS.ADRESS_HOUSNR": "Huisnummer",
+    "ADRESS.ADRESS_HOUSNR_SFX": "HuisnummerToevoeging",
+    "ADRESS.ADRESS_STREET": "Straat"
+  },
+  "GoEfficientCredentials": {
+    "Username": "P2ALinker",
+    "Password": "9u!b[YY_q",
+    "Culture": "nl-nl",
+    "DataserverName": "gotst",
+    "Server": "10.10.1.50"
+  }
+}
+

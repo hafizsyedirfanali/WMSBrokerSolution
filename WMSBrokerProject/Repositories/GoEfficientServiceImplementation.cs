@@ -377,13 +377,13 @@ namespace WMSBrokerProject.Repositories
 
 
                 xmlRequest4 = $@"<Request>
-                                     {GetXMLHeader(model.AanvraagId)}
+                                     {GetXMLHeader(model.InId)}
                                      <Body>
                                          <CreateOperation>
                                              <OperationName>PRO_CREATE_TREE_FROM_TEMPL</OperationName>
                                              <Values>
                                                  <Value FieldName=""PRO.PRO_ID"">6744412</Value>
-                                                 <Value FieldName=""Indicator"">{year};{year_week};{model.CityName} {model.StreetName} {model.HouseNumber} {houseNumberSuffix}{model.ZipCode} {model.AanvraagId}</Value>
+                                                 <Value FieldName=""Indicator"">{year};{year_week};{model.CityName} {model.StreetName} {model.HouseNumber} {houseNumberSuffix}{model.ZipCode} {model.InId}</Value>
                                                  <Value FieldName=""Indicator2"">6999459;6999459;9244608</Value>
                                                  <Value FieldName=""Indicator3"">P</Value>
                                              </Values>
@@ -447,7 +447,7 @@ namespace WMSBrokerProject.Repositories
 
                 string xmlRequest4a = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
                                         <Request>
-	                                        {GetXMLHeader(model.AanvraagId)}
+	                                        {GetXMLHeader(model.InId)}
 	                                        <Body>
 		                                        <ReadOperation>
 			                                        <Fields>
@@ -587,7 +587,7 @@ namespace WMSBrokerProject.Repositories
                 valueText += @"<Value FieldName=""Aanvraag ontvangen via?"">Aansluitingen.nl</Value>";
                 string xmlRequest5 = $@"<?xml version=""1.0"" encoding=""utf-8""?>
                                         <Request>
-	                                        {GetXMLHeader(model.AanvraagId)}
+	                                        {GetXMLHeader(model.InId)}
 	                                        <Body>
 		                                        <UpdateOperation>
 			                                        <OperationName>PRO_FIN_UPDATE</OperationName>
@@ -658,7 +658,7 @@ namespace WMSBrokerProject.Repositories
 
                 string xmlRequest5a = @$"<?xml version=""1.0"" encoding=""utf-8""?>
                             <Request>
-	                            {GetXMLHeader(model.AanvraagId)}
+	                            {GetXMLHeader(model.InId)}
 	                            <Body>
 		                            <UpdateOperation>
 			                            <OperationName>FIN_UPDATE_V1</OperationName>
@@ -825,14 +825,14 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-        private string GetXMLHeader(string aanvraagId)
+        private string GetXMLHeader(string ind)
         {
             return $@"<Header>
                         <User>{goEfficientCredentials.Username}</User>
                         <PassWord>{goEfficientCredentials.Password}</PassWord>
                         <Culture>{goEfficientCredentials.Culture}</Culture>
 		                <DataserverName>{goEfficientCredentials.DataserverName}</DataserverName>
-                        <RequestId>{aanvraagId}</RequestId>
+                        <RequestId>{ind}</RequestId>
                         <ContinueOnError>true</ContinueOnError>
                     </Header>";
         }
