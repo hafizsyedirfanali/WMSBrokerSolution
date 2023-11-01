@@ -2,7 +2,7 @@
 {
     public class REQ5Model
     {
-        public string AanvraagId { get; set; }
+        public string InId { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string DamangeType { get; set; }
