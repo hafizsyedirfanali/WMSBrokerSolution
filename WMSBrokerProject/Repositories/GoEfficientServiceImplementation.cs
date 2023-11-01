@@ -783,7 +783,7 @@ namespace WMSBrokerProject.Repositories
                                                 <Conditions>
                                                     <Condition RightVariableType=""LiteralValue"" RightValue=""{model.InId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_PATH""/>
                                                     <Condition RightVariableType=""LiteralValue"" RightValue=""{model.HuurderId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_UDF_ID""/>
-                                                    <Condition RightVariableType=""LiteralValue"" RightValue=""(0)"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""PRO.PRO_PASSIVE_EFF""/>
+                                                    <Condition RightVariableType=""LiteralValue"" RightValue=""'cifwms-huurderid'"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_NAME_L""/>
                                                 </Conditions>
                                                 <OperationName>PRO_READ_M_V1</OperationName>
                                             </ReadOperation>

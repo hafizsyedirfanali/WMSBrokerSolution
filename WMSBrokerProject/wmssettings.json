@@ -1,33 +1,53 @@
 {
   "Actions": {
     "FULL": {
+      "PRO.PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
       "HuurderId": "1462"
     },
     "PATCH": {
+      "PRO.PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
       "HuurderId": "1462"
     },
     "CONNECTION_INCIDENT": {
+      "PRO.PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
       "HuurderId": "1462"
     },
     "PORT_MIGRATION": {
+      "PRO.PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
       "HuurderId": "1462"
     },
     "NEW_CONNECTION": {
+      "PRO.PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
       "HuurderId": "1462"
     },
     "AFTER_CONNECT": {
+      "PRO.PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
       "HuurderId": "1462"
     },
     "FTU_REPLACEMENT": {
+      "PRO.PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
       "HuurderId": "1462"
     },
     "FTU_DISPLACEMENT": {
+      "PRO.PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
       "HuurderId": "1462"
     },
     "NETWORK_INCIDENT": {
+      "PRO.PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
       "HuurderId": "1462"
     },
     "TELCO_MIGRATION": {
+      "PRO.PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
       "HuurderId": "1462"
     }
 
