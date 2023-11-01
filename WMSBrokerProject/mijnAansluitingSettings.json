@@ -1,52 +1,15 @@
 {
-  "MijnAansluitingRes3aAttributes": {
-    "File": "OphalenBijlageResponse.Bijlage.File"
-  },
-  "MijnAansluitingRes4PDFAttributes": {
-    "File": "OphalenAanvraagPdfResponse.Bijlage.File",
-    "Bestandsnaam": "OphalenAanvraagPdfResponse.Bijlage.Bestandsnaam"
-  },
   //Don't use colon : in keys
   "MijnAansluitingAttributes": { //From Response2
-    "AanvraagID": "OphalenAanvraagResponse.Aanvraag.AanvraagID",
-    "Voorletters": "OphalenAanvraagResponse.Aanvraag.Aanvrager.RelatieGegevens.Persoonsgegevens.Voorletters",
-    "Tussenvoegsels": "OphalenAanvraagResponse.Aanvraag.Aanvrager.RelatieGegevens.Persoonsgegevens.Tussenvoegsels",
-    "TelefoonnummerMobiel": "OphalenAanvraagResponse.Aanvraag.ContactPersoon.TelefoonnummerMobiel",
-    "Achternaam": "OphalenAanvraagResponse.Aanvraag.Aanvrager.RelatieGegevens.Persoonsgegevens.Achternaam",
-    "Emailadres": "OphalenAanvraagResponse.Aanvraag.Aanvrager.RelatieGegevens.Emailadres",
-    "AanvraagDatum": "OphalenAanvraagResponse.Aanvraag.AanvraagDatum",
-    "Straat": "OphalenAanvraagResponse.Aanvraag.Aanvrager.RelatieGegevens.Adres.Straat",
-    "ObjectId": "OphalenAanvraagResponse.Aanvraag.AansluitObjecten[0].ObjectID",
-    "WensJaar": "OphalenAanvraagResponse.Aanvraag.AansluitObjecten[0].WensJaar",
-    "WensWeek": "OphalenAanvraagResponse.Aanvraag.AansluitObjecten[0].WensWeek",
-    //"ObjectType": "OphalenAanvraagResponse.Aanvraag.AansluitObjecten[0].ObjectType",
-    "Plaats": "OphalenAanvraagResponse.Aanvraag.AansluitObjecten[0].Adres.Plaats",
-    "Postcode": "OphalenAanvraagResponse.Aanvraag.AansluitObjecten[0].Adres.Postcode",
-    "Huisnummer": "OphalenAanvraagResponse.Aanvraag.AansluitObjecten[0].Adres.Huisnummer",
-    "HuisnummerToevoeging": "OphalenAanvraagResponse.Aanvraag.AansluitObjecten[0].Adres.HuisnummerToevoeging"
-  },
-  "Aantal_aansluitingen": "OphalenAanvraagResponse.Aanvraag.AansluitObjecten[0]", //It is the path of attribute whose count is required
-  "PullAanvraagIdsCount": 1, //set it as 0 for pulling all AanvraagIds
-  "MijnAansluiting": {
-    //"EndPointUrl": "https://qas.dsplatform.nl",
-    //"EndPointUrl": "https://qas.dsplatform.nl/XISOAPAdapter/MessageServlet?senderParty=E_DFN&senderService=BC_E_DFN&receiverParty=&receiverService=&interface=PullServicePort&interfaceNamespace=http://mijnconnector.nl/pullservice/v0103",
-    "EndPointUrl": "https://qas.dsplatform.nl/XISOAPAdapter/MessageServlet?senderParty=DeltaFiberNetwerk&senderService=BC_DeltaFiberNetwerk&receiverParty=&receiverService=&interface=PullServicePort&interfaceNamespace=http://mijnaansluiting.nl/pullservice/v0103",
-    "YOUR_CLIENT_ID": "E_DFN",
-    "YOUR_CLIENT_SECRET": "A3h/KsF/X6v'B9x's",
-    "CertificatePath": "C:\\Templates\\path_to_certificate.pfx",
-    "CertificatePassword": "password",
-    "CertificateThumbprint": "046199DA9F84DC274A063A94E21CBCEB358380BB",
-    "SymbolForPriority": "*",
-    "SymbolForConcatenation": "+"
-  },
-  "TrackTrace": {
-    "EndPointUrl": "https://qas.dsplatform.nl/XISOAPAdapter/MessageServlet?senderParty=DeltaFiberNetwerk&senderService=BC_DeltaFiberNetwerk&receiverParty=&receiverService=&interface=TracknTraceServicePort&interfaceNamespace=http://mijnaansluiting.nl/trackntraceservice/v0103",
-    //"EndPointUrl": "https://qas.dsplatform.nl/XISOAPAdapter/MessageServlet?senderParty=E_DFN&senderService=BC_E_DFN&receiverParty=&receiverService=&interface=TracknTraceServicePort&interfaceNamespace=http://mijnaansluiting.nl/trackntraceservice/v0103",
-    "YOUR_CLIENT_ID": "E_DFN",
-    "YOUR_CLIENT_SECRET": "A3h/KsF/X6v'B9x's"
-  },
-  "Res3MaxFileSize": 10485760, // for 10MB
-  "Res3MaxArrayLength": 10485760,
-  "Res4PdfMaxFileSize": 10485760,
-  "Res4PdfMaxArrayLength": 10485760
+    "inId": "taskFetchResponse.inId",
+    "PhoneNumber": "taskFetchResponse.taskInfo.hasInfo.contactPerson.phoneNumber",
+    "LastName": "taskFetchResponse.taskInfo.hasInfo.contactPerson.lastName",
+    "Emailadres": "taskFetchResponse.taskInfo.hasInfo.contactPerson.email",
+    //AanvraagDatum
+    "CreatedDate": "taskFetchResponse.header.created",
+    "Street": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
+    "City": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
+    "Postcode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
+    "HouseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber"
+  }
 }
