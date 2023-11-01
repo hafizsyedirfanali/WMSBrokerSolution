@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="json.json" />
+    <_ContentIncludedByDefault Remove="wmssettings.json" />
   </ItemGroup>
 
   <ItemGroup>

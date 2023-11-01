@@ -1,0 +1,13 @@
+{
+  "Actions": {
+    "Action1": {
+      "InID": "InIDValue1",
+      "HuurderId": "HuurderIdValue1"
+    },
+    "Action2": {
+      "InID": "InIDValue2",
+      "HuurderId": "HuurderIdValue2"
+    }
+    // Add more action types as needed
+  }
+}

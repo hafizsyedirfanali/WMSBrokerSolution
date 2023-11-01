@@ -1,8 +1,12 @@
+using Microsoft.Extensions.Configuration;
+using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var configuration = builder.Configuration;
+builder.Configuration.AddJsonFile("wmssettings.json", optional: true, reloadOnChange: true);
+builder.Services.Configure<Dictionary<string, ActionConfiguration>>(configuration.GetSection("Actions"));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IGoEfficientService, GoEfficientServiceImplementation>();

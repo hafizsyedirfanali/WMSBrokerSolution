@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.IO;
 using System.IO.Pipelines;
 using System.Reflection.Emit;
+using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
 
@@ -14,11 +16,13 @@ namespace WMSBrokerProject.Controllers
     public class WMSBrokerController : ControllerBase
     {
         private string inId;
-		private string huurderId = "1462";
 		private readonly IGoEfficientService goEfficientService;
-        public WMSBrokerController(IGoEfficientService goEfficientService)
+        private readonly IOptions<Dictionary<string, ActionConfiguration>> _actionOptions;
+
+        public WMSBrokerController(IGoEfficientService goEfficientService, IOptions<Dictionary<string, ActionConfiguration>> actionOptions)
         {
             this.goEfficientService = goEfficientService;
+            _actionOptions = actionOptions;
         }
         [Route("TaskIndication")]
         [HttpPost]
@@ -44,11 +48,12 @@ namespace WMSBrokerProject.Controllers
                     string responseContent = await response.Content.ReadAsStringAsync();
                     TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
 
-                    //string inIdValue = responseData.inId;
+					//string inIdValue = responseData.inId;
+					_actionOptions.Value.TryGetValue(taskFetchResponse.action, out var actionConfiguration);
                     var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
                     {
                         InId = inId,
-						HuurderId = huurderId
+						HuurderId = actionConfiguration.HuurderId
                     }).ConfigureAwait(false);
 					if (!responseREQ6.IsSuccess) { }
 					if (!responseREQ6.Result.IsRecordExist)
