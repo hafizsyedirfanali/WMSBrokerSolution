@@ -7,7 +7,7 @@
     {
         public string Username { get; set; }
         public string Password { get; set; }
-        public string AanvraagId { get; set; }
+        public string InId { get; set; }
         public string CityName { get; set; }
         public string StreetName { get; set; }  
         public string HouseNumber { get; set; } 
