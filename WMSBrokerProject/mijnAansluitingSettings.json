@@ -2,15 +2,36 @@
 
   //Don't use colon : in keys
   "WMSBeheerderAttributes": { //From Response2
+    //hasInfo
     "inId": "taskFetchResponse.taskInfo.hasInfo:DHid",
     "fiberNumber": "taskFetchResponse.taskInfo.hasInfo:fiberNumber",
-    "Street": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
-    "City": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
+    "streetName": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
+    "city": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
     "Postcode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
-    "HouseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber",
-    "PhoneNumber": "taskFetchResponse.taskInfo.hasInfo.contactPerson.phoneNumber",
-    "LastName": "taskFetchResponse.taskInfo.hasInfo.contactPerson.lastName",
-    "Emailadres": "taskFetchResponse.taskInfo.hasInfo.contactPerson.email"
+    "houseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber",
+    "phoneNumber": "taskFetchResponse.taskInfo.hasInfo.contactPerson.phoneNumber",
+    "lastName": "taskFetchResponse.taskInfo.hasInfo.contactPerson.lastName",
+    "email": "taskFetchResponse.taskInfo.hasInfo.contactPerson.email",
+    //popInfo/activeEquipmentEndpoint
+    "pop": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.pop",
+    "frame": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.frame",
+    "block": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
+    "module": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
+    "port": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.port",
+    "connector": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.connector",
+    "row": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.row",
+    "odfTray": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.odfTray",
+    "subject": "taskFetchResponse.taskInfo.connectionInfo.subject",
+
+    //connectionInfo
+    "inId2": "taskFetchResponse.taskInfo.connectionInfo:DHid",
+    "fiberNumber2": "taskFetchResponse.taskInfo.connectionInfo:fiberNumber",
+    "streetName2": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.streetName",
+    "city2": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.city",
+    "Postcode2": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.postalCode",
+    "houseNumber2": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.houseNumber",
+    "phoneNumber2": "taskFetchResponse.taskInfo.connectionInfo.contactPerson.phoneNumber",
+   
   }
 
 }
