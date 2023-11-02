@@ -1,15 +1,16 @@
 {
+
   //Don't use colon : in keys
-  "MijnAansluitingAttributes": { //From Response2
-    "inId": "taskFetchResponse.inId",
-    "PhoneNumber": "taskFetchResponse.taskInfo.hasInfo.contactPerson.phoneNumber",
-    "LastName": "taskFetchResponse.taskInfo.hasInfo.contactPerson.lastName",
-    "Emailadres": "taskFetchResponse.taskInfo.hasInfo.contactPerson.email",
-    //AanvraagDatum
-    "CreatedDate": "taskFetchResponse.header.created",
+  "WMSBeheerderAttributes": { //From Response2
+    "inId": "taskFetchResponse.taskInfo.hasInfo:DHid",
+    "fiberNumber": "taskFetchResponse.taskInfo.hasInfo:fiberNumber",
     "Street": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
     "City": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
     "Postcode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
-    "HouseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber"
+    "HouseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber",
+    "PhoneNumber": "taskFetchResponse.taskInfo.hasInfo.contactPerson.phoneNumber",
+    "LastName": "taskFetchResponse.taskInfo.hasInfo.contactPerson.lastName",
+    "Emailadres": "taskFetchResponse.taskInfo.hasInfo.contactPerson.email"
   }
+
 }
