@@ -9,7 +9,7 @@ using System.Xml.Linq;
 
 namespace WMSBrokerProject.Repositories
 {
-    public class GoEfficientServiceImplementation : IGoEfficientService
+	public class GoEfficientServiceImplementation : IGoEfficientService
     {
         private readonly string? templateFolder;
         private readonly string symbolForConcatenation;
@@ -44,7 +44,7 @@ namespace WMSBrokerProject.Repositories
         public object? GetValueOfKey(RES2Model model, string sourceKey)
         {
             object? value = null;
-            model.MijnAansluitingAttributes.TryGetValue(sourceKey, out value);
+            model.WMSBeheerderAttributes.TryGetValue(sourceKey, out value);
             return value;
         }
         
@@ -56,7 +56,7 @@ namespace WMSBrokerProject.Repositories
             {
                 sourceKey = GetHighestPriorityKey(model, sourceKey, destinationKey) ?? string.Empty;
             }
-            model.MijnAansluitingAttributes.TryGetValue(sourceKey, out value);
+            model.WMSBeheerderAttributes.TryGetValue(sourceKey, out value);
             return (destinationKey, value);
         }
         public (string DestinationKey, object Value) GetOneToManyValue(RES2Model model, string sourceKey, string destinationKey)
@@ -178,7 +178,7 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-        public async Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template, RES2Model model)
+        public async Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template, TaskFetchResponse2Model model)
         {
             var responseModel = new ResponseModel<RES4aTemplate>();
             try
@@ -195,53 +195,8 @@ namespace WMSBrokerProject.Repositories
                         var sourceKey = attribute.Value;//value is source key
                         var destinationKey = keyArray[keyArray.Length - 1];
 
-                        //For 1:Many
-                        if (sourceKey.Contains(symbolForConcatenation))
-                        {
-                            var valueTuple = GetOneToManyValue(model, sourceKey, destinationKey);
-                            mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
-                        }
-                        else if (sourceKey.Contains(symbolForPriority))
-                        {
-                            var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-                            mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
-                        }
-                        else
-                        {
-                            var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-                            mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
-                        }
                     }
                 }
-
-                //check the count of path                
-                if (model.AantalAansluitingenCount > 1)
-                {
-                    List<string> aanvraagKeys = new List<string>()
-                    {
-                        "AanvraagID" ,          //Column No.2 of Excel
-                        "Naam-aanvrager",       //Column No.3 of Excel
-                        "TelefoonnummerMobiel", //Column No.4 of Excel
-                        "Emailadres",           //Column No.5 of Excel
-                        "AanvraagDatum",        //Column No.6 of Excel
-                        "RequestReceived"       //Column No.7 of Excel
-                    };
-                    foreach (var key in mappedValues)
-                    {
-                        if (!aanvraagKeys.Contains(key.Key))
-                        {
-                            mappedValues[key.Key] = string.Empty;
-                        }
-                    }
-                    mappedValues.Add("Aantal aansluitingen meervoudige aanvraag", model.AantalAansluitingenCount);
-                }
-                else
-                {
-                    mappedValues.Add("Aantal aansluitingen meervoudige aanvraag", "1");
-                }
-
-                var finName_DisciplineId = template.GoEfficientTemplateAttributeList.Where(s=>s.FinId == "7140791").Select(s=>s.FinName).FirstOrDefault();
-                
 
 
                 template.GoEfficientTemplateValues = mappedValues;
@@ -255,7 +210,7 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-        public async Task<ResponseModel<RES4aTemplate>> FillDataIn4aAddressTemplate(RES4aTemplate template, RES2Model model)
+        public async Task<ResponseModel<RES4aTemplate>> FillDataIn4aAddressTemplate(RES4aTemplate template, TaskFetchResponse2Model model)
         {
             var responseModel = new ResponseModel<RES4aTemplate>();
             try
@@ -273,21 +228,21 @@ namespace WMSBrokerProject.Repositories
                         var destinationKey = keyArray[keyArray.Length - 1];
 
                         //For 1:Many
-                        if (sourceKey.Contains(symbolForConcatenation))
-                        {
-                            var valueTuple = GetOneToManyValue(model, sourceKey, destinationKey);
-                            mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
-                        }
-                        else if (sourceKey.Contains(symbolForPriority))
-                        {
-                            var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-                            mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
-                        }
-                        else
-                        {
-                            var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-                            mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
-                        }
+                        //if (sourceKey.Contains(symbolForConcatenation))
+                        //{
+                        //    var valueTuple = GetOneToManyValue(model, sourceKey, destinationKey);
+                        //    mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
+                        //}
+                        //else if (sourceKey.Contains(symbolForPriority))
+                        //{
+                        //    var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
+                        //    mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
+                        //}
+                        //else
+                        //{
+                        //    var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
+                        //    mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
+                        //}
                     }
                 }
                 template.GoEfficientAddressTemplateValues = mappedValues;
@@ -850,7 +805,31 @@ namespace WMSBrokerProject.Repositories
             }
             return $"{date.Year}-{week:00}";
         }
-    }
+
+		public async Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponseModel model)
+		{
+			var responseModel = new ResponseModel<Dictionary<string, object>>();
+			try
+			{
+				Dictionary<string, object?> beheerderAttributes = new Dictionary<string, object>();
+				if (_configuration.GetSection("WMSBeheerderAttributes").GetChildren().Any(x => x.Key == model.action))
+				{
+					beheerderAttributes = _configuration.GetSection($"WMSBeheerderAttributes:{model.action}")
+						.GetChildren()
+						.ToDictionary(x => x.Key, x => (object?) x.Value);
+				}
+
+				responseModel.Result = beheerderAttributes;
+				responseModel.IsSuccess = true;
+			}			
+			catch (Exception ex)
+			{
+				responseModel.ErrorMessage = ex.Message;
+				responseModel.ErrorCode = 10018;
+			}
+			return responseModel;
+		}
+	}
 
    
 }

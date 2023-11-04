@@ -12,10 +12,11 @@ namespace WMSBrokerProject.Interfaces
         Task<ResponseModel<RES6Model>> REQ6_IsRecordExist(REQ6Model model);                          //Request 06 for checking if record exists 
         Task<ResponseModel<Dictionary<string, string>>> GetGoEfficientAttributes();             //to get attributes dynamically from json for goefficient
         Task<ResponseModel<Dictionary<string, string>>> GetGoEfficientFileAttributes();
-        Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template, RES2Model model);
+        Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template, TaskFetchResponse2Model model);
         Task<ResponseModel<string>> GetKeyForValueInRES3aMapping(string value);
         Task<ResponseModel<string>> GetKeyForRES4Mapping();
-        Task<ResponseModel<RES4aTemplate>> FillDataIn4aAddressTemplate(RES4aTemplate template, RES2Model model);
-        //string? GetValueOfKey(RES2Model model, string sourceKey, XmlDocument xmlDoc, XmlNamespaceManager manager);
-    }
+        Task<ResponseModel<RES4aTemplate>> FillDataIn4aAddressTemplate(RES4aTemplate template, TaskFetchResponse2Model model);
+        Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponseModel model);
+
+	}
 }

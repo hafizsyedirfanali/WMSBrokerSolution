@@ -1,4 +1,6 @@
-﻿namespace WMSBrokerProject.Models
+﻿using static WMSBrokerProject.Models.TaskFetchResponseModel;
+
+namespace WMSBrokerProject.Models
 {
     public class TaskFetchResponseModel
     {
@@ -18,9 +20,19 @@
         public class TaskInfo
         {
             public HasInfo hasInfo { get; set; }
+            public PopInfo popInfo { get; set; }
         }
-
-        public class HasInfo
+		public class PopInfo
+		{
+			public string DHid { get; set; }
+			public ContactPerson contactPerson { get; set; }
+			public ConnectionAddress connectionAddress { get; set; }
+			public string fiberNumber { get; set; }
+			public string outletStatus { get; set; }
+			public Payment payment { get; set; }
+            public ActiveEquipmentEndpoint activeEquipmentEndpoint { get; set; }
+        }
+		public class HasInfo
         {
             public string DHid { get; set; }
             public ContactPerson contactPerson { get; set; }
@@ -51,8 +63,20 @@
             public double amount { get; set; }
             public string referenceContractor { get; set; }
         }
+        public class ActiveEquipmentEndpoint
+        {
+            public string pop { get; set; }
+            public string frame { get; set; }
+            public string block { get; set; }
+            public string module { get; set; }
+            public string port { get; set; }
+            public string connector { get; set; }
+            public string row { get; set; }
+            public string odfTray { get; set; }
+        }
 
-        public class Header
+
+		public class Header
         {
             public From from { get; set; }
             public int updateCount { get; set; }

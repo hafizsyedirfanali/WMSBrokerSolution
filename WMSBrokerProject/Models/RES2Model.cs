@@ -10,7 +10,7 @@ namespace WMSBrokerProject.Models
             //this.Envelope = new Envelope();
         }
         
-        public Dictionary<string, object> MijnAansluitingAttributes { get; set; }
+        public Dictionary<string, object> WMSBeheerderAttributes { get; set; }
         public int? AantalAansluitingenCount { get; set; }
         //public string CityName { get; set; }
         //public string StreetName { get; set; }

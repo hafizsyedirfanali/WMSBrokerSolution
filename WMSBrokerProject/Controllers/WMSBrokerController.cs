@@ -46,6 +46,8 @@ namespace WMSBrokerProject.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
+
+
                     TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
 
 					//string inIdValue = responseData.inId;
@@ -58,6 +60,11 @@ namespace WMSBrokerProject.Controllers
 					if (!responseREQ6.IsSuccess) { }
 					if (!responseREQ6.Result.IsRecordExist)
 					{
+
+						var taskFetchResponse2 = await goEfficientService.FillDataInBeheerderAttributesDictionary(taskFetchResponse).ConfigureAwait(false);
+						if (!taskFetchResponse2.IsSuccess) { }
+
+
 						#region RES4 RHS for PRO.PRO_ID
 						
 						var street = taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName;
@@ -100,11 +107,18 @@ namespace WMSBrokerProject.Controllers
 						var fin_Id = res4aResult.Result.FIN_ID;
 
 						var addresses = res4aResult.Result.Addresses;
+						
 						var responseFilledDataResult = await goEfficientService
-							.FillDataIn4aTemplate(res4aResult.Result.Template, res2Result.Result);
+							.FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
+							{
+
+							});
 
 						var responseFilledAddressDataResult = await goEfficientService
-							.FillDataIn4aAddressTemplate(res4aResult.Result.Template, res2Result.Result);
+							.FillDataIn4aAddressTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
+							{
+
+							});
 
 						var goEfficientTemplateValues = responseFilledDataResult.Result.GoEfficientTemplateValues;
 
