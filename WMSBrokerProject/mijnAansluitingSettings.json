@@ -3,8 +3,8 @@
   //Don't use colon : in keys
   "WMSBeheerderAttributes": { //From Response2
     //hasInfo
-    "inId": "taskFetchResponse.taskInfo.hasInfo:DHid",
-    "fiberNumber": "taskFetchResponse.taskInfo.hasInfo:fiberNumber",
+    "inId": "taskFetchResponse.taskInfo.hasInfo.DHid",
+    "fiberNumber": "taskFetchResponse.taskInfo.hasInfo.fiberNumber",
     "streetName": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
     "city": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
     "Postcode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
@@ -24,13 +24,13 @@
     "subject": "taskFetchResponse.taskInfo.connectionInfo.subject",
 
     //connectionInfo
-    "inId2": "taskFetchResponse.taskInfo.connectionInfo:DHid",
-    "fiberNumber2": "taskFetchResponse.taskInfo.connectionInfo:fiberNumber",
+    "inId2": "taskFetchResponse.taskInfo.connectionInfo.DHid",
+    "fiberNumber2": "taskFetchResponse.taskInfo.connectionInfo.fiberNumber",
     "streetName2": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.streetName",
     "city2": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.city",
     "Postcode2": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.postalCode",
     "houseNumber2": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.houseNumber",
-    "phoneNumber2": "taskFetchResponse.taskInfo.connectionInfo.contactPerson.phoneNumber",
+    "phoneNumber2": "taskFetchResponse.taskInfo.connectionInfo.contactPerson.phoneNumber"
    
   }
 
