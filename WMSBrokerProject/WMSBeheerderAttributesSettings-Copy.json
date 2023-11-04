@@ -13,7 +13,7 @@
       "fiberNumber": "taskFetchResponse.taskInfo.hasInfo.fiberNumber",
       "streetName": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
       "city": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
-      "Postcode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
+      "postalCode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
       "houseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber"
     },
     "DEPATCH": {
@@ -29,7 +29,7 @@
       "fiberNumber": "taskFetchResponse.taskInfo.hasInfo.fiberNumber",
       "streetName": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
       "city": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
-      "Postcode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
+      "postalCode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
       "houseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber"
     },
     "NETWORK_INCIDENT": {
@@ -40,7 +40,7 @@
       "streetName": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.streetName",
       "city": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.city",
       "country": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.country",
-      "Postcode": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.postalCode",
+      "postalCode": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.postalCode",
       "firstName": "taskFetchResponse.taskInfo.networkInfo.reportedBy.firstName",
       "lastName": "taskFetchResponse.taskInfo.networkInfo.reportedBy.lastName",
       "phoneNumber": "taskFetchResponse.taskInfo.networkInfo.reportedBy.phoneNumber",
@@ -52,17 +52,128 @@
       "inId": "taskFetchResponse.taskInfo.connectionInfo.DHid",
       "fiberNumber": "taskFetchResponse.taskInfo.connectionInfo.fiberNumber",
       "houseNumber": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.houseNumber",
-      //"houseNumberExtension": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.houseNumberExtension",
+      "houseNumberExtension": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.houseNumberExtension",
       "streetName": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.streetName",
       "city": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.city",
       "country": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.country",
-      "Postcode": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.postalCode",
-      "firstName": "taskFetchResponse.taskInfo.networkInfo.reportedBy.firstName",
-      "lastName": "taskFetchResponse.taskInfo.networkInfo.reportedBy.lastName",
-      "phoneNumber": "taskFetchResponse.taskInfo.networkInfo.reportedBy.phoneNumber",
-      "subject": "taskFetchResponse.taskInfo.networkInfo.subject"
-
-      //connectionInfo note available in yaml file
+      "postalCode": "taskFetchResponse.taskInfo.connectionInfo.connectionAddress.postalCode",
+      "subject": "taskFetchResponse.taskInfo.connectionInfo.subject"
+    },
+    "FTU_REPLACEMENT": {
+      "inId": "taskFetchResponse.taskInfo.hasInfo.DHid",
+      "fiberNumber": "taskFetchResponse.taskInfo.hasInfo.fiberNumber",
+      "streetName": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
+      "city": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
+      "postalCode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
+      "houseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber",
+      "country": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.country"
+    },
+    "NEW_CONNECTION": {
+      "inId": "taskFetchResponse.taskInfo.hasInfo.DHid",
+      "fiberNumber": "taskFetchResponse.taskInfo.hasInfo.fiberNumber",
+      "houseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber",
+      "houseNumberExtension": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumberExtension",
+      "streetName": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
+      "city": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
+      "country": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.country",
+      "postalCode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
+      "pop": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.pop",
+      "frame": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.frame",
+      "block": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
+      "module": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
+      "port": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.port",
+      "connector": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.connector",
+      "row": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.row",
+      "odfTray": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.odfTray"
+    },
+    "AFTER_CONNECT": {
+      "inId": "taskFetchResponse.taskInfo.hasInfo.DHid",
+      "fiberNumber": "taskFetchResponse.taskInfo.hasInfo.fiberNumber",
+      "houseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber",
+      //"houseNumberExtension": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumberExtension",
+      "streetName": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
+      "city": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
+      "country": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.country",
+      "postalCode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
+      "pop": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.pop",
+      "frame": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.frame",
+      "block": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
+      "module": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
+      "port": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.port",
+      "connector": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.connector",
+      "row": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.row",
+      "odfTray": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.odfTray"
+    },
+    "FTU_DISPLACEMENT": {
+      "inId": "taskFetchResponse.taskInfo.hasInfo.DHid",
+      "fiberNumber": "taskFetchResponse.taskInfo.hasInfo.fiberNumber",
+      "houseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber",
+      "houseNumberExtension": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumberExtension",
+      "streetName": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
+      "city": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
+      "country": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.country",
+      "postalCode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode"
+    },
+    "TELCO_MIGRATION": {
+      "inId": "taskFetchResponse.taskInfo.hasInfo.DHid",
+      "fiberNumber": "taskFetchResponse.taskInfo.hasInfo.fiberNumber",
+      "houseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber",
+      //"houseNumberExtension": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumberExtension",
+      "streetName": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
+      "city": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
+      "country": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.country",
+      "postalCode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
+      "pop": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.pop",
+      "frame": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.frame",
+      "block": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
+      "module": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
+      "port": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.port",
+      "connector": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.connector",
+      "row": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.row"
+      //"odfTray": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.odfTray"
+    },
+    "PORT_MIGRATION": {
+      "inId": "taskFetchResponse.taskInfo.hasInfo.DHid",
+      "fiberNumber": "taskFetchResponse.taskInfo.hasInfo.fiberNumber",
+      "houseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber",
+      //"houseNumberExtension": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumberExtension",
+      "streetName": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
+      "city": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
+      "country": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.country",
+      "postalCode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
+      "pop": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.pop",
+      "frame": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.frame",
+      "block": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
+      "module": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
+      "port": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.port",
+      "connector": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.connector",
+      "row": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.row",
+      //"odfTray": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.odfTray"
+      "pop2": "taskFetchResponse.taskInfo.popInfo.previousActiveEndpoint.pop",
+      "frame2": "taskFetchResponse.taskInfo.popInfo.previousActiveEndpoint.frame",
+      "block2": "taskFetchResponse.taskInfo.popInfo.previousActiveEndpoint.block",
+      "port2": "taskFetchResponse.taskInfo.popInfo.previousActiveEndpoint.port",
+      "connector2": "taskFetchResponse.taskInfo.popInfo.previousActiveEndpoint.connector",
+      "row2": "taskFetchResponse.taskInfo.popInfo.previousActiveEndpoint.row"
+    },
+    "AFTERCARE": {
+      //"inId": "taskFetchResponse.taskInfo.hasInfo.DHid",
+      //"fiberNumber": "taskFetchResponse.taskInfo.hasInfo.fiberNumber",
+      //"houseNumber": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber",
+      //"houseNumberExtension": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumberExtension",
+      //"streetName": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
+      //"city": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
+      //"country": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.country",
+      //"postalCode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
+      //"pop": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.pop",
+      //"frame": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.frame",
+      //"block": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
+      //"module": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
+      //"port": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.port",
+      //"connector": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.connector",
+      //"row": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.row",
+      //"odfTray": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.odfTray"
     }
+
   }
 }

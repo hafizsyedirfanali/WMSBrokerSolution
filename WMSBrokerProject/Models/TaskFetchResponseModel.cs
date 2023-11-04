@@ -1,4 +1,5 @@
-﻿using static WMSBrokerProject.Models.TaskFetchResponseModel;
+﻿using Microsoft.AspNetCore.Http;
+using static WMSBrokerProject.Models.TaskFetchResponseModel;
 
 namespace WMSBrokerProject.Models
 {
@@ -21,6 +22,8 @@ namespace WMSBrokerProject.Models
         {
             public HasInfo hasInfo { get; set; }
             public PopInfo popInfo { get; set; }
+            public ConnectionInfo connectionInfo { get; set; }
+            public NetworkInfo networkInfo { get; set; }
         }
 		public class PopInfo
 		{
@@ -31,6 +34,7 @@ namespace WMSBrokerProject.Models
 			public string outletStatus { get; set; }
 			public Payment payment { get; set; }
             public ActiveEquipmentEndpoint activeEquipmentEndpoint { get; set; }
+            public PreviousActiveEndpoint previousActiveEndpoint { get; set; }
         }
 		public class HasInfo
         {
@@ -42,7 +46,22 @@ namespace WMSBrokerProject.Models
             public Payment payment { get; set; }
         }
 
-        public class ContactPerson
+		public class ConnectionInfo
+		{
+			public string DHid { get; set; }
+			public string fiberNumber { get; set; }
+			public string subject { get; set; }
+			public ConnectionAddress connectionAddress { get; set; }
+		}
+
+		public class NetworkInfo
+		{
+			public string subject { get; set; }
+			public ReportedBy reportedBy { get; set; }
+		}
+
+
+		public class ContactPerson
         {
             public string lastName { get; set; }
             public string phoneNumber { get; set; }
@@ -54,6 +73,7 @@ namespace WMSBrokerProject.Models
             public string postalCode { get; set; }
             public int houseNumber { get; set; }
             public string city { get; set; }
+            public string houseNumberExtension { get; set; }
             public string streetName { get; set; }
             public string country { get; set; }
         }
@@ -75,6 +95,24 @@ namespace WMSBrokerProject.Models
             public string odfTray { get; set; }
         }
 
+		public class PreviousActiveEndpoint
+		{
+			public string pop { get; set; }
+			public string frame { get; set; }
+			public string block { get; set; }
+			public string module { get; set; }
+			public string port { get; set; }
+			public string connector { get; set; }
+			public string row { get; set; }
+			public string odfTray { get; set; }
+		}
+
+		public class ReportedBy
+		{
+			public string firstName { get; set; }
+			public string lastName { get; set; }
+			public string phoneNumber { get; set; }
+		}
 
 		public class Header
         {
