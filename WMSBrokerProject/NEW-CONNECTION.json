@@ -1,0 +1,79 @@
+{
+  "value": {
+    "taskInfo": {
+      "popInfo": {
+        "DHid": "dhid1_7433381731",
+        "fiberNumber": "FIBER_1"
+      },
+      "hasInfo": {
+        "DHid": "dhid1_7433381731",
+        "connectionAddress": {
+          "postalCode": "1121AA",
+          "houseNumber": 13,
+          "houseNumberExtension": "A",
+          "city": "LANDSMEER",
+          "streetName": "Noordeinde",
+          "country": "NLD"
+        },
+        "fiberNumber": "FIBER_1",
+        "contactPerson": {
+          "lastName": "JPG Jansen",
+          "phoneNumber": "0618500570",
+          "email": "mail@test.nl"
+        },
+        "payment": {
+          "amount": 538,
+          "referenceContractor": "Offerte-1234.JPG"
+        }
+      }
+    },
+    "originatorId": "9244365",
+    "header": {
+      "from": {
+        "orgId": "DFN",
+        "systemId": "WMS"
+      },
+      "updateCount": 2,
+      "created": "2022-10-25T14:25:25"
+    },
+    "status": {
+      "mainStatus": "NEW"
+    },
+    "action": "NEW_CONNECTION",
+    "urgency": "NORMAL",
+    "taskId": "WMS001497458",
+    "area": {
+      "networkType": "FIBER"
+    },
+    "comments": [
+      {
+        "party": {
+          "orgId": "DFN",
+          "systemId": "WMS"
+        },
+        "author": {
+          "firstName": "DFN",
+          "lastName": "WMS"
+        },
+        "created": "2022-10-25T14:25:25.318913Z",
+        "note": "Ticket status update: RECEIVED naar NETWORK_CHECK",
+        "id": "85af5673-ea3d-4cb4-b7f7-fd21e663fb6f"
+      },
+      {
+        "party": {
+          "orgId": "DFN",
+          "systemId": "WMS"
+        },
+        "author": {
+          "firstName": "DFN",
+          "lastName": "WMS"
+        },
+        "created": "2022-10-26T07:05:44.6440108Z",
+        "note": "Ticket status update: NETWORK_CHECK naar CONFIRMED",
+        "id": "a2c4629f-1e50-4616-8a03-e906e4c35950"
+      }
+    ],
+    "contractant": "DFN",
+    "readOnly": false
+  }
+}
