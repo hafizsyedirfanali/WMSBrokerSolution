@@ -183,7 +183,7 @@ namespace WMSBrokerProject.Repositories
             var responseModel = new ResponseModel<RES4aTemplate>();
             try
             {
-                var goEfficientMijnAansluitingMap = _configuration.GetSection("MijnAansluitingRES2Mapping").AsEnumerable();
+                var goEfficientMijnAansluitingMap = _configuration.GetSection("WMSBeheerderRES2Mapping").AsEnumerable();
                 
                 Dictionary<string, object?> mappedValues = new();
                 foreach (var attribute in goEfficientMijnAansluitingMap)

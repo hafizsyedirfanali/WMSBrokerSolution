@@ -1,27 +1,12 @@
 {
-  "MijnAansluitingRES3aMapping": {
-    //Destination : Source
-    "plattegrond": "GE009",
-    "situatieschets": "GE013"
 
-  },
-  "MijnAansluitingRES4Mapping": {
-    //Destination : Source
-    "AANSLUITING.NL OPDRACHT": "AanvragPDF"
-  },
-  "MijnAansluitingRES2Mapping": {
+
+  "WMSBeheerderRES2Mapping": {
     //Here key name must be same as the key name in GoEFficientAttributes.json
     //Here value must be equal to the key of MijnAansluitingAttributes for 1:1
     //Destination : Source
-    "MA.nl-ObjectID": "ObjectId",
-    "MA.nl-AanvraagID": "AanvraagID",
-    "Mobiel aanvrager": "TelefoonnummerMobiel",
-    "E-mail aanvrager": "Emailadres",
-    "Datum aanvraag ontvangen": "AanvraagDatum",
-    "Betreft het een Hoog Laag of een Duplex woning?": "ObjectType",
-    "Naam-aanvrager": "Voorletters+[Tussenvoegsels]+Achternaam",
-    "Wensdatum": "WensJaar+WensWeek",
-    "MA.nl-DisciplineID": "DisciplineID"
+    "cifwms-fibernumber": "fiberNumber"
+
   },
   "MijnAansluitingRES2AddressMapping": {
     //Here key name must be same as the key name in GoEFficientAttributes.json
