@@ -2,6 +2,7 @@
   "WMSBeheerderAttributes": {
     "PATCH": {
       "inId": "taskFetchResponse.taskInfo.hasInfo.DHid",
+      "fiberNumber": "taskFetchResponse.taskInfo.hasInfo.fiberNumber",
       "pop": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.pop",
       "frame": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.frame",
       "block": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.block",
@@ -10,7 +11,6 @@
       "connector": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.connector",
       "row": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.row",
       "odfTray": "taskFetchResponse.taskInfo.popInfo.activeEquipmentEndpoint.odfTray",
-      "fiberNumber": "taskFetchResponse.taskInfo.hasInfo.fiberNumber",
       "streetName": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName",
       "city": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.city",
       "postalCode": "taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode",
