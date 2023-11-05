@@ -17,6 +17,7 @@ namespace WMSBrokerProject.Controllers
     {
         private string inId;
 		private readonly IGoEfficientService goEfficientService;
+		private readonly IWMSBeheerderService WMSBeheerderService;
         private readonly IOptions<Dictionary<string, ActionConfiguration>> _actionOptions;
 
         public WMSBrokerController(IGoEfficientService goEfficientService, IOptions<Dictionary<string, ActionConfiguration>> actionOptions)
@@ -36,8 +37,14 @@ namespace WMSBrokerProject.Controllers
 
             inId = model.inId;
 
-            ///Request 2
-            using (HttpClient httpClient = new HttpClient())
+			var Response2 = await WMSBeheerderService.Request2TaskFetch(new Models.REQ2Model { InID = inId }).ConfigureAwait(false);
+			if (Response2.IsSuccess)
+			{
+				
+			}
+
+			///Request 2
+			using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
                 // httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
@@ -46,7 +53,6 @@ namespace WMSBrokerProject.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     string responseContent = await response.Content.ReadAsStringAsync();
-
 
                     TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
 
@@ -61,26 +67,32 @@ namespace WMSBrokerProject.Controllers
 					if (!responseREQ6.Result.IsRecordExist)
 					{
 
-						var taskFetchResponse2 = await goEfficientService.FillDataInBeheerderAttributesDictionary(taskFetchResponse).ConfigureAwait(false);
+						var taskFetchResponse2 = await goEfficientService.FillSourcePathInBeheerderAttributesDictionary(taskFetchResponse).ConfigureAwait(false);
 						if (!taskFetchResponse2.IsSuccess) { }
-						//fill data
+						//above service gives key and path
+						var taskFetchResponseData = await goEfficientService.FillDataInBeheerderAttributesDictionary(taskFetchResponse, taskFetchResponse2.Result).ConfigureAwait(false);
+						if (!taskFetchResponseData.IsSuccess) { }
+
 
 						#region RES4 RHS for PRO.PRO_ID
+						var dataDictionary = taskFetchResponseData.Result;
 						
-						var street = taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName;
-						var cityName = taskFetchResponse.taskInfo.hasInfo.connectionAddress.city;
-						var houseNumber = taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber;
-						var zipCode = taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode;
-						//var houseNumberSuffix = taskFetchResponse.taskInfo.hasInfo.connectionAddress.;
-						var houseNumberSuffix = "";
+						var taskFetchForReq4 = await goEfficientService.FillDataForRequest4(dataDictionary!);
+						if (!taskFetchForReq4.IsSuccess) { }
+						//var street = taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName;
+						//var cityName = taskFetchResponse.taskInfo.hasInfo.connectionAddress.city;
+						//var houseNumber = taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber;
+						//var zipCode = taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode;
+						////var houseNumberSuffix = taskFetchResponse.taskInfo.hasInfo.connectionAddress.;
+						//var houseNumberSuffix = "";
 						var res4Result = await goEfficientService.REQ4_GetProIDAsync(new Models.REQ4Model
 						{
 							InId = inId,
-							CityName = cityName != null ? cityName.ToString()! : "",
-							StreetName = street != null ? street.ToString()! : "",
-							HouseNumber = houseNumber != null ? houseNumber.ToString()! : "",
-							ZipCode = zipCode != null ? zipCode.ToString()! : "",
-							HouseNumberSuffix = houseNumberSuffix != null ? houseNumberSuffix.ToString()! : ""
+							CityName = taskFetchForReq4.Result!.CityName,
+							StreetName = taskFetchForReq4.Result!.StreetName,
+							HouseNumber = taskFetchForReq4.Result!.HouseNumber,
+							PostalCode = taskFetchForReq4.Result!.PostalCode,
+							HouseNumberExtension = taskFetchForReq4.Result!.HouseNumberExtension
 						});
 						if (res4Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "GetProId service returned null" });
 						if (res4Result.Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "GetProId service returned null" });
@@ -111,13 +123,13 @@ namespace WMSBrokerProject.Controllers
 						var responseFilledDataResult = await goEfficientService
 							.FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
 							{
-
+								WMSBeheerderAttributes = taskFetchResponse2.Result
 							});
 
 						var responseFilledAddressDataResult = await goEfficientService
 							.FillDataIn4aAddressTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
 							{
-
+								WMSBeheerderAttributes = taskFetchResponse2.Result
 							});
 
 						var goEfficientTemplateValues = responseFilledDataResult.Result.GoEfficientTemplateValues;

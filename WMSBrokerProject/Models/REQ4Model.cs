@@ -11,8 +11,9 @@
         public string CityName { get; set; }
         public string StreetName { get; set; }  
         public string HouseNumber { get; set; } 
-        public string? HouseNumberSuffix { get; set; }
-        public string ZipCode { get; set; }
+        public string? HouseNumberExtension { get; set; }
+        public string PostalCode { get; set; }
+        public string Country { get; set; }
         
     }
 

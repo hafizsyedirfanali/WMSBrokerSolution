@@ -12,6 +12,7 @@ builder.Services.Configure<Dictionary<string, ActionConfiguration>>(configuratio
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IGoEfficientService, GoEfficientServiceImplementation>();
+builder.Services.AddTransient<IWMSBeheerderService, WMSBeheerderImplementation>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

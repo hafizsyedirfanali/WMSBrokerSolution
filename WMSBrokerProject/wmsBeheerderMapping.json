@@ -1,6 +1,14 @@
 {
-
-
+  "WMSBeheerderRES4Mapping": {
+    //Note: Destination key name not to be changed.
+    //Destination : Source 
+    "streetName": "streetName",
+    "cityName": "cityName",
+    "country": "country",
+    "houseNumber": "houseNumber",
+    "postalCode": "postalCode",
+    "houseNumberExtension": "houseNumberExtension"
+  },
   "WMSBeheerderRES2Mapping": {
     //Here key name must be same as the key name in GoEFficientAttributes.json
     //Here value must be equal to the key of MijnAansluitingAttributes for 1:1
@@ -13,10 +21,8 @@
     "ADRESS.ADRESS_TOWN": "city",
     "ADRESS.ADRESS_CNTR_ISO3166A3": "country",
     "ADRESS.ADRESS_ZIPCODE": "postalCode"
-
-
   },
-  "MijnAansluitingRES2AddressMapping": {
+  "WMSBeheerderRES2AddressMapping": {
     //Here key name must be same as the key name in GoEFficientAttributes.json
     //Here value must be equal to the key of MijnAansluitingAttributes for 1:1
     //Destination : Source
@@ -27,5 +33,6 @@
     "ADRESS.ADRESS_HOUSNR_SFX": "HuisnummerToevoeging",
     "ADRESS.ADRESS_STREET": "Straat"
   }
+
 }
 

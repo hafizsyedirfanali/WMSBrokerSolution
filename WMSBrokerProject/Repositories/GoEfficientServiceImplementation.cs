@@ -6,6 +6,10 @@ using System.Reflection;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
+using System.Linq;
+using System.Text.RegularExpressions;
+using System.Collections;
+using Newtonsoft.Json;
 
 namespace WMSBrokerProject.Repositories
 {
@@ -27,7 +31,7 @@ namespace WMSBrokerProject.Repositories
             this.symbolForPriority = configuration.GetSection("MijnAansluiting:SymbolForPriority").Value ?? "*";
             this.templateFolder = configuration.GetSection("TemplatesFolder").Value;
         }
-        public string? GetHighestPriorityKey(RES2Model model, string sourceKey, string destinationKey)
+        public string? GetHighestPriorityKey(TaskFetchResponse2Model model, string sourceKey, string destinationKey)
         {
             string? priorityKey = null;
             var sourceKeyArray = sourceKey.Split(symbolForPriority);
@@ -41,79 +45,20 @@ namespace WMSBrokerProject.Repositories
             }
             return priorityKey;
         }
-        public object? GetValueOfKey(RES2Model model, string sourceKey)
+        public object? GetValueOfKey(TaskFetchResponse2Model model, string sourceKey)
         {
             object? value = null;
             model.WMSBeheerderAttributes.TryGetValue(sourceKey, out value);
             return value;
         }
         
-        public (string DestinationKey, object? Value) GetOneToOneValue(RES2Model model, string sourceKey, string destinationKey)
+        public (string DestinationKey, object? Value) GetOneToOneValue(TaskFetchResponse2Model model, string sourceKey, string destinationKey)
         {
             object? value;
-            //Following is 1:1 map - following line of code is fetching the path from response for the mapped key
-            if (sourceKey.Contains(symbolForPriority))
-            {
-                sourceKey = GetHighestPriorityKey(model, sourceKey, destinationKey) ?? string.Empty;
-            }
             model.WMSBeheerderAttributes.TryGetValue(sourceKey, out value);
             return (destinationKey, value);
         }
-        public (string DestinationKey, object Value) GetOneToManyValue(RES2Model model, string sourceKey, string destinationKey)
-        {
-            List<object> sourceValueList = new();
-            var sourceKeyArray = sourceKey.Split(symbolForConcatenation);
-            foreach (var sKey in sourceKeyArray)
-            {
-                if (sKey.Contains(symbolForPriority))
-                {
-                    var priorityKey = GetHighestPriorityKey(model, sourceKey, destinationKey);
-                    if (priorityKey != null)
-                    {
-                        var val = GetValueOfKey(model, priorityKey);
-                        if (val is not null)
-                        {
-                            sourceValueList.Add(val);
-                        }
-                    }
-                }
-                //checking if array has any element that contains "[".. This is for optional parameter
-                if (sKey.Contains("["))
-                {
-                    //Removing [ ] 
-                    var sKeyWithoutBracket = sKey.Substring(1, sKey.Length - 2);
-                    if (sKeyWithoutBracket != null)
-                    {
-                        var val = GetValueOfKey(model, sKeyWithoutBracket);
-                        if (val is not null)
-                        {
-                            sourceValueList.Add(val);
-                        }
-                    }
-                }
-                else
-                {
-                    var val = GetValueOfKey(model, sKey);
-                    if (val is not null)
-                    {
-                        sourceValueList.Add(val);
-                    }
-                }
-            }
-            object sourceValueConcatenated;
-            if (sourceKeyArray.Contains("WensJaar") && sourceValueList.Count==2)
-            {
-                List<int> list = sourceValueList.Select(o => Convert.ToInt32(o)).OrderBy(s=>s).ToList();
-                
-                sourceValueConcatenated = GetFridayFromDate(list[0], list[1]);
-            }
-            else
-            {
-                sourceValueConcatenated = string.Join(' ', sourceValueList);
-            }
-
-            return (destinationKey, sourceValueConcatenated);
-        }
+        
         public DateTime GetFridayFromDate(int weekNumber, int year)
         {
             DateTime jan1 = new DateTime(year, 1, 1);
@@ -179,8 +124,9 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
         public async Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template, TaskFetchResponse2Model model)
-        {
-            var responseModel = new ResponseModel<RES4aTemplate>();
+		//TaskFetchResponse2Model model contains sourse key and path
+		{
+			var responseModel = new ResponseModel<RES4aTemplate>();
             try
             {
                 var goEfficientMijnAansluitingMap = _configuration.GetSection("WMSBeheerderRES2Mapping").AsEnumerable();
@@ -195,7 +141,11 @@ namespace WMSBrokerProject.Repositories
                         var sourceKey = attribute.Value;//value is source key
                         var destinationKey = keyArray[keyArray.Length - 1];
 
-                    }
+						var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
+						
+						mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
+
+					}
                 }
 
 
@@ -210,12 +160,13 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
+        
         public async Task<ResponseModel<RES4aTemplate>> FillDataIn4aAddressTemplate(RES4aTemplate template, TaskFetchResponse2Model model)
         {
             var responseModel = new ResponseModel<RES4aTemplate>();
             try
             {
-                var goEfficientMijnAansluitingMap = _configuration.GetSection("MijnAansluitingRES2AddressMapping").AsEnumerable();
+                var goEfficientMijnAansluitingMap = _configuration.GetSection("WMSBeheerderRES2AddressMapping").AsEnumerable();
                 
                 Dictionary<string, object?> mappedValues = new();
                 foreach (var attribute in goEfficientMijnAansluitingMap)
@@ -226,25 +177,10 @@ namespace WMSBrokerProject.Repositories
                         var keyArray = key.Split(':');//in this array last but one will be key
                         var sourceKey = attribute.Value;//value is source key
                         var destinationKey = keyArray[keyArray.Length - 1];
-
-                        //For 1:Many
-                        //if (sourceKey.Contains(symbolForConcatenation))
-                        //{
-                        //    var valueTuple = GetOneToManyValue(model, sourceKey, destinationKey);
-                        //    mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
-                        //}
-                        //else if (sourceKey.Contains(symbolForPriority))
-                        //{
-                        //    var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-                        //    mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
-                        //}
-                        //else
-                        //{
-                        //    var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-                        //    mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
-                        //}
+                        var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
+                        mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);                        
                     }
-                }
+				}
                 template.GoEfficientAddressTemplateValues = mappedValues;
                 responseModel.Result = template;
                 responseModel.IsSuccess = true;
@@ -328,7 +264,8 @@ namespace WMSBrokerProject.Repositories
                 string? requestUri = _configuration.GetSection("GoEfficient:EndPointUrl").Value;
 
                 string xmlRequest4 = string.Empty;
-                var houseNumberSuffix = string.IsNullOrEmpty(model.HouseNumberSuffix) ? "" : model.HouseNumberSuffix + " ";
+                var houseNumberExtension = string.IsNullOrEmpty(model.HouseNumberExtension) ? "" : model.HouseNumberExtension + " ";
+                //var houseNumberSuffix = string.IsNullOrEmpty(model.HouseNumberSuffix) ? "" : model.HouseNumberSuffix + " ";
 
 
                 xmlRequest4 = $@"<Request>
@@ -338,7 +275,7 @@ namespace WMSBrokerProject.Repositories
                                              <OperationName>PRO_CREATE_TREE_FROM_TEMPL</OperationName>
                                              <Values>
                                                  <Value FieldName=""PRO.PRO_ID"">6744412</Value>
-                                                 <Value FieldName=""Indicator"">{year};{year_week};{model.CityName} {model.StreetName} {model.HouseNumber} {houseNumberSuffix}{model.ZipCode} {model.InId}</Value>
+                                                 <Value FieldName=""Indicator"">{year};{year_week};{model.CityName} {model.StreetName} {model.HouseNumber} {houseNumberExtension}{model.PostalCode} {model.InId}</Value>
                                                  <Value FieldName=""Indicator2"">6999459;6999459;9244608</Value>
                                                  <Value FieldName=""Indicator3"">P</Value>
                                              </Values>
@@ -806,7 +743,7 @@ namespace WMSBrokerProject.Repositories
             return $"{date.Year}-{week:00}";
         }
 
-		public async Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponseModel model)
+		public async Task<ResponseModel<Dictionary<string, object>>> FillSourcePathInBeheerderAttributesDictionary(TaskFetchResponseModel model)
 		{
 			var responseModel = new ResponseModel<Dictionary<string, object>>();
 			try
@@ -829,7 +766,177 @@ namespace WMSBrokerProject.Repositories
 			}
 			return responseModel;
 		}
+		public async Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponseModel model, Dictionary<string, object> sourcePathInBeheerderAttributesDictionary)
+		{
+			var responseModel = new ResponseModel<Dictionary<string, object>>();
+			try
+			{
+				Dictionary<string, object?> beheerderData = new Dictionary<string, object>();
+                foreach (var pair in sourcePathInBeheerderAttributesDictionary)
+                {
+                    var key = pair.Key;
+                    var valuePath = pair.Value;
+					var value = GetPropertyValueOrField(obj: model, propertyPath: valuePath.ToString());
+                    beheerderData.Add(key, value);
+				}
+
+				responseModel.Result = beheerderData;
+				responseModel.IsSuccess = true;
+			}
+			catch (Exception ex)
+			{
+				responseModel.ErrorMessage = ex.Message;
+				responseModel.ErrorCode = 10019;
+			}
+			return responseModel;
+		}
+
+		public async Task<ResponseModel<REQ4Model>> FillDataForRequest4(Dictionary<string, object> dataDictionary)
+		{
+			var responseModel = new ResponseModel<REQ4Model>();
+			try
+			{
+				var goEfficientWMSMap = _configuration.GetSection("WMSBeheerderRES4Mapping").AsEnumerable();
+
+				Dictionary<string, object?> mappedValues = new();
+				foreach (var attribute in goEfficientWMSMap)
+				{
+					if (attribute.Value != null)
+					{
+						var key = attribute.Key;//Its key represents RHS
+						var keyArray = key.Split(':');//in this array last but one will be key
+						
+                        var sourceKey = attribute.Value;//value is source key
+						var destinationKey = keyArray[keyArray.Length - 1];
+
+						//var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
+						var isValueAvailable = dataDictionary.TryGetValue(sourceKey, out object? value);
+						mappedValues.Add(destinationKey, value);
+					}
+				}
+                mappedValues.TryGetValue("streetName", out object? streetName);
+				mappedValues.TryGetValue("cityName", out object? cityName);
+				mappedValues.TryGetValue("country", out object? country);
+				mappedValues.TryGetValue("houseNumber", out object? houseNumber);
+				mappedValues.TryGetValue("postalCode", out object? postalCode);
+				mappedValues.TryGetValue("houseNumberExtension", out object? houseNumberExtension);
+				//mappedValues.TryGetValue("streetName", out object? streetName);
+
+
+				responseModel.Result = new REQ4Model
+                {
+                    StreetName = streetName!.ToString()!,
+                    CityName = cityName!.ToString()!,
+					Country = country!.ToString()!,
+                    HouseNumber = houseNumber!.ToString()!,
+					PostalCode = postalCode!.ToString()!,
+					HouseNumberExtension = houseNumberExtension!.ToString()!
+				};
+				responseModel.IsSuccess = true;
+			}
+			catch (Exception ex)
+			{
+				responseModel.ErrorMessage = ex.Message;
+				responseModel.ErrorCode = 10017;
+			}
+			return responseModel;
+		}
+
+		#region Helper Functions of Response 2
+		public object GetPropertyValueOrField(object obj, string propertyPath)
+		{
+			if (obj == null) throw new ArgumentNullException(nameof(obj));
+			if (propertyPath == null) throw new ArgumentNullException(nameof(propertyPath));
+
+			Type objType = obj.GetType();
+			foreach (var part in propertyPath.Split('.'))
+			{
+				if (obj == null) { return null; }
+
+				// Check if the part has an indexer
+				var match = Regex.Match(part, @"(.*?)\[(\d+)\]");
+				if (match.Success)
+				{
+					var propertyName = match.Groups[1].Value;
+					var index = int.Parse(match.Groups[2].Value);
+
+					obj = GetValue(obj, objType, propertyName);
+
+					if (obj is IList list && index < list.Count)
+					{
+						if (list.Count > 1)
+						{
+							return null;
+						}
+						obj = list[index];
+						var count = list.Count;
+					}
+					else
+					{
+						return null;
+					}
+
+					objType = obj?.GetType();
+					continue;
+				}
+
+				obj = GetValue(obj, objType, part);
+
+				objType = obj?.GetType();
+			}
+			return obj;
+		}
+		public int? GetArrayPropertyCount(object obj, string propertyPath)
+		{
+			if (obj == null) throw new ArgumentNullException(nameof(obj));
+			if (propertyPath == null) throw new ArgumentNullException(nameof(propertyPath));
+
+			Type objType = obj.GetType();
+			foreach (var part in propertyPath.Split('.'))
+			{
+				if (obj == null) { return null; }
+
+				var match = Regex.Match(part, @"(.*?)\[(.*?)\]");
+				if (match.Success)
+				{
+					var propertyName = match.Groups[1].Value;
+
+					obj = GetValue(obj, objType, propertyName);
+
+					if (obj is IList list)
+					{
+						return list.Count;
+					}
+					else
+					{
+						return null;
+					}
+				}
+				obj = GetValue(obj, objType, part);
+				objType = obj?.GetType();
+			}
+			return null;
+		}
+		private object GetValue(object obj, Type objType, string part)
+		{
+			var propertyInfo = objType.GetProperty(part);
+			if (propertyInfo != null)
+			{
+				return propertyInfo.GetValue(obj, null);
+			}
+
+			var fieldInfo = objType.GetField(part);
+			if (fieldInfo != null)
+			{
+				return fieldInfo.GetValue(obj);
+			}
+
+			return null;
+		}
+
+		
+		#endregion
 	}
 
-   
+
 }
