@@ -88,7 +88,7 @@ namespace WMSBrokerProject.Repositories
 					await httpClient.PutAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.taskId}", content);
 				if (response.IsSuccessStatusCode)
 				{
-					string responseContent = await response.Content.ReadAsStringAsync();
+					//string responseContent = await response.Content.ReadAsStringAsync();
 					responseModel.IsSuccess = true;
 				}
 				else

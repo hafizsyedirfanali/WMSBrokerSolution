@@ -39,7 +39,7 @@ namespace WMSBrokerProject.Controllers
             inId = model.inId;
 
 			var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = inId }).ConfigureAwait(false);
-			if (!response2TaskFetch.IsSuccess) { }
+            if (!response2TaskFetch.IsSuccess) { }//{ return StatusCode(StatusCodes.Status500InternalServerError, response2TaskFetch); }
 
 			TaskFetchResponseModel taskFetchResponse = response2TaskFetch.Result!;
             actionOptions.Value.TryGetValue(taskFetchResponse.action, out var actionConfiguration);
@@ -179,6 +179,9 @@ namespace WMSBrokerProject.Controllers
                     clarification = taskFetchResponse.status.clarification
                 }
             }).ConfigureAwait(false);
+            if (!taskSyncResponse.IsSuccess) { }
+
+
             return Ok("Process completed successfully");
         }
         
