@@ -160,7 +160,7 @@ namespace WMSBrokerProject.Controllers
 
             var taskSyncResponse = await wMSBeheerderService.RequestTaskSync(new TaskSyncRequestModel
             {
-                taskId = taskFetchResponse.taskId,
+                taskId = taskFetchResponse.inId,
                 header = new TaskSyncRequestModel.Header
                 {
                     from = new TaskSyncRequestModel.From
