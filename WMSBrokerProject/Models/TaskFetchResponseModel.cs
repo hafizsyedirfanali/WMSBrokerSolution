@@ -130,6 +130,9 @@ namespace WMSBrokerProject.Models
         public class Status
         {
             public string mainStatus { get; set; }
+            public string subStatus { get; set; }
+            public string reason { get; set; }
+            public string clarification { get; set; }
         }
 
         public class Area

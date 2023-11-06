@@ -17,15 +17,16 @@ namespace WMSBrokerProject.Controllers
     {
         private string inId;
 		private readonly IGoEfficientService goEfficientService;
-		private readonly IWMSBeheerderService WMSBeheerderService;
-        private readonly IOptions<Dictionary<string, ActionConfiguration>> _actionOptions;
+		private readonly IWMSBeheerderService wMSBeheerderService;
+        private readonly IOptions<Dictionary<string, ActionConfiguration>> actionOptions;
 
-        public WMSBrokerController(IGoEfficientService goEfficientService, IOptions<Dictionary<string, ActionConfiguration>> actionOptions)
-        {
-            this.goEfficientService = goEfficientService;
-            _actionOptions = actionOptions;
-        }
-        [Route("TaskIndication")]
+		public WMSBrokerController(IGoEfficientService goEfficientService, IOptions<Dictionary<string, ActionConfiguration>> actionOptions, IWMSBeheerderService wMSBeheerderService)
+		{
+			this.goEfficientService = goEfficientService;
+			this.actionOptions = actionOptions;
+			this.wMSBeheerderService = wMSBeheerderService;
+		}
+		[Route("TaskIndication")]
         [HttpPost]
         public async Task<IActionResult> BeginProcess([FromBody] TaskIndicationRequestModel model)
         {
@@ -37,10 +38,11 @@ namespace WMSBrokerProject.Controllers
 
             inId = model.inId;
 
-			var response2TaskFetch = await WMSBeheerderService.Request2TaskFetch(new Models.REQ2Model { InID = inId }).ConfigureAwait(false);
+			var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = inId }).ConfigureAwait(false);
 			if (!response2TaskFetch.IsSuccess) { }
+
 			TaskFetchResponseModel taskFetchResponse = response2TaskFetch.Result!;
-            _actionOptions.Value.TryGetValue(taskFetchResponse.action, out var actionConfiguration);
+            actionOptions.Value.TryGetValue(taskFetchResponse.action, out var actionConfiguration);
             var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
             {
                 InId = inId,
@@ -156,6 +158,27 @@ namespace WMSBrokerProject.Controllers
 
             }
 
+            var taskSyncResponse = await wMSBeheerderService.RequestTaskSync(new TaskSyncRequestModel
+            {
+                taskId = taskFetchResponse.taskId,
+                header = new TaskSyncRequestModel.Header
+                {
+                    from = new TaskSyncRequestModel.From
+                    {
+                        orgId = taskFetchResponse.header.from.orgId,
+                        systemId = taskFetchResponse.header.from.systemId
+					},
+                    updateCount = taskFetchResponse.header.updateCount,
+                    created = taskFetchResponse.header.created
+                },
+                status = new TaskSyncRequestModel.Status
+                {
+                    mainStatus = taskFetchResponse.status.mainStatus,
+                    reason = taskFetchResponse.status.reason,
+                    subStatus = taskFetchResponse.status.subStatus,
+                    clarification = taskFetchResponse.status.clarification
+                }
+            }).ConfigureAwait(false);
             return Ok("Process completed successfully");
         }
         

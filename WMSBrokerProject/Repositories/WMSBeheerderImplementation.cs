@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WMSBrokerProject.Repositories
 {
@@ -71,20 +72,23 @@ namespace WMSBrokerProject.Repositories
 			return responseModel;
 		}
 
-		public async Task<ResponseModel<string>> RequestTaskSync(string InID)
+		public async Task<ResponseModel<TaskSyncResponseModel>> RequestTaskSync(TaskSyncRequestModel model)
 		{
-			var responseModel = new ResponseModel<string>();
+			var responseModel = new ResponseModel<TaskSyncResponseModel>();
 			try
 			{
 				using HttpClient httpClient = new HttpClient();
 				httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
 				// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
-				HttpResponseMessage response = await httpClient.GetAsync("wms-beheerder-api/contractor/Circet/tasks/9245949");
+				var dataJson = JsonConvert.SerializeObject(model);
+				var content = new StringContent(dataJson, Encoding.UTF8, "application/json");
+
+				model.taskId = "9245949";//this line to be removed
+				HttpResponseMessage response =
+					await httpClient.PutAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.taskId}", content);
 				if (response.IsSuccessStatusCode)
 				{
 					string responseContent = await response.Content.ReadAsStringAsync();
-					responseModel.Result = responseContent;
-
 					responseModel.IsSuccess = true;
 				}
 				else

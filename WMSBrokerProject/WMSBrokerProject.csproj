@@ -17,6 +17,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="WMSBeheerderAttributesSettings.Development.json" />
+    <Content Remove="WMSBeheerderAttributesSettingsExcluded.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <_ContentIncludedByDefault Remove="json.json" />
     <_ContentIncludedByDefault Remove="wmssettings.json" />
   </ItemGroup>

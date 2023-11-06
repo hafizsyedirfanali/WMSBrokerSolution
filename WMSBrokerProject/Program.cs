@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 builder.Configuration.AddJsonFile("wmssettings.json", optional: true, reloadOnChange: true);
 //builder.Configuration.AddJsonFile("WMSBeheerderAttributesSettings.json", optional: true, reloadOnChange: true);
-builder.Configuration.AddJsonFile("WMSBeheerderAttributesSettings-Copy.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile("WMSBeheerderAttributesSettings.json", optional: true, reloadOnChange: true);
 builder.Services.Configure<Dictionary<string, ActionConfiguration>>(configuration.GetSection("Actions"));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
