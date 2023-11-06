@@ -37,151 +37,126 @@ namespace WMSBrokerProject.Controllers
 
             inId = model.inId;
 
-			var Response2 = await WMSBeheerderService.Request2TaskFetch(new Models.REQ2Model { InID = inId }).ConfigureAwait(false);
-			if (Response2.IsSuccess)
-			{
-				
-			}
-
-			///Request 2
-			using (HttpClient httpClient = new HttpClient())
+			var response2TaskFetch = await WMSBeheerderService.Request2TaskFetch(new Models.REQ2Model { InID = inId }).ConfigureAwait(false);
+			if (!response2TaskFetch.IsSuccess) { }
+			TaskFetchResponseModel taskFetchResponse = response2TaskFetch.Result!;
+            _actionOptions.Value.TryGetValue(taskFetchResponse.action, out var actionConfiguration);
+            var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
             {
-                httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
-                // httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
-                HttpResponseMessage response = await httpClient.GetAsync("wms-beheerder-api/contractor/Circet/tasks/9245949");
+                InId = inId,
+                HuurderId = actionConfiguration.HuurderId
+            }).ConfigureAwait(false);
+            if (!responseREQ6.IsSuccess) { }
+            if (!responseREQ6.Result.IsRecordExist)
+            {
+                var taskFetchResponse2 = await goEfficientService
+                    .FillSourcePathInBeheerderAttributesDictionary(taskFetchResponse).ConfigureAwait(false);
+                if (!taskFetchResponse2.IsSuccess) { }
+                //above service gives key and path
+                var taskFetchResponseData = await goEfficientService.FillDataInBeheerderAttributesDictionary(taskFetchResponse, taskFetchResponse2.Result).ConfigureAwait(false);
+                if (!taskFetchResponseData.IsSuccess) { }
 
-                if (response.IsSuccessStatusCode)
+
+                #region RES4 RHS for PRO.PRO_ID
+                var dataDictionary = taskFetchResponseData.Result;
+
+                var taskFetchForReq4 = await goEfficientService.FillDataForRequest4(dataDictionary!);
+                if (!taskFetchForReq4.IsSuccess) { }
+                //var street = taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName;
+                //var cityName = taskFetchResponse.taskInfo.hasInfo.connectionAddress.city;
+                //var houseNumber = taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber;
+                //var zipCode = taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode;
+                ////var houseNumberSuffix = taskFetchResponse.taskInfo.hasInfo.connectionAddress.;
+                //var houseNumberSuffix = "";
+                var res4Result = await goEfficientService.REQ4_GetProIDAsync(new Models.REQ4Model
                 {
-                    string responseContent = await response.Content.ReadAsStringAsync();
+                    InId = inId,
+                    CityName = taskFetchForReq4.Result!.CityName,
+                    StreetName = taskFetchForReq4.Result!.StreetName,
+                    HouseNumber = taskFetchForReq4.Result!.HouseNumber,
+                    PostalCode = taskFetchForReq4.Result!.PostalCode,
+                    HouseNumberExtension = taskFetchForReq4.Result!.HouseNumberExtension
+                });
+                if (res4Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "GetProId service returned null" });
+                if (res4Result.Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "GetProId service returned null" });
+                if (!res4Result.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res4Result);
+                #endregion
+                var proId = res4Result.Result.ProId3;
+                if (proId is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "ProId is null" });
+                var responseGoEfficientAttr = await goEfficientService.GetGoEfficientAttributes();
+                var responseGoEfficientFileAttr = await goEfficientService.GetGoEfficientFileAttributes();
+                #region REQ4a RHS for Template
+                ///Here we have to pass the responseGoEfficientFileAttr
+                var res4aResult = await goEfficientService.REQ4a_GetTemplateFromGoEfficient(new Models.REQ4aModel
+                {
+                    InId = inId,
+                    ProId = proId,
+                    Username = "",
+                    Password = "",
+                    GoEfficientAttributes = responseGoEfficientAttr.Result
+                }).ConfigureAwait(false);
+                if (res4aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Get Template service returned null" });
+                if (res4aResult.Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Get Template service returned null" });
+                if (!res4aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res4aResult);
+                #endregion
+                var fin_Id = res4aResult.Result.FIN_ID;
 
-                    TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
+                var addresses = res4aResult.Result.Addresses;
 
-					//string inIdValue = responseData.inId;
-					_actionOptions.Value.TryGetValue(taskFetchResponse.action, out var actionConfiguration);
-                    var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
+                var responseFilledDataResult = await goEfficientService
+                    .FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
+                    {
+                        WMSBeheerderAttributes = taskFetchResponse2.Result
+                    });
+
+                var responseFilledAddressDataResult = await goEfficientService
+                    .FillDataIn4aAddressTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
+                    {
+                        WMSBeheerderAttributes = taskFetchResponse2.Result
+                    });
+
+                var goEfficientTemplateValues = responseFilledDataResult.Result.GoEfficientTemplateValues;
+
+                #region REQ5 RHS Save Record
+                var res5Result = await goEfficientService.REQ5_SaveRecordToGoEfficient(new Models.REQ5Model
+                {
+                    Username = "",
+                    Password = "",
+                    InId = inId,
+                    PRO_ID_3 = proId,
+                    RES4aTemplate = responseFilledDataResult.Result,
+                    GoEfficientTemplateValues = goEfficientTemplateValues
+                }).ConfigureAwait(false);
+                if (res5Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Record service returned null" });
+                if (!res5Result.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5Result);
+                #endregion
+
+
+                foreach (var address in addresses)
+                {
+                    #region REQ5a RHS Save Addresses
+                    var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
                     {
                         InId = inId,
-						HuurderId = actionConfiguration.HuurderId
+                        PRO_ID_3 = proId,
+                        Username = "",
+                        Password = "",
+                        Address_FIN_ID = fin_Id,
+                        City = address.City,
+                        HouseNo = address.HouseNo,
+                        HouseNoSuffix = address.HouseNoSuffix,
+                        PostalCode = address.PostalCode,
+                        Street = address.Street,
+                        Template = responseFilledAddressDataResult.Result
                     }).ConfigureAwait(false);
-					if (!responseREQ6.IsSuccess) { }
-					if (!responseREQ6.Result.IsRecordExist)
-					{
+                    if (res5aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Address service returned null" });
+                    if (!res5aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5aResult);
+                    #endregion
+                }
 
-						var taskFetchResponse2 = await goEfficientService.FillSourcePathInBeheerderAttributesDictionary(taskFetchResponse).ConfigureAwait(false);
-						if (!taskFetchResponse2.IsSuccess) { }
-						//above service gives key and path
-						var taskFetchResponseData = await goEfficientService.FillDataInBeheerderAttributesDictionary(taskFetchResponse, taskFetchResponse2.Result).ConfigureAwait(false);
-						if (!taskFetchResponseData.IsSuccess) { }
-
-
-						#region RES4 RHS for PRO.PRO_ID
-						var dataDictionary = taskFetchResponseData.Result;
-						
-						var taskFetchForReq4 = await goEfficientService.FillDataForRequest4(dataDictionary!);
-						if (!taskFetchForReq4.IsSuccess) { }
-						//var street = taskFetchResponse.taskInfo.hasInfo.connectionAddress.streetName;
-						//var cityName = taskFetchResponse.taskInfo.hasInfo.connectionAddress.city;
-						//var houseNumber = taskFetchResponse.taskInfo.hasInfo.connectionAddress.houseNumber;
-						//var zipCode = taskFetchResponse.taskInfo.hasInfo.connectionAddress.postalCode;
-						////var houseNumberSuffix = taskFetchResponse.taskInfo.hasInfo.connectionAddress.;
-						//var houseNumberSuffix = "";
-						var res4Result = await goEfficientService.REQ4_GetProIDAsync(new Models.REQ4Model
-						{
-							InId = inId,
-							CityName = taskFetchForReq4.Result!.CityName,
-							StreetName = taskFetchForReq4.Result!.StreetName,
-							HouseNumber = taskFetchForReq4.Result!.HouseNumber,
-							PostalCode = taskFetchForReq4.Result!.PostalCode,
-							HouseNumberExtension = taskFetchForReq4.Result!.HouseNumberExtension
-						});
-						if (res4Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "GetProId service returned null" });
-						if (res4Result.Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "GetProId service returned null" });
-						if (!res4Result.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res4Result);
-						#endregion
-						var proId = res4Result.Result.ProId3;
-						if (proId is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "ProId is null" });
-						var responseGoEfficientAttr = await goEfficientService.GetGoEfficientAttributes();
-						var responseGoEfficientFileAttr = await goEfficientService.GetGoEfficientFileAttributes();
-						#region REQ4a RHS for Template
-						///Here we have to pass the responseGoEfficientFileAttr
-						var res4aResult = await goEfficientService.REQ4a_GetTemplateFromGoEfficient(new Models.REQ4aModel
-						{
-							InId = inId,
-							ProId = proId,
-							Username = "",
-							Password = "",
-							GoEfficientAttributes = responseGoEfficientAttr.Result
-						}).ConfigureAwait(false);
-						if (res4aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Get Template service returned null" });
-						if (res4aResult.Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Get Template service returned null" });
-						if (!res4aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res4aResult);
-						#endregion
-						var fin_Id = res4aResult.Result.FIN_ID;
-
-						var addresses = res4aResult.Result.Addresses;
-						
-						var responseFilledDataResult = await goEfficientService
-							.FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
-							{
-								WMSBeheerderAttributes = taskFetchResponse2.Result
-							});
-
-						var responseFilledAddressDataResult = await goEfficientService
-							.FillDataIn4aAddressTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
-							{
-								WMSBeheerderAttributes = taskFetchResponse2.Result
-							});
-
-						var goEfficientTemplateValues = responseFilledDataResult.Result.GoEfficientTemplateValues;
-
-						#region REQ5 RHS Save Record
-						var res5Result = await goEfficientService.REQ5_SaveRecordToGoEfficient(new Models.REQ5Model
-						{
-							Username = "",
-							Password = "",
-							InId = inId,
-							PRO_ID_3 = proId,
-							RES4aTemplate = responseFilledDataResult.Result,
-							GoEfficientTemplateValues = goEfficientTemplateValues
-						}).ConfigureAwait(false);
-						if (res5Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Record service returned null" });
-						if (!res5Result.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5Result);
-						#endregion
-
-
-						foreach (var address in addresses)
-						{
-							#region REQ5a RHS Save Addresses
-							var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
-							{
-								InId = inId,
-								PRO_ID_3 = proId,
-								Username = "",
-								Password = "",
-								Address_FIN_ID = fin_Id,
-								City = address.City,
-								HouseNo = address.HouseNo,
-								HouseNoSuffix = address.HouseNoSuffix,
-								PostalCode = address.PostalCode,
-								Street = address.Street,
-								Template = responseFilledAddressDataResult.Result
-							}).ConfigureAwait(false);
-							if (res5aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Address service returned null" });
-							if (!res5aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5aResult);
-							#endregion
-						}
-
-					}
-					//task sync
-				}
             }
 
-            ///Request 3 onwardas
-
-
-
-
-            return Ok();
+            return Ok("Process completed successfully");
         }
         
     }

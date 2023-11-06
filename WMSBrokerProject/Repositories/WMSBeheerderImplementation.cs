@@ -42,21 +42,20 @@ namespace WMSBrokerProject.Repositories
 				using HttpClient httpClient = new HttpClient();
 				httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
 				// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
-				HttpResponseMessage response = await httpClient.GetAsync("wms-beheerder-api/contractor/Circet/tasks/9245949");
+				model.InID = "9245949";//this line to be removed
+                HttpResponseMessage response = 
+					await httpClient.GetAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.InID}");
 				if (response.IsSuccessStatusCode)
 				{
 					string responseContent = await response.Content.ReadAsStringAsync();
-
-
 					TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
 					responseModel.Result = taskFetchResponse;
-
 					responseModel.IsSuccess = true;
 				}
 				else
 				{
 					responseModel.ErrorCode = (int)response.StatusCode;
-					responseModel.ErrorMessage = "Call failure";
+					responseModel.ErrorMessage = $"Task fetch call failure with status/code:{response.StatusCode}";
 				}
 			}
 			catch (HttpRequestException ex)
@@ -91,18 +90,19 @@ namespace WMSBrokerProject.Repositories
 				else
 				{
 					responseModel.ErrorCode = (int)response.StatusCode;
-					responseModel.ErrorMessage = "Call failure";
-				}
-			}
+                    responseModel.ErrorMessage = $"Task Sync call failure with status/code:{response.StatusCode}";
+
+                }
+            }
 			catch (HttpRequestException ex)
 			{
 				responseModel.ErrorMessage = ex.Message;
-				responseModel.ErrorCode = 50001;
+				responseModel.ErrorCode = 50003;
 			}
 			catch (Exception ex)
 			{
 				responseModel.ErrorMessage = ex.Message;
-				responseModel.ErrorCode = 50002;
+				responseModel.ErrorCode = 50004;
 			}
 			return responseModel;
 		}
