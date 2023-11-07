@@ -8,10 +8,10 @@
     <Result>
       <Rows Count="10">
         <Row>
-          <Value FieldName="FIN.FIN_ID">71407634</Value>
-          <Value FieldName="UDF.UDF_TYPE">T</Value>
+          <Value FieldName="FIN.FIN_ID">71068879</Value>
+          <Value FieldName="UDF.UDF_TYPE">A</Value>
           <Value FieldName="FIN.FIN_NAME">MA.nl-ObjectID</Value>
-          <Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
+          <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
           <Value FieldName="FIN.FIN_PATH" />
           <Value FieldName="FIN.FIN_DATE" />
           <Value FieldName="FIN.FIN_NUMBER" />
@@ -19,191 +19,134 @@
           <Value FieldName="FIN.FIN_FILE_EXT" />
           <Value FieldName="UDF.UDF_TYPEINFO" />
           <Value FieldName="UDF.UDF_LABEL">MA.nl-ObjectID</Value>
-          <Value FieldName="PRO.PRO_ID">9246345</Value>
+          <Value FieldName="PRO.PRO_ID">9242119</Value>
         </Row>
         <Row>
-          <Value FieldName="FIN.FIN_ID">71407635</Value>
-          <Value FieldName="UDF.UDF_TYPE">T</Value>
-          <Value FieldName="FIN.FIN_NAME">MA.nl-AanvraagID</Value>
-          <Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
+          <Value FieldName="FIN.FIN_ID">71068880</Value>
+          <Value FieldName="UDF.UDF_TYPE">FC</Value>
+          <Value FieldName="FIN.FIN_NAME">21 Soort schade</Value>
+          <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
           <Value FieldName="FIN.FIN_PATH" />
           <Value FieldName="FIN.FIN_DATE" />
           <Value FieldName="FIN.FIN_NUMBER" />
           <Value FieldName="FIN.FIN_MEMO" />
           <Value FieldName="FIN.FIN_FILE_EXT" />
-          <Value FieldName="UDF.UDF_TYPEINFO"/>
-          <Value FieldName="UDF.UDF_LABEL">MA.nl-AanvraagID</Value>
-          <Value FieldName="PRO.PRO_ID">9246345</Value>
+          <Value FieldName="UDF.UDF_TYPEINFO">SEL:&lt;01&gt;=Choise01;&lt;02&gt;=Choise02;</Value>
+          <Value FieldName="UDF.UDF_LABEL">WePoFC</Value>
+          <Value FieldName="PRO.PRO_ID">9242119</Value>
         </Row>
-		<Row>
-		  <Value FieldName="FIN.FIN_ID">71407670</Value>
-		  <Value FieldName="UDF.UDF_TYPE">T</Value>
-		  <Value FieldName="FIN.FIN_NAME">Naam-aanvrager</Value>
-		  <Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-		  <Value FieldName="FIN.FIN_PATH"/>
-		  <Value FieldName="FIN.FIN_DATE"/>
-		  <Value FieldName="FIN.FIN_NUMBER"/>
-		  <Value FieldName="FIN.FIN_MEMO"/>
-		  <Value FieldName="FIN.FIN_FILE_EXT"/>
-		  <Value FieldName="UDF.UDF_TYPEINFO"/>
-		  <Value FieldName="UDF.UDF_LABEL">NKM_ST_Naam-klant</Value>
-		  <Value FieldName="PRO.PRO_ID">9246345</Value>
-        </Row>      
-		<Row>
-		  <Value FieldName="FIN.FIN_ID">71407671</Value>
-		  <Value FieldName="UDF.UDF_TYPE">T</Value>
-		  <Value FieldName="FIN.FIN_NAME">Mobiel aanvrager</Value>
-		  <Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-		  <Value FieldName="FIN.FIN_PATH"/>
-		  <Value FieldName="FIN.FIN_DATE"/>
-		  <Value FieldName="FIN.FIN_NUMBER"/>
-		  <Value FieldName="FIN.FIN_MEMO"/>
-		  <Value FieldName="FIN.FIN_FILE_EXT"/>
-		  <Value FieldName="UDF.UDF_TYPEINFO"/>
-		  <Value FieldName="UDF.UDF_LABEL">NKM_ST_Telnr-vast-klant</Value>
-		  <Value FieldName="PRO.PRO_ID">9246345</Value>
-		</Row>		
-		<Row>
-			<Value FieldName="FIN.FIN_ID">71407672</Value>
-			<Value FieldName="UDF.UDF_TYPE">T</Value>
-			<Value FieldName="FIN.FIN_NAME">E-mail aanvrager</Value>
-			<Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-			<Value FieldName="FIN.FIN_PATH"/>
-			<Value FieldName="FIN.FIN_DATE"/>
-			<Value FieldName="FIN.FIN_NUMBER"/>
-			<Value FieldName="FIN.FIN_MEMO"/>
-			<Value FieldName="FIN.FIN_FILE_EXT"/>
-			<Value FieldName="UDF.UDF_TYPEINFO"/>
-			<Value FieldName="UDF.UDF_LABEL">E-mail-adres-klant</Value>
-			<Value FieldName="PRO.PRO_ID">9246345</Value>
-		</Row>
-		<Row>
-			<Value FieldName="FIN.FIN_ID">71407673</Value>
-			<Value FieldName="UDF.UDF_TYPE">D</Value>
-			<Value FieldName="FIN.FIN_NAME">Datum aanvraag ontvangen</Value>
-			<Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-			<Value FieldName="FIN.FIN_PATH"/>
-			<Value FieldName="FIN.FIN_DATE"/>
-			<Value FieldName="FIN.FIN_NUMBER"/>
-			<Value FieldName="FIN.FIN_MEMO"/>
-			<Value FieldName="FIN.FIN_FILE_EXT"/>
-			<Value FieldName="UDF.UDF_TYPEINFO">dd-MM-yyyy</Value>
-			<Value FieldName="UDF.UDF_LABEL">Date</Value>
-			<Value FieldName="PRO.PRO_ID">9246345</Value>
-		</Row>
-		<Row>
-			<Value FieldName="FIN.FIN_ID">71407674</Value>
-			<Value FieldName="UDF.UDF_TYPE">FC</Value>
-			<Value FieldName="FIN.FIN_NAME">Aanvraag ontvangen via?</Value>
-			<Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-			<Value FieldName="FIN.FIN_PATH"/>
-			<Value FieldName="FIN.FIN_DATE"/>
-			<Value FieldName="FIN.FIN_NUMBER"/>
-			<Value FieldName="FIN.FIN_MEMO"/>
-			<Value FieldName="FIN.FIN_FILE_EXT"/>
-			<Value FieldName="UDF.UDF_TYPEINFO">SEL:<A>=Aansluitingen.nl;<ISP>=ISP;<CAIW>=Caiway;<WEB>=Web CIF;<M>=Mail;<LIP>=LIP aanvraagnummer;<COMB>=Combi projectnummer;</Value>
-			<Value FieldName="UDF.UDF_LABEL">NKM_SOC_Aanvraag</Value>
-			<Value FieldName="PRO.PRO_ID">9246345</Value>
-		</Row>
-		<Row>
-			<Value FieldName="FIN.FIN_ID">71407675</Value>
-			<Value FieldName="UDF.UDF_TYPE">T</Value>
-			<Value FieldName="FIN.FIN_NAME">Wensdatum</Value>
-			<Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-			<Value FieldName="FIN.FIN_PATH"/>
-			<Value FieldName="FIN.FIN_DATE"/>
-			<Value FieldName="FIN.FIN_NUMBER"/>
-			<Value FieldName="FIN.FIN_MEMO"/>
-			<Value FieldName="FIN.FIN_FILE_EXT"/>
-			<Value FieldName="UDF.UDF_TYPEINFO"/>
-			<Value FieldName="UDF.UDF_LABEL">AM_RFS_DAT</Value>
-			<Value FieldName="PRO.PRO_ID">9246345</Value>
-		</Row>
         <Row>
-			<Value FieldName="FIN.FIN_ID">71407677</Value>
-			<Value FieldName="UDF.UDF_TYPE">FC</Value>
-			<Value FieldName="FIN.FIN_NAME">Betreft het een Hoog Laag of een Duplex woning?</Value>
-			<Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-			<Value FieldName="FIN.FIN_PATH"/>
-			<Value FieldName="FIN.FIN_DATE"/>
-			<Value FieldName="FIN.FIN_NUMBER"/>
-			<Value FieldName="FIN.FIN_MEMO"/>
-			<Value FieldName="FIN.FIN_FILE_EXT"/>
-			<Value FieldName="UDF.UDF_TYPEINFO">SEL:<HOOG>=Hoogbouw;<LAAG>=Laagbouw;<DPLX>=Duplex;<AP>=Appartement/appartements-gebouw</Value>
-			<Value FieldName="UDF.UDF_LABEL">FTTH_Hoog_Laagbouw</Value>
-			<Value FieldName="PRO.PRO_ID">9246345</Value>
-		</Row>
+          <Value FieldName="FIN.FIN_ID">71068881</Value>
+          <Value FieldName="UDF.UDF_TYPE">B</Value>
+          <Value FieldName="FIN.FIN_NAME">22 Is gat nog open?</Value>
+          <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
+          <Value FieldName="FIN.FIN_PATH" />
+          <Value FieldName="FIN.FIN_DATE" />
+          <Value FieldName="FIN.FIN_NUMBER" />
+          <Value FieldName="FIN.FIN_MEMO" />
+          <Value FieldName="FIN.FIN_FILE_EXT" />
+          <Value FieldName="UDF.UDF_TYPEINFO">SEL:&lt;0&gt;=Nee;&lt;1&gt;=Ja;</Value>
+          <Value FieldName="UDF.UDF_LABEL">WePoB</Value>
+          <Value FieldName="PRO.PRO_ID">9242119</Value>
+        </Row>
         <Row>
-			<Value FieldName="FIN.FIN_ID">71407687</Value>
-			<Value FieldName="UDF.UDF_TYPE">N</Value>
-			<Value FieldName="FIN.FIN_NAME">Aantal aansluitingen</Value>
-			<Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-			<Value FieldName="FIN.FIN_PATH"/>
-			<Value FieldName="FIN.FIN_DATE"/>
-			<Value FieldName="FIN.FIN_NUMBER"/>
-			<Value FieldName="FIN.FIN_MEMO"/>
-			<Value FieldName="FIN.FIN_FILE_EXT"/>
-			<Value FieldName="UDF.UDF_TYPEINFO"/>
-			<Value FieldName="UDF.UDF_LABEL">NKM_ST_Graafwerk</Value>
-			<Value FieldName="PRO.PRO_ID">9246345</Value>
-		</Row>
-		        <Row>
-			<Value FieldName="FIN.FIN_ID">71407688</Value>
-			<Value FieldName="UDF.UDF_TYPE">A</Value>
-			<Value FieldName="FIN.FIN_NAME">Aanleg-Adres (Address)</Value>
-			<Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-			<Value FieldName="FIN.FIN_PATH"/>
-			<Value FieldName="FIN.FIN_DATE"/>
-			<Value FieldName="FIN.FIN_NUMBER"/>
-			<Value FieldName="FIN.FIN_MEMO"/>
-			<Value FieldName="FIN.FIN_FILE_EXT"/>
-			<Value FieldName="UDF.UDF_TYPEINFO"/>
-			<Value FieldName="UDF.UDF_LABEL">Address</Value>
-			<Value FieldName="PRO.PRO_ID">9246345</Value>
-		</Row>
-		        <Row>
-			<Value FieldName="FIN.FIN_ID">71407689</Value>
-			<Value FieldName="UDF.UDF_TYPE">F</Value>
-			<Value FieldName="FIN.FIN_NAME">Plattegrond</Value>
-			<Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-			<Value FieldName="FIN.FIN_PATH"/>
-			<Value FieldName="FIN.FIN_DATE"/>
-			<Value FieldName="FIN.FIN_NUMBER"/>
-			<Value FieldName="FIN.FIN_MEMO"/>
-			<Value FieldName="FIN.FIN_FILE_EXT"/>
-			<Value FieldName="UDF.UDF_TYPEINFO"/>
-			<Value FieldName="UDF.UDF_LABEL">Plattegrond</Value>
-			<Value FieldName="PRO.PRO_ID">9246345</Value>
-		</Row>
-		 <Row>
-			<Value FieldName="FIN.FIN_ID">71407690</Value>
-			<Value FieldName="UDF.UDF_TYPE">F</Value>
-			<Value FieldName="FIN.FIN_NAME">Situatieschets</Value>
-			<Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-			<Value FieldName="FIN.FIN_PATH"/>
-			<Value FieldName="FIN.FIN_DATE"/>
-			<Value FieldName="FIN.FIN_NUMBER"/>
-			<Value FieldName="FIN.FIN_MEMO"/>
-			<Value FieldName="FIN.FIN_FILE_EXT"/>
-			<Value FieldName="UDF.UDF_TYPEINFO"/>
-			<Value FieldName="UDF.UDF_LABEL">Situatieschets</Value>
-			<Value FieldName="PRO.PRO_ID">9246345</Value>
-		</Row>
-		<Row>
-			<Value FieldName="FIN.FIN_ID">7140791</Value>
-			<Value FieldName="UDF.UDF_TYPE">F</Value>
-			<Value FieldName="FIN.FIN_NAME">AanvragPDF</Value>
-			<Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-			<Value FieldName="FIN.FIN_PATH"/>
-			<Value FieldName="FIN.FIN_DATE"/>
-			<Value FieldName="FIN.FIN_NUMBER"/>
-			<Value FieldName="FIN.FIN_MEMO"/>
-			<Value FieldName="FIN.FIN_FILE_EXT"/>
-			<Value FieldName="UDF.UDF_TYPEINFO"/>
-			<Value FieldName="UDF.UDF_LABEL">AanvragPDF</Value>
-			<Value FieldName="PRO.PRO_ID">9246345</Value>
-		</Row>
-        
+          <Value FieldName="FIN.FIN_ID">71068882</Value>
+          <Value FieldName="UDF.UDF_TYPE">N</Value>
+          <Value FieldName="FIN.FIN_NAME">23 KLIC meldnummer</Value>
+          <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
+          <Value FieldName="FIN.FIN_PATH" />
+          <Value FieldName="FIN.FIN_DATE" />
+          <Value FieldName="FIN.FIN_NUMBER" />
+          <Value FieldName="FIN.FIN_MEMO" />
+          <Value FieldName="FIN.FIN_FILE_EXT" />
+          <Value FieldName="UDF.UDF_TYPEINFO" />
+          <Value FieldName="UDF.UDF_LABEL">WePoN</Value>
+          <Value FieldName="PRO.PRO_ID">9242119</Value>
+        </Row>
+        <Row>
+          <Value FieldName="FIN.FIN_ID">71068883</Value>
+          <Value FieldName="UDF.UDF_TYPE">D</Value>
+          <Value FieldName="FIN.FIN_NAME">24 Datum schade</Value>
+          <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
+          <Value FieldName="FIN.FIN_PATH" />
+          <Value FieldName="FIN.FIN_DATE" />
+          <Value FieldName="FIN.FIN_NUMBER" />
+          <Value FieldName="FIN.FIN_MEMO" />
+          <Value FieldName="FIN.FIN_FILE_EXT" />
+          <Value FieldName="UDF.UDF_TYPEINFO" />
+          <Value FieldName="UDF.UDF_LABEL">WePoD</Value>
+          <Value FieldName="PRO.PRO_ID">9242119</Value>
+        </Row>
+        <Row>
+          <Value FieldName="FIN.FIN_ID">71068884</Value>
+          <Value FieldName="UDF.UDF_TYPE">DT</Value>
+          <Value FieldName="FIN.FIN_NAME">25 Tijd schade</Value>
+          <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
+          <Value FieldName="FIN.FIN_PATH" />
+          <Value FieldName="FIN.FIN_DATE" />
+          <Value FieldName="FIN.FIN_NUMBER" />
+          <Value FieldName="FIN.FIN_MEMO" />
+          <Value FieldName="FIN.FIN_FILE_EXT" />
+          <Value FieldName="UDF.UDF_TYPEINFO" />
+          <Value FieldName="UDF.UDF_LABEL">WePoDT</Value>
+          <Value FieldName="PRO.PRO_ID">9242119</Value>
+        </Row>
+        <Row>
+          <Value FieldName="FIN.FIN_ID">71068885</Value>
+          <Value FieldName="UDF.UDF_TYPE">T</Value>
+          <Value FieldName="FIN.FIN_NAME">31 Naam (bedrijf) veroorzaker</Value>
+          <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
+          <Value FieldName="FIN.FIN_PATH" />
+          <Value FieldName="FIN.FIN_DATE" />
+          <Value FieldName="FIN.FIN_NUMBER" />
+          <Value FieldName="FIN.FIN_MEMO" />
+          <Value FieldName="FIN.FIN_FILE_EXT" />
+          <Value FieldName="UDF.UDF_TYPEINFO" />
+          <Value FieldName="UDF.UDF_LABEL">WePoT</Value>
+          <Value FieldName="PRO.PRO_ID">9242119</Value>
+        </Row>
+        <Row>
+          <Value FieldName="FIN.FIN_ID">71068886</Value>
+          <Value FieldName="UDF.UDF_TYPE">D</Value>
+          <Value FieldName="FIN.FIN_NAME">41 Datum melding</Value>
+          <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
+          <Value FieldName="FIN.FIN_PATH" />
+          <Value FieldName="FIN.FIN_DATE" />
+          <Value FieldName="FIN.FIN_NUMBER" />
+          <Value FieldName="FIN.FIN_MEMO" />
+          <Value FieldName="FIN.FIN_FILE_EXT" />
+          <Value FieldName="UDF.UDF_TYPEINFO" />
+          <Value FieldName="UDF.UDF_LABEL">WePoD</Value>
+          <Value FieldName="PRO.PRO_ID">9242119</Value>
+        </Row>
+        <Row>
+          <Value FieldName="FIN.FIN_ID">71068887</Value>
+          <Value FieldName="UDF.UDF_TYPE">T</Value>
+          <Value FieldName="FIN.FIN_NAME">42 Naam melder</Value>
+          <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
+          <Value FieldName="FIN.FIN_PATH" />
+          <Value FieldName="FIN.FIN_DATE" />
+          <Value FieldName="FIN.FIN_NUMBER" />
+          <Value FieldName="FIN.FIN_MEMO" />
+          <Value FieldName="FIN.FIN_FILE_EXT" />
+          <Value FieldName="UDF.UDF_TYPEINFO" />
+          <Value FieldName="UDF.UDF_LABEL">WePoT</Value>
+          <Value FieldName="PRO.PRO_ID">9242119</Value>
+        </Row>
+        <Row>
+          <Value FieldName="FIN.FIN_ID">71068888</Value>
+          <Value FieldName="UDF.UDF_TYPE">T</Value>
+          <Value FieldName="FIN.FIN_NAME">43 Telefoonnummer melder</Value>
+          <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
+          <Value FieldName="FIN.FIN_PATH" />
+          <Value FieldName="FIN.FIN_DATE" />
+          <Value FieldName="FIN.FIN_NUMBER" />
+          <Value FieldName="FIN.FIN_MEMO" />
+          <Value FieldName="FIN.FIN_FILE_EXT" />
+          <Value FieldName="UDF.UDF_TYPEINFO" />
+          <Value FieldName="UDF.UDF_LABEL">WePoT</Value>
+          <Value FieldName="PRO.PRO_ID">9242119</Value>
+        </Row>
       </Rows>
     </Result>
   </Body>
