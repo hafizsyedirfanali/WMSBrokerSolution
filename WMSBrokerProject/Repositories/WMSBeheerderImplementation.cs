@@ -41,7 +41,7 @@ namespace WMSBrokerProject.Repositories
 			try
 			{
                 string responseContent = File.ReadAllText("response2.json");
-                TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
+                TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject <TaskFetchResponseModel> (responseContent)!;
 				responseModel.Result = taskFetchResponse;
 				responseModel.IsSuccess = true;
                 //+++++++++++++++UnComment Following lines in live environment and comment above lines

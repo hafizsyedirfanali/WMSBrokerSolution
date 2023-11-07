@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Response>
+  <Header>
+    <RequestId />
+    <Timestamp>2022-06-08T09:51:45</Timestamp>
+  </Header>
+  <Body>
+    <Result>
+      <Values>
+        <Value FieldName="PRO.PRO_ID">9241480</Value>
+        <Value FieldName="Indicator">2022;2022-06;Aanvraag4</Value>
+        <Value FieldName="Indicator2">9241301;9241301;9241302</Value>
+        <Value FieldName="Indicator3">P</Value>
+        <Value FieldName="PRO.PRO_ID_1">9241544</Value>
+        <Value FieldName="PRO.PRO_ID_2">9242118</Value>
+        <Value FieldName="PRO.PRO_ID_3">9242119</Value>
+      </Values>
+    </Result>
+  </Body>
+</Response>

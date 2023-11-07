@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Response>
+    <Header>
+        <RequestId>12345</RequestId>
+        <Timestamp>2023-09-14T02:20:16</Timestamp>
+    </Header>
+    <Body>
+        <Result>
+            <Rows Count="0">
+            </Rows>
+        </Result>
+    </Body>
+</Response>

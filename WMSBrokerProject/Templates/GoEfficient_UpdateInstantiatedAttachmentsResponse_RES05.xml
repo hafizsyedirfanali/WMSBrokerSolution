@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Response>
+  <Header>
+    <RequestId>0000</RequestId>
+    <Timestamp>2022-06-08T12:17:18</Timestamp>
+  </Header>
+  <Body>
+    <Result />
+  </Body>
+</Response>

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
 using System.IO.Pipelines;
 using System.Reflection.Emit;
@@ -26,6 +27,8 @@ namespace WMSBrokerProject.Controllers
 			this.actionOptions = actionOptions;
 			this.wMSBeheerderService = wMSBeheerderService;
 		}
+		
+		
 		[Route("TaskIndication")]
         [HttpPost]
         public async Task<IActionResult> BeginProcess([FromBody] TaskIndicationRequestModel model)
