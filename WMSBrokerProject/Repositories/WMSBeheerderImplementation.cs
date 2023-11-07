@@ -40,26 +40,30 @@ namespace WMSBrokerProject.Repositories
 			var responseModel = new ResponseModel<TaskFetchResponseModel>();
 			try
 			{
-				using HttpClient httpClient = new HttpClient();
-				httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
-				// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
-				model.InID = "9245949";//this line to be removed
-                HttpResponseMessage response = 
-					await httpClient.GetAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.InID}");
-				if (response.IsSuccessStatusCode)
-				{
-					string responseContent = await response.Content.ReadAsStringAsync();
-					TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
-					responseModel.Result = taskFetchResponse;
-					responseModel.IsSuccess = true;
-				}
-				else
-				{
-					responseModel.ErrorCode = (int)response.StatusCode;
-					responseModel.ErrorMessage = $"Task fetch call failure with status/code:{response.StatusCode}";
-				}
-			}
-			catch (HttpRequestException ex)
+                string responseContent = File.ReadAllText("response2.json");
+                TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
+				responseModel.Result = taskFetchResponse;
+				responseModel.IsSuccess = true;
+                //+++++++++++++++UnComment Following lines in live environment and comment above lines
+                //using HttpClient httpClient = new HttpClient();
+                //httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
+                //// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
+                //model.InID = "9245949";//this line to be removed
+                //            HttpResponseMessage response = await httpClient.GetAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.InID}");
+                //if (response.IsSuccessStatusCode)
+                //{
+                //	string responseContent = await response.Content.ReadAsStringAsync();
+                //	TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
+                //	responseModel.Result = taskFetchResponse;
+                //	responseModel.IsSuccess = true;
+                //}
+                //else
+                //{
+                //	responseModel.ErrorCode = (int)response.StatusCode;
+                //	responseModel.ErrorMessage = $"Task fetch call failure with status/code:{response.StatusCode}";
+                //}
+            }
+            catch (HttpRequestException ex)
 			{
 				responseModel.ErrorMessage = ex.Message;
 				responseModel.ErrorCode = 50001;
