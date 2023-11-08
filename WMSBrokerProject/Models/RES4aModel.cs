@@ -3,8 +3,8 @@
     public class RES4aModel
     {
 
-        public string? FIN_ID { get; set; }
-        public List<RES4aAddress> Addresses { get; set; }
+        //public string? FIN_ID { get; set; }
+        //public List<RES4aAddress> Addresses { get; set; }
         public RES4aTemplate Template { get; set; }
 
     }

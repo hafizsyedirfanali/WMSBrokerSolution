@@ -3,7 +3,7 @@
     //Note: Destination key name not to be changed.
     //Destination : Source 
     "streetName": "streetName",
-    "cityName": "cityName",
+    "cityName": "city",
     "country": "country",
     "houseNumber": "houseNumber",
     "postalCode": "postalCode",
@@ -13,25 +13,26 @@
     //Here key name must be same as the key name in GoEFficientAttributes.json
     //Here value must be equal to the key of MijnAansluitingAttributes for 1:1
     //Destination : Source
-    "cifwms-dhid": "inId",
-    "cifwms-fibernumber": "fiberNumber",
-    "ADRESS.ADRESS_HOUSNR": "houseNumber",
-    "ADRESS.ADRESS_HOUSNR_SFX": "houseNumberExtension",
-    "ADRESS.ADRESS_STREET": "streetName",
-    "ADRESS.ADRESS_TOWN": "city",
-    "ADRESS.ADRESS_CNTR_ISO3166A3": "country",
-    "ADRESS.ADRESS_ZIPCODE": "postalCode"
+    "MA.nl-ObjectID": "inId"
+    //"cifwms-dhid": "inId",
+    //"cifwms-fibernumber": "fiberNumber",
+    //"ADRESS.ADRESS_HOUSNR": "houseNumber",
+    //"ADRESS.ADRESS_HOUSNR_SFX": "houseNumberExtension",
+    //"ADRESS.ADRESS_STREET": "streetName",
+    //"ADRESS.ADRESS_TOWN": "city",
+    //"ADRESS.ADRESS_CNTR_ISO3166A3": "country",
+    //"ADRESS.ADRESS_ZIPCODE": "postalCode"
   },
   "WMSBeheerderRES2AddressMapping": {
     //Here key name must be same as the key name in GoEFficientAttributes.json
     //Here value must be equal to the key of MijnAansluitingAttributes for 1:1
     //Destination : Source
 
-    "ADRESS.ADRESS_TOWN": "Plaats",
-    "ADRESS.ADRESS_ZIPCODE": "Postcode",
-    "ADRESS.ADRESS_HOUSNR": "Huisnummer",
-    "ADRESS.ADRESS_HOUSNR_SFX": "HuisnummerToevoeging",
-    "ADRESS.ADRESS_STREET": "Straat"
+    "ADRESS.ADRESS_TOWN": "city",
+    "ADRESS.ADRESS_ZIPCODE": "postalCode",
+    "ADRESS.ADRESS_HOUSNR": "houseNumber",
+    "ADRESS.ADRESS_HOUSNR_SFX": "houseNumberExtension",
+    "ADRESS.ADRESS_STREET": "streetName"
   }
 
 }

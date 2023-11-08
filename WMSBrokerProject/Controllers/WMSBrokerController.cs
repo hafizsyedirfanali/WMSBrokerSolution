@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 using Swashbuckle.AspNetCore.Swagger;
 using System.IO;
 using System.IO.Pipelines;
+using System.Net;
 using System.Reflection.Emit;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
@@ -104,23 +105,24 @@ namespace WMSBrokerProject.Controllers
                 if (res4aResult.Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Get Template service returned null" });
                 if (!res4aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res4aResult);
                 #endregion
-                var fin_Id = res4aResult.Result.FIN_ID;
+                //var fin_Id = res4aResult.Result.FIN_ID;
 
-                var addresses = res4aResult.Result.Addresses;
+                //var addresses = res4aResult.Result.Addresses;
 
                 var responseFilledDataResult = await goEfficientService
                     .FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
                     {
-                        WMSBeheerderAttributes = taskFetchResponse2.Result
-                    });
+                        WMSBeheerderAttributes = dataDictionary
+					});
 
                 var responseFilledAddressDataResult = await goEfficientService
                     .FillDataIn4aAddressTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
                     {
-                        WMSBeheerderAttributes = taskFetchResponse2.Result
-                    });
+                        WMSBeheerderAttributes = dataDictionary
+					});
 
-                var goEfficientTemplateValues = responseFilledDataResult.Result.GoEfficientTemplateValues;
+               // var goEfficientTemplateValues = responseFilledDataResult.Result.GoEfficientTemplateValues;
+                var goEfficientAddressTemplateValues = responseFilledDataResult.Result.GoEfficientAddressTemplateValues;
 
                 #region REQ5 RHS Save Record
                 var res5Result = await goEfficientService.REQ5_SaveRecordToGoEfficient(new Models.REQ5Model
@@ -130,38 +132,56 @@ namespace WMSBrokerProject.Controllers
                     InId = inId,
                     PRO_ID_3 = proId,
                     RES4aTemplate = responseFilledDataResult.Result,
-                    GoEfficientTemplateValues = goEfficientTemplateValues
-                }).ConfigureAwait(false);
+                    GoEfficientTemplateValues = goEfficientAddressTemplateValues
+				}).ConfigureAwait(false);
                 if (res5Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Record service returned null" });
                 if (!res5Result.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5Result);
-                #endregion
+				#endregion
 
+				#region REQ5a RHS Save Addresses
+				var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
+				{
+					InId = inId,
+					PRO_ID_3 = proId,
+					Username = "",
+					Password = "",
+					//Address_FIN_ID = fin_Id,
+					City = taskFetchForReq4.Result!.CityName,
+					HouseNo = taskFetchForReq4.Result!.HouseNumber,
+					HouseNoSuffix = taskFetchForReq4.Result!.HouseNumberExtension,
+					PostalCode = taskFetchForReq4.Result!.PostalCode,
+					Street = taskFetchForReq4.Result!.StreetName,
+					Template = responseFilledAddressDataResult.Result
+				}).ConfigureAwait(false);
+				if (res5aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Address service returned null" });
+				if (!res5aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5aResult);
+				#endregion
 
-                foreach (var address in addresses)
-                {
-                    #region REQ5a RHS Save Addresses
-                    var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
-                    {
-                        InId = inId,
-                        PRO_ID_3 = proId,
-                        Username = "",
-                        Password = "",
-                        Address_FIN_ID = fin_Id,
-                        City = address.City,
-                        HouseNo = address.HouseNo,
-                        HouseNoSuffix = address.HouseNoSuffix,
-                        PostalCode = address.PostalCode,
-                        Street = address.Street,
-                        Template = responseFilledAddressDataResult.Result
-                    }).ConfigureAwait(false);
-                    if (res5aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Address service returned null" });
-                    if (!res5aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5aResult);
-                    #endregion
-                }
+				//foreach (var address in addresses)
+				//{
+				//    #region REQ5a RHS Save Addresses
+				//    var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
+				//    {
+				//        InId = inId,
+				//        PRO_ID_3 = proId,
+				//        Username = "",
+				//        Password = "",
+				//        Address_FIN_ID = fin_Id,
+				//        City = address.City,
+				//        HouseNo = address.HouseNo,
+				//        HouseNoSuffix = address.HouseNoSuffix,
+				//        PostalCode = address.PostalCode,
+				//        Street = address.Street,
+				//        Template = responseFilledAddressDataResult.Result
+				//    }).ConfigureAwait(false);
+				//    if (res5aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Address service returned null" });
+				//    if (!res5aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5aResult);
+				//    #endregion
+				//}
 
-            }
+			}
 
-            var taskSyncResponse = await wMSBeheerderService.RequestTaskSync(new TaskSyncRequestModel
+			var taskSyncResponse = await wMSBeheerderService.RequestTaskSync(new TaskSyncRequestModel
             {
                 taskId = taskFetchResponse.inId,
                 header = new TaskSyncRequestModel.Header

@@ -10,7 +10,7 @@
         <Row>
           <Value FieldName="FIN.FIN_ID">71068879</Value>
           <Value FieldName="UDF.UDF_TYPE">A</Value>
-          <Value FieldName="FIN.FIN_NAME">MA.nl-ObjectID</Value>
+          <Value FieldName="FIN.FIN_NAME">ObjectId</Value>
           <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
           <Value FieldName="FIN.FIN_PATH" />
           <Value FieldName="FIN.FIN_DATE" />

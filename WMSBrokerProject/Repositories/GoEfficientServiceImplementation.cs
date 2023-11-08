@@ -414,37 +414,37 @@ namespace WMSBrokerProject.Repositories
                 //2. fill the values from res2 into above
 
 
-                List<RES4aAddress> addresses = (from row in xdoc.Descendants("Row")
-                                                let udfTypeValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value
-                                                where udfTypeValue == "A"
-                                                let udfLabelValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_LABEL")?.Value
-                                                let finNameValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value
-                                                let udfFIN_IDValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_ID")?.Value
-                                                select new RES4aAddress
-                                                {
-                                                    HouseNo = udfLabelValue,
-                                                    FIN_Id = udfFIN_IDValue,
-                                                    FIN_Name = finNameValue
-                                                }).ToList();
+                //List<RES4aAddress> addresses = (from row in xdoc.Descendants("Row")
+                //                                let udfTypeValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value
+                //                                where udfTypeValue == "A"
+                //                                let udfLabelValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_LABEL")?.Value
+                //                                let finNameValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value
+                //                                let udfFIN_IDValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_ID")?.Value
+                //                                select new RES4aAddress
+                //                                {
+                //                                    HouseNo = udfLabelValue,
+                //                                    FIN_Id = udfFIN_IDValue,
+                //                                    FIN_Name = finNameValue
+                //                                }).ToList();
                 //1. create TemplateAttributes for all addresses "AddressTemplateAttribute"
-                Dictionary<string, string> addressTemplateAttribute = new Dictionary<string, string>();
-                foreach (var property in model.GoEfficientAttributes)
-                {
-                    var isAvailableInRes4a = addresses.Where(s => s.FIN_Name == property.Value).Any();
-                    if (isAvailableInRes4a)
-                    {
-                        addressTemplateAttribute.Add(property.Key, property.Value);
-                    }
-                }
-                template.GoEfficientAddressTemplateAttributes = addressTemplateAttribute;
+                //Dictionary<string, string> addressTemplateAttribute = new Dictionary<string, string>();
+                //foreach (var property in model.GoEfficientAttributes)
+                //{
+                //    var isAvailableInRes4a = addresses.Where(s => s.FIN_Name == property.Value).Any();
+                //    if (isAvailableInRes4a)
+                //    {
+                //        addressTemplateAttribute.Add(property.Key, property.Value);
+                //    }
+                //}
+                //template.GoEfficientAddressTemplateAttributes = addressTemplateAttribute;
 
 
 
                 responseModel.Result = new RES4aModel
                 {
                     Template = template,
-                    Addresses = addresses,
-                    FIN_ID = addresses.Select(s => s.FIN_Id).FirstOrDefault()
+                    //Addresses = addresses,
+                    //FIN_ID = addresses.Select(s => s.FIN_Id).FirstOrDefault()
                 };
                 responseModel.IsSuccess = true;
             }
@@ -822,15 +822,14 @@ namespace WMSBrokerProject.Repositories
 				mappedValues.TryGetValue("houseNumberExtension", out object? houseNumberExtension);
 				//mappedValues.TryGetValue("streetName", out object? streetName);
 
-
 				responseModel.Result = new REQ4Model
                 {
-                    StreetName = streetName!.ToString()!,
-                    CityName = cityName!.ToString()!,
-					Country = country!.ToString()!,
-                    HouseNumber = houseNumber!.ToString()!,
-					PostalCode = postalCode!.ToString()!,
-					HouseNumberExtension = houseNumberExtension!.ToString()!
+                    StreetName = streetName!=null? streetName.ToString()!:"",
+					CityName = cityName != null? cityName.ToString()!:"",
+					Country = country != null? country.ToString()!:"",
+					HouseNumber = houseNumber != null? houseNumber.ToString()!:"",
+					PostalCode = postalCode != null? postalCode.ToString()!:"",
+					HouseNumberExtension = houseNumberExtension != null? houseNumberExtension.ToString()!:""
 				};
 				responseModel.IsSuccess = true;
 			}
