@@ -23,6 +23,7 @@ namespace WMSBrokerProject.Repositories
 		private readonly string symbolForConcatenation;
 		private readonly string symbolForPriority;
 		private readonly string token;
+		private readonly string orgId;
 		private readonly IConfiguration _configuration;
 		private readonly IWebHostEnvironment hostEnvironment;
 		private readonly GoEfficientCredentials goEfficientCredentials;
@@ -30,6 +31,7 @@ namespace WMSBrokerProject.Repositories
 			IOptions<GoEfficientCredentials> goEfficientCredentials)
 		{
 			this.token = configuration.GetSection("token").Value!;
+			this.orgId = configuration.GetSection("orgId").Value!;
 			_configuration = configuration;
 			this.hostEnvironment = hostEnvironment;
 			this.goEfficientCredentials = goEfficientCredentials.Value;
@@ -54,7 +56,7 @@ namespace WMSBrokerProject.Repositories
 				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 				// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
 				model.InID = "9245949";//this line to be removed
-				HttpResponseMessage response = await httpClient.GetAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.InID}");
+				HttpResponseMessage response = await httpClient.GetAsync($"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
 				if (response.IsSuccessStatusCode)
 				{
 					string responseContent = await response.Content.ReadAsStringAsync();
