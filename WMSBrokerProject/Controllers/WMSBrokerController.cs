@@ -196,7 +196,7 @@ namespace WMSBrokerProject.Controllers
                 },
                 status = new TaskSyncRequestModel.Status
                 {
-                    mainStatus = taskFetchResponse.status.mainStatus,
+                    mainStatus = "NEW",
                     reason = taskFetchResponse.status.reason,
                     subStatus = taskFetchResponse.status.subStatus,
                     clarification = taskFetchResponse.status.clarification
