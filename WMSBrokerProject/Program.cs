@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
-using WMSBrokerProject.Logging;
+//using WMSBrokerProject.Logging;
 using WMSBrokerProject.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
