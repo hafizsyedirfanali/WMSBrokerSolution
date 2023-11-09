@@ -52,11 +52,16 @@ namespace WMSBrokerProject.Repositories
 				//responseModel.IsSuccess = true;
 				//+++++++++++++++UnComment Following lines in live environment and comment above lines
 				using HttpClient httpClient = new HttpClient();
-				httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
+				string? endPointUrl = "https://uat-gke.cif-operator.com/";
+				string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
+
+
+				//httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
 				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
 				// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
 				model.InID = "9245949";//this line to be removed
-				HttpResponseMessage response = await httpClient.GetAsync($"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
+				HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
 				if (response.IsSuccessStatusCode)
 				{
 					string responseContent = await response.Content.ReadAsStringAsync();

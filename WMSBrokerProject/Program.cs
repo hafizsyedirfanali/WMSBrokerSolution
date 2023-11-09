@@ -1,6 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
+using WMSBrokerProject.Logging;
 using WMSBrokerProject.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -38,7 +39,6 @@ app.UseHttpsRedirection();
 
 app.UseAuthorization();
 app.MapControllers();
-
 //app.MapControllerRoute(
 //    name: "default",
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
