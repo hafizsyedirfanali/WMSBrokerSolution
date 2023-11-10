@@ -105,7 +105,7 @@ namespace WMSBrokerProject.Controllers
                 if (res4aResult.Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Get Template service returned null" });
                 if (!res4aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res4aResult);
                 #endregion
-                //var fin_Id = res4aResult.Result.FIN_ID;
+                var fin_Id = res4aResult.Result.FIN_ID;
 
                 //var addresses = res4aResult.Result.Addresses;
 
@@ -145,7 +145,7 @@ namespace WMSBrokerProject.Controllers
 					PRO_ID_3 = proId,
 					Username = "",
 					Password = "",
-					//Address_FIN_ID = fin_Id,
+					Address_FIN_ID = fin_Id,
 					City = taskFetchForReq4.Result!.CityName,
 					HouseNo = taskFetchForReq4.Result!.HouseNumber,
 					HouseNoSuffix = taskFetchForReq4.Result!.HouseNumberExtension,
