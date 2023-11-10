@@ -46,34 +46,34 @@ namespace WMSBrokerProject.Repositories
 			var responseModel = new ResponseModel<TaskFetchResponseModel>();
 			try
 			{
-				//string responseContent = File.ReadAllText("response2.json");
-				//TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
-				//responseModel.Result = taskFetchResponse;
-				//responseModel.IsSuccess = true;
+				string responseContent = File.ReadAllText("response2.json");
+				TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
+				responseModel.Result = taskFetchResponse;
+				responseModel.IsSuccess = true;
 				//+++++++++++++++UnComment Following lines in live environment and comment above lines
-				model.InID = "9245949";//this line to be removed
-				using HttpClient httpClient = new HttpClient();
-				string? endPointUrl = "https://uat-gke.cif-operator.com/";
-				string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
+				//model.InID = "9245949";//this line to be removed
+				//using HttpClient httpClient = new HttpClient();
+				//string? endPointUrl = "https://uat-gke.cif-operator.com/";
+				//string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
 
-				//httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
-				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+				////httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
+				//httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-				// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
-				
-				HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
-				if (response.IsSuccessStatusCode)
-				{
-					string responseContent = await response.Content.ReadAsStringAsync();
-					TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
-					responseModel.Result = taskFetchResponse;
-					responseModel.IsSuccess = true;
-				}
-				else
-				{
-					responseModel.ErrorCode = (int)response.StatusCode;
-					responseModel.ErrorMessage = $"Task fetch call failure with status/code:{response.StatusCode}";
-				}
+				//// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
+
+				//HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
+				//if (response.IsSuccessStatusCode)
+				//{
+				//	string responseContent = await response.Content.ReadAsStringAsync();
+				//	TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
+				//	responseModel.Result = taskFetchResponse;
+				//	responseModel.IsSuccess = true;
+				//}
+				//else
+				//{
+				//	responseModel.ErrorCode = (int)response.StatusCode;
+				//	responseModel.ErrorMessage = $"Task fetch call failure with status/code:{response.StatusCode}";
+				//}
 			}
             catch (HttpRequestException ex)
 			{

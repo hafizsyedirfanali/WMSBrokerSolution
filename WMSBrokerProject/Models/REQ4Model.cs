@@ -14,6 +14,8 @@
         public string? HouseNumberExtension { get; set; }
         public string PostalCode { get; set; }
         public string Country { get; set; }
+        public string PRO_ID { get; set; }
+        public string Indicator2 { get; set; }
         
     }
 

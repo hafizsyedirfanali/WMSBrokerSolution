@@ -274,9 +274,9 @@ namespace WMSBrokerProject.Repositories
                                          <CreateOperation>
                                              <OperationName>PRO_CREATE_TREE_FROM_TEMPL</OperationName>
                                              <Values>
-                                                 <Value FieldName=""PRO.PRO_ID"">6744412</Value>
+                                                 <Value FieldName=""PRO.PRO_ID"">{model.PRO_ID}</Value>
                                                  <Value FieldName=""Indicator"">{year};{year_week};{model.CityName} {model.StreetName} {model.HouseNumber} {houseNumberExtension}{model.PostalCode} {model.InId}</Value>
-                                                 <Value FieldName=""Indicator2"">6999459;6999459;9244608</Value>
+                                                 <Value FieldName=""Indicator2"">{model.Indicator2}</Value>
                                                  <Value FieldName=""Indicator3"">P</Value>
                                              </Values>
                                          </CreateOperation>
@@ -674,7 +674,7 @@ namespace WMSBrokerProject.Repositories
                                                 </Fields>
                                                 <Conditions>
                                                     <Condition RightVariableType=""LiteralValue"" RightValue=""{model.InId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_PATH""/>
-                                                    <Condition RightVariableType=""LiteralValue"" RightValue=""{model.HuurderId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_UDF_ID""/>
+                                                    <Condition RightVariableType=""LiteralValue"" RightValue=""{model.FIN_UDF_ID_HuurderId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_UDF_ID""/>
                                                     <Condition RightVariableType=""LiteralValue"" RightValue=""'cifwms-huurderid'"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_NAME_L""/>
                                                 </Conditions>
                                                 <OperationName>PRO_READ_M_V1</OperationName>

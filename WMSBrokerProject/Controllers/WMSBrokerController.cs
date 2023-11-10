@@ -50,7 +50,7 @@ namespace WMSBrokerProject.Controllers
             var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
             {
                 InId = inId,
-                HuurderId = actionConfiguration.HuurderId
+                FIN_UDF_ID_HuurderId = actionConfiguration.FIN_UDF_ID_HuurderId
             }).ConfigureAwait(false);
             if (!responseREQ6.IsSuccess) { }
             if (!responseREQ6.Result.IsRecordExist)
@@ -77,6 +77,8 @@ namespace WMSBrokerProject.Controllers
                 var res4Result = await goEfficientService.REQ4_GetProIDAsync(new Models.REQ4Model
                 {
                     InId = inId,
+                    PRO_ID = actionConfiguration.PRO_ID,
+                    Indicator2 = actionConfiguration.Indicator2,
                     CityName = taskFetchForReq4.Result!.CityName,
                     StreetName = taskFetchForReq4.Result!.StreetName,
                     HouseNumber = taskFetchForReq4.Result!.HouseNumber,
