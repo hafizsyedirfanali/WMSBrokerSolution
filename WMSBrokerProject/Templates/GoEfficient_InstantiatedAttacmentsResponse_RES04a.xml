@@ -22,18 +22,32 @@
           <Value FieldName="PRO.PRO_ID">9242119</Value>
         </Row>
         <Row>
-          <Value FieldName="FIN.FIN_ID">71068880</Value>
+          <Value FieldName="FIN.FIN_ID">71407674</Value>
           <Value FieldName="UDF.UDF_TYPE">FC</Value>
-          <Value FieldName="FIN.FIN_NAME">21 Soort schade</Value>
-          <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
-          <Value FieldName="FIN.FIN_PATH" />
-          <Value FieldName="FIN.FIN_DATE" />
-          <Value FieldName="FIN.FIN_NUMBER" />
-          <Value FieldName="FIN.FIN_MEMO" />
-          <Value FieldName="FIN.FIN_FILE_EXT" />
-          <Value FieldName="UDF.UDF_TYPEINFO">SEL:&lt;01&gt;=Choise01;&lt;02&gt;=Choise02;</Value>
-          <Value FieldName="UDF.UDF_LABEL">WePoFC</Value>
-          <Value FieldName="PRO.PRO_ID">9242119</Value>
+          <Value FieldName="FIN.FIN_NAME">Aanvraag ontvangen via?</Value>
+          <Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
+          <Value FieldName="FIN.FIN_PATH"/>
+          <Value FieldName="FIN.FIN_DATE"/>
+          <Value FieldName="FIN.FIN_NUMBER"/>
+          <Value FieldName="FIN.FIN_MEMO"/>
+          <Value FieldName="FIN.FIN_FILE_EXT"/>
+          <Value FieldName="UDF.UDF_TYPEINFO">SEL:&lt;A&gt;=Aansluitingen.nl;&lt;ISP&gt;=ISP;&lt;CAIW&gt;=Caiway;&lt;WEB&gt;=Web CIF;&lt;M&gt;=Mail;&lt;LIP&gt;=LIP aanvraagnummer;&lt;COMB&gt;=Combi projectnummer;</Value>
+          <Value FieldName="UDF.UDF_LABEL">NKM_SOC_Aanvraag</Value>
+          <Value FieldName="PRO.PRO_ID">9246345</Value>
+        </Row>
+        <Row>
+          <Value FieldName="FIN.FIN_ID">71407677</Value>
+          <Value FieldName="UDF.UDF_TYPE">FC</Value>
+          <Value FieldName="FIN.FIN_NAME">Betreft het een Hoog Laag of een Duplex woning?</Value>
+          <Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
+          <Value FieldName="FIN.FIN_PATH"/>
+          <Value FieldName="FIN.FIN_DATE"/>
+          <Value FieldName="FIN.FIN_NUMBER"/>
+          <Value FieldName="FIN.FIN_MEMO"/>
+          <Value FieldName="FIN.FIN_FILE_EXT"/>
+          <Value FieldName="UDF.UDF_TYPEINFO">SEL:&lt;HOOG&gt;=Hoogbouw;&lt;LAAG&gt;=Laagbouw;&lt;DPLX&gt;=Duplex;&lt;AP&gt;=Appartement/appartements-gebouw</Value>
+          <Value FieldName="UDF.UDF_LABEL">FTTH_Hoog_Laagbouw</Value>
+          <Value FieldName="PRO.PRO_ID">9246345</Value>
         </Row>
         <Row>
           <Value FieldName="FIN.FIN_ID">71068881</Value>

@@ -431,7 +431,7 @@ namespace WMSBrokerProject.Repositories
                                                 let udfTypeValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value
                                                 where udfTypeValue == "FC"
                                                 let finNameValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value
-                                                let udfTypeInfoValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.UDF_TYPEINFO")?.Value
+                                                let udfTypeInfoValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value
                                                 select new 
                                                 {
                                                     FIN_NAME = finNameValue,
@@ -450,6 +450,10 @@ namespace WMSBrokerProject.Repositories
                     //<M>=Mail;
                     //<LIP>=LIP aanvraagnummer;
                     //<COMB>=Combi projectnummer;
+                    if (decodedUDFTypeInfo.StartsWith("SEL:", StringComparison.OrdinalIgnoreCase))
+                    {
+                        decodedUDFTypeInfo = decodedUDFTypeInfo.Substring("SEL:".Length);
+                    }
                     var keyValuePairs = decodedUDFTypeInfo.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
                         .Select(s => s.Split('=')).ToList();
                     Dictionary<string, string> selectListItems = new ();
@@ -459,7 +463,7 @@ namespace WMSBrokerProject.Repositories
                         {
                             var key = keyValuePair[0].Trim();
                             var value = keyValuePair[1].Trim();
-                            selectListItems.Add(key: key, value: value);
+                            selectListItems.Add(key: value, value: key);
                         }
                     }
                     finNameFCList.Add(new FinNameFC
