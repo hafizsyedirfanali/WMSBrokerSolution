@@ -84,7 +84,8 @@
       "port": "taskInfo.popInfo.activeEquipmentEndpoint.port",
       "connector": "taskInfo.popInfo.activeEquipmentEndpoint.connector",
       "row": "taskInfo.popInfo.activeEquipmentEndpoint.row",
-      "odfTray": "taskInfo.popInfo.activeEquipmentEndpoint.odfTray"
+      "odfTray": "taskInfo.popInfo.activeEquipmentEndpoint.odfTray",
+      "buildingType": "taskInfo.hasInfo.buildingType"
     },
     "AFTER_CONNECT": {
       "inId": "taskInfo.hasInfo.DHid",

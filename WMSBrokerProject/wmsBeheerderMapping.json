@@ -13,7 +13,8 @@
     //Here key name must be same as the key name in GoEFficientAttributes.json
     //Here value must be equal to the key of MijnAansluitingAttributes for 1:1
     //Destination : Source
-    "MA.nl-ObjectID": "inId"
+    "MA.nl-ObjectID": "inId",
+    "Betreft het een Hoog Laag of een Duplex woning?": "buildingType"
     //"cifwms-dhid": "inId",
     //"cifwms-fibernumber": "fiberNumber",
     //"ADRESS.ADRESS_HOUSNR": "houseNumber",
