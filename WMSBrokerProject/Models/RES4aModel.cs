@@ -6,7 +6,13 @@
         public string? FIN_ID { get; set; }
         //public List<RES4aAddress> Addresses { get; set; }
         public RES4aTemplate Template { get; set; }
+        public List<FinNameFC> FinNameFCList { get; set; }
 
+    }
+    public class FinNameFC
+    {
+        public string FinName { get; set; }
+        public Dictionary<string, string> SelectListItems { get; set; }
     }
     public class RES4aAddress
     {
