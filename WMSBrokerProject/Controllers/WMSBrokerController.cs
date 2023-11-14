@@ -114,17 +114,38 @@ namespace WMSBrokerProject.Controllers
                 var responseFilledDataResult = await goEfficientService
                     .FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
                     {
-                        WMSBeheerderAttributes = dataDictionary
+                        WMSBeheerderAttributes = dataDictionary!
 					});
-
+                if (!responseFilledDataResult.IsSuccess)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound, new
+                    {
+                        responseFilledDataResult.ErrorMessage,
+                        responseFilledDataResult.ErrorCode
+                    });
+                }
+                var responseFilledFCDataResult = await goEfficientService
+                    .FillFCDataIn4aTemplate(res4aResult.Result, new TaskFetchResponse2Model
+                    {
+                        WMSBeheerderAttributes = dataDictionary!
+                    });
+                if (!responseFilledFCDataResult.IsSuccess)
+                {
+                    return StatusCode(StatusCodes.Status404NotFound,new {
+                        responseFilledFCDataResult.ErrorMessage,
+                        responseFilledFCDataResult.ErrorCode
+                    });
+                }
                 var responseFilledAddressDataResult = await goEfficientService
                     .FillDataIn4aAddressTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
                     {
                         WMSBeheerderAttributes = dataDictionary
 					});
 
-               // var goEfficientTemplateValues = responseFilledDataResult.Result.GoEfficientTemplateValues;
-                var goEfficientAddressTemplateValues = responseFilledDataResult.Result.GoEfficientAddressTemplateValues;
+                Dictionary<string, object?> goEfficientTemplateValues = responseFilledDataResult.Result!
+                    .GoEfficientTemplateValues;
+               
+                //var goEfficientAddressTemplateValues = responseFilledDataResult.Result.GoEfficientAddressTemplateValues;
 
                 #region REQ5 RHS Save Record
                 var res5Result = await goEfficientService.REQ5_SaveRecordToGoEfficient(new Models.REQ5Model
@@ -134,8 +155,8 @@ namespace WMSBrokerProject.Controllers
                     InId = inId,
                     PRO_ID_3 = proId,
                     RES4aTemplate = responseFilledDataResult.Result,
-                    GoEfficientTemplateValues = goEfficientAddressTemplateValues
-				}).ConfigureAwait(false);
+                    GoEfficientTemplateValues = goEfficientTemplateValues
+                }).ConfigureAwait(false);
                 if (res5Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Record service returned null" });
                 if (!res5Result.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5Result);
 				#endregion

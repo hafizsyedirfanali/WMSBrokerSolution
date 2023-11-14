@@ -43,6 +43,7 @@ namespace WMSBrokerProject.Models
             public ConnectionAddress connectionAddress { get; set; }
             public string fiberNumber { get; set; }
             public string outletStatus { get; set; }
+            public string buildingType { get; set; }
             public Payment payment { get; set; }
         }
 

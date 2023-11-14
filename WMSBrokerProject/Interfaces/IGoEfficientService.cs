@@ -12,6 +12,7 @@ namespace WMSBrokerProject.Interfaces
         Task<ResponseModel<Dictionary<string, string>>> GetGoEfficientAttributes();             //to get attributes dynamically from json for goefficient
         Task<ResponseModel<Dictionary<string, string>>> GetGoEfficientFileAttributes();
         Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template, TaskFetchResponse2Model model);
+        Task<ResponseModel<RES4aTemplate>> FillFCDataIn4aTemplate(RES4aModel res4aModel, TaskFetchResponse2Model model);
         Task<ResponseModel<string>> GetKeyForValueInRES3aMapping(string value);
         Task<ResponseModel<string>> GetKeyForRES4Mapping();
         Task<ResponseModel<RES4aTemplate>> FillDataIn4aAddressTemplate(RES4aTemplate template, TaskFetchResponse2Model model);

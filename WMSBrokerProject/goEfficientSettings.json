@@ -14,7 +14,7 @@
     "Datum aanvraag ontvangen": "AanvraagDatum",
     "Aanvraag ontvangen via?": "RequestReceived",
     "Wensdatum": "WensJaar",
-    "Betreft het een Hoog Laag of een Duplex woning?": "ObjectType",
+    //"Betreft het een Hoog Laag of een Duplex woning?": "ObjectType",
     "plattegrond": "plattegrond",
     "situatieschets": "situatieschets",
     "AanvragPDF": "AANSLUITING.NL OPDRACHT",

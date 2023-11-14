@@ -35,15 +35,16 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 //app.UseStaticFiles();
 
-//app.UseRouting();
 
 app.UseAuthorization();
-app.MapControllers();
 //app.MapControllerRoute(
 //    name: "default",
 //    pattern: "{controller=Home}/{action=Index}/{id?}");
 app.UseSwaggerUI(c =>
 {
 	c.SwaggerEndpoint("/swagger/v1/swagger.json", "Your API V1");
+    c.RoutePrefix = string.Empty;
 });
+app.UseRouting();
+app.MapControllers();
 app.Run();

@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Collections;
 using Newtonsoft.Json;
+using System;
 
 namespace WMSBrokerProject.Repositories
 {
@@ -124,7 +125,6 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
         public async Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template, TaskFetchResponse2Model model)
-		//TaskFetchResponse2Model model contains sourse key and path
 		{
 			var responseModel = new ResponseModel<RES4aTemplate>();
             try
@@ -160,7 +160,79 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-        
+
+        public async Task<ResponseModel<RES4aTemplate>> FillFCDataIn4aTemplate(RES4aModel res4aModel, TaskFetchResponse2Model model)
+        {
+            var responseModel = new ResponseModel<RES4aTemplate>();
+            try
+            {
+                var goEfficientMijnAansluitingMap = _configuration.GetSection("WMSBeheerderRES2FCMapping").AsEnumerable();
+                if(res4aModel.Template is null) res4aModel.Template = new RES4aTemplate();
+                Dictionary<string, object?> mappedValues = new();
+                var fcMapping = res4aModel.FinNameFCList;
+                foreach (var attribute in goEfficientMijnAansluitingMap)
+                {
+                    if (attribute.Value != null)
+                    {
+                        var key = attribute.Key;//Its key represents RHS
+                        var keyArray = key.Split(':');//in this array last but one will be key
+                        var sourceKey = attribute.Value;//value is source key
+                        var destinationKey = keyArray[keyArray.Length - 1];
+                        if(fcMapping.Where(s => s.FinName == destinationKey).Any())
+                        {
+                            Dictionary<string, string>? finNameSelectList = fcMapping.Where(s => s.FinName == destinationKey).Select(s => s.SelectListItems).FirstOrDefault();
+                            if(finNameSelectList is not null)
+                            {
+                                var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
+                                if(finNameSelectList.Any(s=>s.Key == valueTuple.Value.ToString()))
+                                {
+                                    string? fcValue = finNameSelectList.Where(s => s.Key == valueTuple.Value.ToString()).Select(s => s.Value).FirstOrDefault();
+                                    if (!string.IsNullOrEmpty(fcValue))
+                                    {
+                                        mappedValues.Add(valueTuple.DestinationKey, fcValue);
+                                    }
+                                    else
+                                    {
+                                        responseModel.ErrorMessage = $"The key: {valueTuple.Value} is not present in GoEfficient";
+                                        responseModel.ErrorCode = 10021;
+                                    }
+                                }
+                                else
+                                {
+                                    responseModel.ErrorMessage = $"The key: {valueTuple.Value} is not present in GoEfficient";
+                                    responseModel.ErrorCode = 10020;
+                                }
+                            }
+                            else
+                            {
+                                responseModel.ErrorMessage = $"Select List not present for FIN_NAME of FC in GoEfficient";
+                                responseModel.ErrorCode = 10022;
+                            }
+                        }
+                        else
+                        {
+                            responseModel.ErrorMessage = $"FIN_NAME of FC not present in GoEfficient";
+                            responseModel.ErrorCode = 10023;
+                        }
+                    }
+                }
+                if (mappedValues.Any())
+                {
+                    foreach (var map in mappedValues)
+                    {
+                        res4aModel.Template.GoEfficientTemplateValues.Add(map.Key, map.Value);
+                    }
+                    responseModel.Result = res4aModel.Template;
+                    responseModel.IsSuccess = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10017;
+            }
+            return responseModel;
+        }
         public async Task<ResponseModel<RES4aTemplate>> FillDataIn4aAddressTemplate(RES4aTemplate template, TaskFetchResponse2Model model)
         {
             var responseModel = new ResponseModel<RES4aTemplate>();
@@ -461,9 +533,10 @@ namespace WMSBrokerProject.Repositories
                     {
                         if(keyValuePair.Length == 2)
                         {
-                            var key = keyValuePair[0].Trim();
-                            var value = keyValuePair[1].Trim();
-                            selectListItems.Add(key: value, value: key);
+                            var value = keyValuePair[0].Trim();
+                            value = value.Replace("<","").Replace(">","").Trim();
+                            var text = keyValuePair[1].Trim();
+                            selectListItems.Add(key: text, value: value);
                         }
                     }
                     finNameFCList.Add(new FinNameFC
