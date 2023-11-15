@@ -218,13 +218,14 @@ namespace WMSBrokerProject.Repositories
                 }
                 if (mappedValues.Any())
                 {
-                    foreach (var map in mappedValues)
-                    {
-                        res4aModel.Template.GoEfficientTemplateValues.Add(map.Key, map.Value);
-                    }
-                    responseModel.Result = res4aModel.Template;
-                    responseModel.IsSuccess = true;
+                    
                 }
+                foreach (var map in mappedValues)
+                {
+                    res4aModel.Template.GoEfficientTemplateValues.Add(map.Key, map.Value);
+                }
+                responseModel.Result = res4aModel.Template;
+                responseModel.IsSuccess = true;
             }
             catch (Exception ex)
             {
@@ -468,6 +469,7 @@ namespace WMSBrokerProject.Repositories
                         string finName = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value!;
                         string proId = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "PRO.PRO_ID")?.Value!;
                         string udfType = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value!;
+                        string udfTypeInfo = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value!;
 
                         templateAttributeList.Add(new GoEfficientTemplateAttributesClass
                         {
@@ -476,7 +478,8 @@ namespace WMSBrokerProject.Repositories
                             FinId = finId,
                             FinName = finName,
                             ProId = proId,
-                            UdfType = udfType
+                            UdfType = udfType,
+                            UdfTypeInfo = udfTypeInfo
                         });
                     }
                 }
@@ -499,21 +502,22 @@ namespace WMSBrokerProject.Repositories
                                                     FIN_Name = finNameValue
                                                 }).ToList();
 
-                var fixedContentList = (from row in xdoc.Descendants("Row")
-                                                let udfTypeValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value
-                                                where udfTypeValue == "FC"
-                                                let finNameValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value
-                                                let udfTypeInfoValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value
-                                                select new 
-                                                {
-                                                    FIN_NAME = finNameValue,
-                                                    UDF_TYPEINFO = udfTypeInfoValue
-                                                }).ToList();
+                //var fixedContentList = (from row in xdoc.Descendants("Row")
+                //                                let udfTypeValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value
+                //                                where udfTypeValue == "FC"
+                //                                let finNameValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value
+                //                                let udfTypeInfoValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value
+                //                                select new 
+                //                                {
+                //                                    FIN_NAME = finNameValue,
+                //                                    UDF_TYPEINFO = udfTypeInfoValue
+                //                                }).ToList();
+                var fixedContentList = templateAttributeList.Where(s => s.UdfType == "FC").ToList();
                 List<FinNameFC> finNameFCList = new ();
                 foreach (var fc in fixedContentList)
                 {
                     Dictionary<string, string> selectOptions = new();
-                    var decodedUDFTypeInfo = System.Net.WebUtility.HtmlDecode(fc.UDF_TYPEINFO);
+                    var decodedUDFTypeInfo = System.Net.WebUtility.HtmlDecode(fc.UdfTypeInfo);
                     //SEL:
                     //<A>=Aansluitingen.nl;
                     //<ISP>=ISP;
@@ -541,7 +545,7 @@ namespace WMSBrokerProject.Repositories
                     }
                     finNameFCList.Add(new FinNameFC
                     {
-                        FinName = fc.FIN_NAME,
+                        FinName = fc.FinName,
                         SelectListItems = selectListItems
                     });
                 }

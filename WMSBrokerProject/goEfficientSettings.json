@@ -6,7 +6,7 @@
   //Don't use colon : in keys
   //Destination : Mapping Name
   "GoEfficientAttributes": {
-    "MA.nl-ObjectID": "ObjectId",
+    //"MA.nl-ObjectID": "ObjectId",
     "MA.nl-AanvraagID": "AanvraagID",
     "Naam-aanvrager": "Naam-aanvrager",
     "Mobiel aanvrager": "TelefoonnummerMobiel",
@@ -14,7 +14,7 @@
     "Datum aanvraag ontvangen": "AanvraagDatum",
     "Aanvraag ontvangen via?": "RequestReceived",
     "Wensdatum": "WensJaar",
-    //"Betreft het een Hoog Laag of een Duplex woning?": "ObjectType",
+    "Betreft het een Hoog Laag of een Duplex woning?": "Betreft het een Hoog Laag of een Duplex woning?",
     "plattegrond": "plattegrond",
     "situatieschets": "situatieschets",
     "AanvragPDF": "AANSLUITING.NL OPDRACHT",

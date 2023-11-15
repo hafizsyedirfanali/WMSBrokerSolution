@@ -1,0 +1,20 @@
+{
+  "OrderProgressTemplates": {
+    "Actions": {
+      "Templates1": {
+        "ActionType": "new connection",
+        "templateID": "98789",
+        "WMSStatus": "Confirm",
+        "GoEffiecientStatus": "Confirmed"
+      },
+      "Templates2": {
+        "ActionType": "new connection",
+        "templateID": "98790",
+        "WMSStatus": "In Process",
+        "GoEffiecientStatus": "In Process"
+      }
+    }
+
+    // Add more templates types as needed
+  }
+}

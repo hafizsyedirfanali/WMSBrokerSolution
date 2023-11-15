@@ -15,12 +15,6 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\WMSReferenceController.cs" />
-    <Compile Remove="Models\TTREQ4aModel.cs" />
-    <Compile Remove="Models\TTREQ4Model.cs" />
-    <Compile Remove="Models\TTREQ7aModel.cs" />
-    <Compile Remove="Models\TTRES4aModel.cs" />
-    <Compile Remove="Models\TTRES4Model.cs" />
-    <Compile Remove="Models\TTRES7aModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,10 +25,6 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="json.json" />
     <_ContentIncludedByDefault Remove="wmssettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
   <ItemGroup>

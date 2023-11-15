@@ -30,6 +30,7 @@
         public string FinName { get; set; }
         public string ProId { get; set; }
         public string UdfType { get; set; }
+        public string UdfTypeInfo { get; set; }
         public string GoEfficientAttributeName { get; set; }
         public string MappingName { get; set; }
         public string MappingValue { get; set; }

@@ -24,6 +24,8 @@
     //"ADRESS.ADRESS_ZIPCODE": "postalCode"
   },
   "WMSBeheerderRES2FCMapping": {
+    //Destination : Source
+    
     "Betreft het een Hoog Laag of een Duplex woning?": "buildingType"
   },
   "WMSBeheerderRES2AddressMapping": {
