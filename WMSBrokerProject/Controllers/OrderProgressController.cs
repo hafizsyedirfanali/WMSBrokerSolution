@@ -1,16 +1,20 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
 
 namespace WMSBrokerProject.Controllers
 {
-    public class OrderProgressController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class OrderProgressController : ControllerBase
     {
         private readonly IGoEfficientService goEfficientService;
         private readonly IConfiguration configuration;
         private readonly IOptions<GoEfficientCredentials> goEfficientCredentials1;
         private readonly IOrderProgressService orderProgressService;
+        private readonly OrderProgressSettingsModel orderProgressSettings;
         private readonly GoEfficientCredentials goEfficientCredentials;
 
         public OrderProgressController(IGoEfficientService goEfficientService, IConfiguration configuration,
@@ -21,10 +25,12 @@ namespace WMSBrokerProject.Controllers
             this.configuration = configuration;
             goEfficientCredentials1 = goEfficientCredentials;
             this.orderProgressService = orderProgressService;
+            this.orderProgressSettings = orderProgressSettings;
         }
-
-        public async Task<IActionResult> BeginProcess()
+        [HttpGet("BeginOrderProgress")]
+        public async Task<IActionResult> BeginOrderProgress()
         {
+            var test = orderProgressSettings;
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();
             var templateResponse = await orderProgressService.GetTemplateIds().ConfigureAwait(false);
@@ -86,7 +92,7 @@ namespace WMSBrokerProject.Controllers
                 }
             }
 
-                return View();
+            return Ok("Process completed successfully");    
         }
     }
 }

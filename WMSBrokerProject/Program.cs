@@ -1,21 +1,27 @@
 using Microsoft.Extensions.Configuration;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
+using WMSBrokerProject.Models;
+
 //using WMSBrokerProject.Logging;
 using WMSBrokerProject.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
+
 builder.Configuration.AddJsonFile("wmssettings.json", optional: true, reloadOnChange: true);
-//builder.Configuration.AddJsonFile("WMSBeheerderAttributesSettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile("goEfficientSettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile("WMSBeheerderAttributesSettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile("wmsBeheerderMapping.json", optional: true, reloadOnChange: true);
-builder.Services.Configure<Dictionary<string, ActionConfiguration>>(configuration.GetSection("Actions"));
+builder.Configuration.AddJsonFile("wmsOrderProgressSettings.json", optional: true, reloadOnChange: true);
+builder.Configuration.GetSection("OrderProgressTemplates").Bind(new OrderProgressSettingsModel().OrderProgressTemplates);
+//builder.Services.Configure<Dictionary<string, ActionConfiguration>>(configuration.GetSection("Actions"));
+builder.Services.Configure<OrderProgressSettingsModel>(configuration.GetSection("OrderProgressTemplates"));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IGoEfficientService, GoEfficientServiceImplementation>();
 builder.Services.AddTransient<IWMSBeheerderService, WMSBeheerderImplementation>();
+builder.Services.AddTransient<IOrderProgressService, WMSOrderProgressImplementation>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
