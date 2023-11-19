@@ -14,7 +14,8 @@ builder.Configuration.AddJsonFile("goEfficientSettings.json", optional: true, re
 builder.Configuration.AddJsonFile("WMSBeheerderAttributesSettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile("wmsBeheerderMapping.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile("wmsOrderProgressSettings.json", optional: true, reloadOnChange: true);
-builder.Configuration.GetSection("OrderProgressTemplates").Bind(new OrderProgressSettingsModel().OrderProgressTemplates);
+
+
 //builder.Services.Configure<Dictionary<string, ActionConfiguration>>(configuration.GetSection("Actions"));
 builder.Services.Configure<OrderProgressSettingsModel>(configuration.GetSection("OrderProgressTemplates"));
 // Add services to the container.

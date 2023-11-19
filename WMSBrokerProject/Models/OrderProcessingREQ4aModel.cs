@@ -1,6 +1,6 @@
 ﻿namespace WMSBrokerProject.Models
 {
-    public class TTREQ4aModel
+    public class OrderProcessingREQ4aModel
     {
         public string RequestId { get; set; }
         public string ProId { get; set; }

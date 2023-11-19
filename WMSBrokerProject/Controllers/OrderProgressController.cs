@@ -14,9 +14,7 @@ namespace WMSBrokerProject.Controllers
         private readonly IConfiguration configuration;
         private readonly IOptions<GoEfficientCredentials> goEfficientCredentials1;
         private readonly IOrderProgressService orderProgressService;
-        private readonly OrderProgressSettingsModel orderProgressSettings;
         private readonly GoEfficientCredentials goEfficientCredentials;
-
         public OrderProgressController(IGoEfficientService goEfficientService, IConfiguration configuration,
             IOptions<GoEfficientCredentials> goEfficientCredentials, IOrderProgressService orderProgressService)
         {
@@ -25,12 +23,10 @@ namespace WMSBrokerProject.Controllers
             this.configuration = configuration;
             goEfficientCredentials1 = goEfficientCredentials;
             this.orderProgressService = orderProgressService;
-            this.orderProgressSettings = orderProgressSettings;
         }
         [HttpGet("BeginOrderProgress")]
         public async Task<IActionResult> BeginOrderProgress()
         {
-            var test = orderProgressSettings;
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();
             var templateResponse = await orderProgressService.GetTemplateIds().ConfigureAwait(false);
@@ -42,25 +38,26 @@ namespace WMSBrokerProject.Controllers
                 var res7Result = await orderProgressService.REQ7GetTaskIDs(new REQ7Model
                 {
                     RequestId = requestId,
-                    TemplateId = template.TemplateId
+                    TemplateId = template.TemplateID
                 }).ConfigureAwait(false);
-                if (!res7Result.IsSuccess) { }
+                if (!res7Result.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res7Result); }
                 var taskIds = res7Result.Result!.TaskIdList;
-                if (taskIds.Count != 0)
+                if (taskIds is not null && taskIds.Any())
                 {
                     foreach (var taskId in taskIds)
                     {
-                        var res4aResult = await orderProgressService.REQ4a_GetTemplateFromGoEfficient(new TTREQ4aModel
-                        {
-                            RequestId = requestId,
-                            ProId = taskId.ProIdDESC
-                        }).ConfigureAwait(false);
-                        if (!res4aResult.IsSuccess) { }
+                        var res4aResult = await orderProgressService.REQ4a_GetTemplateFromGoEfficient(
+                            new OrderProcessingREQ4aModel
+                            {
+                                RequestId = requestId,
+                                ProId = taskId.ProIdDESC
+                            }).ConfigureAwait(false);
+                        if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
 
-                        var res5Result = await orderProgressService.REQ05_UpdateInstantiatedAttachmentsRequest(new TTREQ5Model
+                        var res5Result = await orderProgressService.REQ05_UpdateInstantiatedAttachmentsRequest(new UIAREQ5Model
                         {
                             RequestId = requestId,
-                            Status = "" //wmsOderProgressSetting.json mian se WMSstatus se dalengey
+                            Status = template.WMSStatus
                         }).ConfigureAwait(false);
                         if (!res4aResult.IsSuccess) { }
 

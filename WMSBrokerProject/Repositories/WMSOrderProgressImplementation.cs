@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Globalization;
-using System.ServiceModel;
 using System.Text;
 using System.Xml.Linq;
 using WMSBrokerProject.Interfaces;
@@ -17,11 +16,16 @@ namespace WMSBrokerProject.Repositories
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment hostEnvironment;
         private readonly GoEfficientCredentials goEfficientCredentials;
+        private readonly OrderProgressSettingsModel orderProgressSettings;
+        
         private readonly string clientId;
         private readonly string clientSecret;
         private readonly string endpointUrl;
-        public WMSOrderProgressImplementation(IConfiguration configuration, IWebHostEnvironment hostEnvironment, IOptions<GoEfficientCredentials> goEfficientCredentials)
+        public WMSOrderProgressImplementation(IConfiguration configuration, IWebHostEnvironment hostEnvironment,
+            IOptions<GoEfficientCredentials> goEfficientCredentials)
         {
+            orderProgressSettings = new OrderProgressSettingsModel();
+            configuration.GetSection("OrderProgressTemplates").Bind(orderProgressSettings.OrderProgressTemplates);
             _configuration = configuration;
             this.hostEnvironment = hostEnvironment;
             this.goEfficientCredentials = goEfficientCredentials.Value;
@@ -33,33 +37,40 @@ namespace WMSBrokerProject.Repositories
             this.endpointUrl = configuration.GetSection("TrackTrace:EndPointUrl").Value!;
         }
 
-        public async Task<ResponseModel<TrackTraceTemplateResponse>> GetTemplateIds()
+        public async Task<ResponseModel<OrderProcessingTemplateResponse>> GetTemplateIds()
         {
-            var responseModel = new ResponseModel<TrackTraceTemplateResponse>();
+            var responseModel = new ResponseModel<OrderProcessingTemplateResponse>();
             try
             {
                 List<TemplateClass> templates = new List<TemplateClass>();
-                var trackTraceTemplates = _configuration.GetSection("TrackTraceTemplates").AsEnumerable();
-                foreach (var attribute in trackTraceTemplates)
+                var orderProgressTemplates = orderProgressSettings.OrderProgressTemplates;
+
+                if (orderProgressTemplates is not null)
                 {
-                    if (attribute.Value != null)
+                    foreach (var template in orderProgressTemplates)
                     {
-                        var keyFull = attribute.Key;
-                        var keyArray = keyFull.Split(':');
-                        var value = attribute.Value;
-                        var key = keyArray[keyArray.Length - 1];
-                        templates.Add(new TemplateClass
+                        if (template.Value != null)
                         {
-                            TemplateId = key,
-                            Status = value
-                        });
+                            templates.Add(new TemplateClass
+                            {
+                                TemplateKey = template.Key,
+                                ActionType = template.Value.ActionType,
+                                GoEfficientStatus = template.Value.GoEfficientStatus,
+                                TemplateID = template.Value.TemplateID,
+                                WMSStatus = template.Value.WMSStatus
+                            });
+                        }
                     }
+                    responseModel.Result = new OrderProcessingTemplateResponse
+                    {
+                        Templates = templates
+                    };
+                    responseModel.IsSuccess = true; 
                 }
-                responseModel.Result = new TrackTraceTemplateResponse
+                else
                 {
-                    Templates = templates
-                };
-                responseModel.IsSuccess = true;
+                    responseModel.ErrorMessage = "No order processing template found";
+                }
             }
             catch (Exception ex)
             {
@@ -147,7 +158,7 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
 
-        public async Task<ResponseModel<TTRES4aModel>> REQ4a_GetTemplateFromGoEfficient(TTREQ4aModel model)
+        public async Task<ResponseModel<TTRES4aModel>> REQ4a_GetTemplateFromGoEfficient(OrderProcessingREQ4aModel model)
         {
             var responseModel = new ResponseModel<TTRES4aModel>();
 
@@ -240,9 +251,9 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
 
-        public async Task<ResponseModel<TTRES5Model>> REQ05_UpdateInstantiatedAttachmentsRequest(TTREQ5Model model)
+        public async Task<ResponseModel<UIARES5Model>> REQ05_UpdateInstantiatedAttachmentsRequest(UIAREQ5Model model)
         {
-            var responseModel = new ResponseModel<TTRES5Model>();
+            var responseModel = new ResponseModel<UIARES5Model>();
             try
             {
                 using HttpClient client = new HttpClient();
@@ -282,7 +293,7 @@ namespace WMSBrokerProject.Repositories
 
                 XDocument doc = XDocument.Parse(xmlResponse);
 
-                responseModel.Result = new TTRES5Model { };
+                responseModel.Result = new UIARES5Model { };
                 responseModel.IsSuccess = true;
             }
             catch (HttpRequestException ex)

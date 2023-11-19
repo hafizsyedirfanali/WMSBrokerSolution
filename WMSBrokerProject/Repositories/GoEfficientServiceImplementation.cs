@@ -513,7 +513,7 @@ namespace WMSBrokerProject.Repositories
                 //                                    UDF_TYPEINFO = udfTypeInfoValue
                 //                                }).ToList();
                 var fixedContentList = templateAttributeList.Where(s => s.UdfType == "FC").ToList();
-                List<FinNameFC> finNameFCList = new ();
+                List<FinNameFC> finNameFCList = new();
                 foreach (var fc in fixedContentList)
                 {
                     Dictionary<string, string> selectOptions = new();
@@ -532,13 +532,13 @@ namespace WMSBrokerProject.Repositories
                     }
                     var keyValuePairs = decodedUDFTypeInfo.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
                         .Select(s => s.Split('=')).ToList();
-                    Dictionary<string, string> selectListItems = new ();
+                    Dictionary<string, string> selectListItems = new();
                     foreach (var keyValuePair in keyValuePairs)
                     {
-                        if(keyValuePair.Length == 2)
+                        if (keyValuePair.Length == 2)
                         {
                             var value = keyValuePair[0].Trim();
-                            value = value.Replace("<","").Replace(">","").Trim();
+                            value = value.Replace("<", "").Replace(">", "").Trim();
                             var text = keyValuePair[1].Trim();
                             selectListItems.Add(key: text, value: value);
                         }

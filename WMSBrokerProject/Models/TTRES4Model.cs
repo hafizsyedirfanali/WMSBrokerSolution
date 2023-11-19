@@ -4,13 +4,16 @@
     {
         public int ResultCode { get; set; }
     }
-    public class TrackTraceTemplateResponse
+    public class OrderProcessingTemplateResponse
     {
         public List<TemplateClass> Templates { get; set; }
     }
     public class TemplateClass
     {
-        public string TemplateId { get; set; }
-        public string Status { get; set; }
+        public string TemplateKey { get; set; }
+        public string ActionType { get; set; }
+        public string TemplateID { get; set; }
+        public string WMSStatus { get; set; }
+        public string GoEfficientStatus { get; set; }
     }
 }
