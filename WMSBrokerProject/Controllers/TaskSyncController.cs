@@ -10,7 +10,10 @@ namespace WMSBrokerProject.Controllers
     [ApiController]
     public class TaskSyncController : AppBaseController
     {
-        public TaskSyncController(IGoEfficientService goEfficientService, IConfiguration configuration, IOptions<GoEfficientCredentials> goEfficientCredentials, IOrderProgressService orderProgressService) : base(goEfficientService, configuration, goEfficientCredentials, orderProgressService) { }
+        public TaskSyncController(IGoEfficientService goEfficientService, IConfiguration configuration, IOptions<GoEfficientCredentials> goEfficientCredentials, IOrderProgressService orderProgressService, ICorrelationServices correlationServices) : base(goEfficientService, configuration, goEfficientCredentials, orderProgressService, correlationServices)
+        {
+        }
+
         [HttpGet]
         public async Task<IActionResult> BeginProcess()
         {

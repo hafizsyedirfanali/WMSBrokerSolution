@@ -10,7 +10,9 @@ namespace WMSBrokerProject.Controllers
     [ApiController]
     public class OrderProgressController : AppBaseController
     {
-        public OrderProgressController(IGoEfficientService goEfficientService, IConfiguration configuration, IOptions<GoEfficientCredentials> goEfficientCredentials, IOrderProgressService orderProgressService) : base(goEfficientService, configuration, goEfficientCredentials, orderProgressService){ }
+        public OrderProgressController(IGoEfficientService goEfficientService, IConfiguration configuration, IOptions<GoEfficientCredentials> goEfficientCredentials, IOrderProgressService orderProgressService, ICorrelationServices correlationServices) : base(goEfficientService, configuration, goEfficientCredentials, orderProgressService, correlationServices)
+        {
+        }
 
         [HttpGet]
         public async Task<IActionResult> BeginProcess()
@@ -65,6 +67,7 @@ namespace WMSBrokerProject.Controllers
                             inId = ""
                         }).ConfigureAwait(false);
                         if (!taskSyncResponse.IsSuccess) { }
+                        //use correlationServices.Value1 for correlation 
                     }
                 }
             }

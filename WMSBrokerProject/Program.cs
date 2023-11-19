@@ -23,6 +23,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IGoEfficientService, GoEfficientServiceImplementation>();
 builder.Services.AddTransient<IWMSBeheerderService, WMSBeheerderImplementation>();
 builder.Services.AddTransient<IOrderProgressService, WMSOrderProgressImplementation>();
+builder.Services.AddSingleton<ICorrelationServices, CorrelationImplementation>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
