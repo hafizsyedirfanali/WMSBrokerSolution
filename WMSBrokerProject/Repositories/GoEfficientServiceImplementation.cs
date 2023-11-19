@@ -842,6 +842,66 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
+
+        public async Task<ResponseModel<CTRES7aModel>> REQ7a(CTREQ7aModel model)
+        {
+            var responseModel = new ResponseModel<CTRES7aModel>();
+            try
+            {
+                using HttpClient client = new HttpClient();
+                string? requestUri = _configuration.GetSection("GoEfficient:EndPointUrl").Value;
+                var date = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
+
+                var xmlRequest7a = @$"<?xml version=""1.0"" encoding=""UTF-8""?>
+                                        <Request>
+	                                        {GetXMLHeader(model.RequestId)}
+                                            <Body>
+                                                <UpdateOperation>
+                                                    <OperationName>PRO_UPDATE_V1</OperationName>
+                                                    <Values>
+                                                        <Value FieldName=""PRO.PRO_OPENED"">{date}</Value>
+                                                        <Value FieldName=""PRO.PRO_CLOSED"">{date}</Value>
+                                                    </Values>
+                                                    <Conditions>
+                                                        <Condition FieldName=""PRO.PRO_ID"">{model.ProId}</Condition>
+                                                    </Conditions>
+                                                </UpdateOperation>
+                                            </Body>
+                                        </Request>";
+
+                var content = new StringContent(xmlRequest7a, Encoding.UTF8, "application/xml");
+                string xmlResponse;
+                if (!string.IsNullOrEmpty(requestUri))
+                {
+                    var response = await client.PostAsync(requestUri, content);
+                    response.EnsureSuccessStatusCode();
+                    xmlResponse = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    var xmlResponseFilePath = Path.Combine(templateFolder!, $"GoEfficient_RES7aOpenTask.xml");
+                    xmlResponse = File.ReadAllText(xmlResponseFilePath);
+                }
+
+
+                XDocument doc = XDocument.Parse(xmlResponse);
+
+                responseModel.Result = new CTRES7aModel { };
+                responseModel.IsSuccess = true;
+            }
+            catch (HttpRequestException ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 40006;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 40007;
+            }
+            return responseModel;
+        }
+
         private string GetXMLHeader(string ind)
         {
             return $@"<Header>

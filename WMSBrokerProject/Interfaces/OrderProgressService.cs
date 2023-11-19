@@ -11,6 +11,6 @@ namespace WMSBrokerProject.Interfaces
         Task<ResponseModel<UIARES5Model>> REQ05_UpdateInstantiatedAttachmentsRequest(UIAREQ5Model model);//GoEfficient_UpdateInstantiatedAttachmentsRequest_REQ05
         Task<ResponseModel<TaskIndicationResponseModel>> RequestTaskIndication(TaskIndicationRequestModel model);
        // Task<ResponseModel<TTRES4Model>> REQ4_TrackAndTrace(TTREQ4Model model);
-        Task<ResponseModel<TTRES7aModel>> REQ7a(TTREQ7aModel model);
+        Task<ResponseModel<CTRES7aModel>> REQ7a(CTREQ7aModel model);
     }
 }

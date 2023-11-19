@@ -1,6 +1,6 @@
 ﻿namespace WMSBrokerProject.Models
 {
-    public class TTRES7aModel
+    public class CTRES7aModel
     {
         public string ProId { get; set; }
     }

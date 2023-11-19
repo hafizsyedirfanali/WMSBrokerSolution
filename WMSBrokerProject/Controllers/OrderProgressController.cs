@@ -8,24 +8,12 @@ namespace WMSBrokerProject.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OrderProgressController : ControllerBase
+    public class OrderProgressController : AppBaseController
     {
-        private readonly IGoEfficientService goEfficientService;
-        private readonly IConfiguration configuration;
-        private readonly IOptions<GoEfficientCredentials> goEfficientCredentials1;
-        private readonly IOrderProgressService orderProgressService;
-        private readonly GoEfficientCredentials goEfficientCredentials;
-        public OrderProgressController(IGoEfficientService goEfficientService, IConfiguration configuration,
-            IOptions<GoEfficientCredentials> goEfficientCredentials, IOrderProgressService orderProgressService)
-        {
-            this.goEfficientCredentials = goEfficientCredentials.Value;
-            this.goEfficientService = goEfficientService;
-            this.configuration = configuration;
-            goEfficientCredentials1 = goEfficientCredentials;
-            this.orderProgressService = orderProgressService;
-        }
-        [HttpGet("BeginOrderProgress")]
-        public async Task<IActionResult> BeginOrderProgress()
+        public OrderProgressController(IGoEfficientService goEfficientService, IConfiguration configuration, IOptions<GoEfficientCredentials> goEfficientCredentials, IOrderProgressService orderProgressService) : base(goEfficientService, configuration, goEfficientCredentials, orderProgressService){ }
+
+        [HttpGet]
+        public async Task<IActionResult> BeginProcess()
         {
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();
@@ -63,7 +51,6 @@ namespace WMSBrokerProject.Controllers
 
                         var taskSyncResponse = await orderProgressService.RequestTaskIndication(new TaskIndicationRequestModel
                         {
-                            
                             header = new TaskIndicationRequestModel.Header
                             {
                                 from = new TaskIndicationRequestModel.From
@@ -76,13 +63,6 @@ namespace WMSBrokerProject.Controllers
                                 priority = "BASIC"
                             },
                             inId = ""
-                            //status = new TaskIndicationRequestModel.Status
-                            //{
-                            //    mainStatus = "NEW",
-                            //    reason = taskFetchResponse.status.reason,
-                            //    subStatus = taskFetchResponse.status.subStatus,
-                            //    clarification = taskFetchResponse.status.clarification
-                            //}
                         }).ConfigureAwait(false);
                         if (!taskSyncResponse.IsSuccess) { }
                     }
@@ -91,5 +71,6 @@ namespace WMSBrokerProject.Controllers
 
             return Ok("Process completed successfully");    
         }
+        
     }
 }

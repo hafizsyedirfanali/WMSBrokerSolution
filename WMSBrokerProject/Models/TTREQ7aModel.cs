@@ -1,6 +1,6 @@
 ﻿namespace WMSBrokerProject.Models
 {
-    public class TTREQ7aModel
+    public class CTREQ7aModel
     {
         public string RequestId { get; set; }
         public string Opened { get; set; }

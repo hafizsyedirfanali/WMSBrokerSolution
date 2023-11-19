@@ -319,10 +319,8 @@ namespace WMSBrokerProject.Repositories
                 // httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
                 var dataJson = JsonConvert.SerializeObject(model);
                 var content = new StringContent(dataJson, Encoding.UTF8, "application/json");
-
-                model.inId = "9245949";//this line to be removed
                 HttpResponseMessage response =
-                    await httpClient.PutAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.inId}", content);
+                    await httpClient.PostAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.inId}", content);
                 if (response.IsSuccessStatusCode)
                 {
                     //string responseContent = await response.Content.ReadAsStringAsync();
@@ -410,9 +408,9 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
 
-        public async Task<ResponseModel<TTRES7aModel>> REQ7a(TTREQ7aModel model)
+        public async Task<ResponseModel<CTRES7aModel>> REQ7a(CTREQ7aModel model)
         {
-            var responseModel = new ResponseModel<TTRES7aModel>();
+            var responseModel = new ResponseModel<CTRES7aModel>();
             try
             {
                 using HttpClient client = new HttpClient();
@@ -453,7 +451,7 @@ namespace WMSBrokerProject.Repositories
 
                 XDocument doc = XDocument.Parse(xmlResponse);
 
-                responseModel.Result = new TTRES7aModel { };
+                responseModel.Result = new CTRES7aModel { };
                 responseModel.IsSuccess = true;
 
                 //var proId = doc.Descendants("Row")

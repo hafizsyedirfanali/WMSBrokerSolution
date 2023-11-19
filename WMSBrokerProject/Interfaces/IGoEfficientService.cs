@@ -9,6 +9,7 @@ namespace WMSBrokerProject.Interfaces
         Task<ResponseModel<RES5Model>> REQ5_SaveRecordToGoEfficient(REQ5Model model);                //Request 05 for saving the information
         Task<ResponseModel<RES5aModel>> REQ5a_SaveAddressToGoEfficient(REQ5aModel model);             //Request 05a for saving address
         Task<ResponseModel<RES6Model>> REQ6_IsRecordExist(REQ6Model model);                          //Request 06 for checking if record exists 
+        Task<ResponseModel<CTRES7aModel>> REQ7a(CTREQ7aModel model);//GoEfficient_Request07aCloseTask_REQ7a
         Task<ResponseModel<Dictionary<string, string>>> GetGoEfficientAttributes();             //to get attributes dynamically from json for goefficient
         Task<ResponseModel<Dictionary<string, string>>> GetGoEfficientFileAttributes();
         Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template, TaskFetchResponse2Model model);
