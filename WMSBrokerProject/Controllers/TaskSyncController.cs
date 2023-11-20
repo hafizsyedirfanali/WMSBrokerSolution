@@ -17,7 +17,7 @@ namespace WMSBrokerProject.Controllers
         [HttpGet]
         public async Task<IActionResult> BeginProcess()
         {
-            var res7aResult = await goEfficientService.REQ7a(new CTREQ7aModel
+            var res7aResult = await orderProgressService.REQ7a(new CTREQ7aModel
             {
 
             }).ConfigureAwait(false);

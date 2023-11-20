@@ -49,7 +49,7 @@ namespace WMSBrokerProject.Controllers
                             RequestId = requestId,
                             Status = template.WMSStatus
                         }).ConfigureAwait(false);
-                        if (!res4aResult.IsSuccess) { }
+                        if (!res5Result.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res5Result); }
 
                         var taskSyncResponse = await orderProgressService.RequestTaskIndication(new TaskIndicationRequestModel
                         {
