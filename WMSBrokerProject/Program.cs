@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
-using WMSBrokerProject.Models;
 
 //using WMSBrokerProject.Logging;
 using WMSBrokerProject.Repositories;
@@ -17,7 +16,7 @@ builder.Configuration.AddJsonFile("wmsOrderProgressSettings.json", optional: tru
 
 
 //builder.Services.Configure<Dictionary<string, ActionConfiguration>>(configuration.GetSection("Actions"));
-builder.Services.Configure<OrderProgressSettingsModel>(configuration.GetSection("OrderProgressTemplates"));
+builder.Services.Configure<OrderProgressConfigurationModel>(configuration.GetSection("OrderProgressTemplates"));
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IGoEfficientService, GoEfficientServiceImplementation>();

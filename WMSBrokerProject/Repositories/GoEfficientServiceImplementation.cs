@@ -11,10 +11,11 @@ using System.Text.RegularExpressions;
 using System.Collections;
 using Newtonsoft.Json;
 using System;
+using WMSBrokerProject.ConfigModels;
 
 namespace WMSBrokerProject.Repositories
 {
-	public class GoEfficientServiceImplementation : IGoEfficientService
+    public class GoEfficientServiceImplementation : IGoEfficientService
     {
         private readonly string? templateFolder;
         private readonly string symbolForConcatenation;

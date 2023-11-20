@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Globalization;
 using System.Text;
 using System.Xml.Linq;
+using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
 
@@ -16,7 +17,7 @@ namespace WMSBrokerProject.Repositories
         private readonly IConfiguration _configuration;
         private readonly IWebHostEnvironment hostEnvironment;
         private readonly GoEfficientCredentials goEfficientCredentials;
-        private readonly OrderProgressSettingsModel orderProgressSettings;
+        private readonly OrderProgressConfigurationModel orderProgressSettings;
         
         private readonly string clientId;
         private readonly string clientSecret;
@@ -24,8 +25,16 @@ namespace WMSBrokerProject.Repositories
         public WMSOrderProgressImplementation(IConfiguration configuration, IWebHostEnvironment hostEnvironment,
             IOptions<GoEfficientCredentials> goEfficientCredentials)
         {
-            orderProgressSettings = new OrderProgressSettingsModel();
-            configuration.GetSection("OrderProgressTemplates").Bind(orderProgressSettings.OrderProgressTemplates);
+            orderProgressSettings = new OrderProgressConfigurationModel();
+            var templatesSection = configuration.GetSection("OrderProgressTemplates");
+            foreach (var templateSection in templatesSection.GetChildren())
+            {
+                var template = new OrderProgressTemplate();
+                templateSection.Bind(template);
+                orderProgressSettings.OrderProgressTemplates ??= new Dictionary<string, OrderProgressTemplate>();
+                orderProgressSettings.OrderProgressTemplates[templateSection.Key] = template;
+            }
+
             _configuration = configuration;
             this.hostEnvironment = hostEnvironment;
             this.goEfficientCredentials = goEfficientCredentials.Value;

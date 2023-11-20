@@ -1,6 +1,6 @@
-﻿namespace WMSBrokerProject.Models
+﻿namespace WMSBrokerProject.ConfigModels
 {
-    public class OrderProgressSettingsModel
+    public class OrderProgressConfigurationModel
     {
         public Dictionary<string, OrderProgressTemplate> OrderProgressTemplates { get; set; }
     }

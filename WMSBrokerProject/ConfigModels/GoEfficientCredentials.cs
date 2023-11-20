@@ -1,4 +1,4 @@
-﻿namespace WMSBrokerProject.Models
+﻿namespace WMSBrokerProject.ConfigModels
 {
     public class GoEfficientCredentials
     {

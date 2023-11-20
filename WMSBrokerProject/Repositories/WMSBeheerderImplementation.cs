@@ -14,10 +14,11 @@ using Microsoft.Extensions.Configuration;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
+using WMSBrokerProject.ConfigModels;
 
 namespace WMSBrokerProject.Repositories
 {
-	public class WMSBeheerderImplementation : IWMSBeheerderService
+    public class WMSBeheerderImplementation : IWMSBeheerderService
 	{
 		private readonly string? templateFolder;
 		private readonly string symbolForConcatenation;
