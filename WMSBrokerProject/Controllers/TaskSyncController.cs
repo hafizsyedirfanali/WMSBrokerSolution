@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
 
@@ -15,7 +16,10 @@ namespace WMSBrokerProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BeginProcess()
+        public async Task<IActionResult> BeginProcess(
+            [FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId,
+            [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID
+            )
         {
             var res7aResult = await orderProgressService.REQ7a(new CTREQ7aModel
             {

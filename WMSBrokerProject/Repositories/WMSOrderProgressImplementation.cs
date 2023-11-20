@@ -17,12 +17,13 @@ namespace WMSBrokerProject.Repositories
         private readonly IWebHostEnvironment hostEnvironment;
         private readonly GoEfficientCredentials goEfficientCredentials;
         private readonly OrderProgressSettingsModel orderProgressSettings;
+        private readonly ICorrelationServices correlationServices;
         
         private readonly string clientId;
         private readonly string clientSecret;
         private readonly string endpointUrl;
         public WMSOrderProgressImplementation(IConfiguration configuration, IWebHostEnvironment hostEnvironment,
-            IOptions<GoEfficientCredentials> goEfficientCredentials)
+            IOptions<GoEfficientCredentials> goEfficientCredentials, ICorrelationServices correlationServices)
         {
             orderProgressSettings = new OrderProgressSettingsModel();
             configuration.GetSection("OrderProgressTemplates").Bind(orderProgressSettings.OrderProgressTemplates);
@@ -314,6 +315,8 @@ namespace WMSBrokerProject.Repositories
             var responseModel = new ResponseModel<TaskIndicationResponseModel>();
             try
             {
+                //correlationServices.Value1;
+
                 using HttpClient httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
                 // httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
