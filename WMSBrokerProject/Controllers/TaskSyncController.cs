@@ -16,7 +16,10 @@ namespace WMSBrokerProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BeginProcess()
+        public async Task<IActionResult> BeginProcess(
+            [FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId,
+            [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID
+            )
         {
             var res7aResult = await orderProgressService.REQ7a(new CTREQ7aModel
             {
