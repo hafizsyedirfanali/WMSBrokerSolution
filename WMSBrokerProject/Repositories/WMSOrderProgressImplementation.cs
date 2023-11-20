@@ -18,6 +18,8 @@ namespace WMSBrokerProject.Repositories
         private readonly IWebHostEnvironment hostEnvironment;
         private readonly GoEfficientCredentials goEfficientCredentials;
         private readonly OrderProgressConfigurationModel orderProgressSettings;
+        private readonly ICorrelationServices correlationServices;
+
         
         private readonly string clientId;
         private readonly string clientSecret;
