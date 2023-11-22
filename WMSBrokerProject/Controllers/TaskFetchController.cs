@@ -27,7 +27,7 @@ namespace WMSBrokerProject.Controllers
             [FromHeader][StringLength(8, MinimumLength = 1)] string xWMSAPIVersion)
         {
             
-            var res4aResult = await orderProgressService.REQ4a_GetTemplateFromGoEfficient(new OrderProcessingREQ4aModel
+            var res4aResult = await orderProgressService.REQ4a_GetTemplateData(new REQ4aGetTemplateModel
             {
                 RequestId = xRequestID,
                 ProId = inId

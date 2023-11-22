@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
@@ -169,9 +170,63 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
 
-        public async Task<ResponseModel<TTRES4aModel>> REQ4a_GetTemplateFromGoEfficient(OrderProcessingREQ4aModel model)
+        public async Task<ResponseModel<Dictionary<string,string>>> GetKeyForRES4Mapping()
         {
-            var responseModel = new ResponseModel<TTRES4aModel>();
+            var responseModel = new ResponseModel<Dictionary<string, string>>();
+            try
+            {
+                var goEfficientMijnAansluitingMap = _configuration.GetSection("WMSBeheerderMapping").AsEnumerable();
+                var mappingDictionary = new Dictionary<string, string>();
+                foreach (var attribute in goEfficientMijnAansluitingMap)
+                {
+                    if (attribute.Value != null)
+                    {
+                        var key = attribute.Key;//Its key represents RHS
+                        var keyArray = key.Split(':');//in this array last but one will be key
+                        var sourceKey = attribute.Value;//value is source key
+                        var destinationKey = keyArray[keyArray.Length - 1];
+                        //responseModel.Result = destinationKey;
+                        mappingDictionary.Add(key, value);
+                    }
+                }
+                responseModel.Result = mappingDictionary;
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10017;
+            }
+            return responseModel;
+
+        }
+        public async Task<ResponseModel<ResOPAttributeData>> GetOPAttributeData(ReqOPDataDictionaryModel model)
+        {
+            var responseModel = new ResponseModel<ResOPAttributeData>();
+
+            try
+            {
+                //var value = GetKeyForRES4Mapping(key, value);
+                //call will give you dict.
+                var dataDictionary = new Dictionary<string, string>();
+                foreach (var item in model.TemplateDictionary)
+                {
+                    var key = item.Key;
+                    //serarch in dicti for this kkey
+                    //if key is available then get its value and add to datadictionay (key,value)
+                }
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 60005;
+            }
+            return responseModel;
+        }
+        public async Task<ResponseModel<OPRES4aModel>> REQ4a_GetInID(OrderProcessingREQ4aModel model)
+        {
+            var responseModel = new ResponseModel<OPRES4aModel>();
 
             try
             {
@@ -221,31 +276,97 @@ namespace WMSBrokerProject.Repositories
                 RES4aTemplate template = new RES4aTemplate();
                 XDocument xdoc = XDocument.Parse(xmlResponse);
 
-                var disciplineId = xdoc.Descendants("Row")
-                            .Where(row => row.Elements("Value")
-                                    .Any(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NAME" && e.Value == "MA.nl-DisciplineID"))
-                            .Select(row => row.Elements("Value")
-                                    .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_PATH")?.Value)
-                            .FirstOrDefault();
-                //var disciplineId = 1000222873;
-                var objectId = xdoc.Descendants("Row")
+                var inId = xdoc.Descendants("Row")
                             .Where(row => row.Elements("Value")
                                     .Any(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NAME" && e.Value == "MA.nl-ObjectID"))
                             .Select(row => row.Elements("Value")
-                                    .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_PATH")?.Value)
-                            .FirstOrDefault();
-                var aanvraagId = xdoc.Descendants("Row")
-                            .Where(row => row.Elements("Value")
-                                    .Any(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NAME" && e.Value == "MA.nl-AanvraagID"))
-                            .Select(row => row.Elements("Value")
-                                    .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_PATH")?.Value)
+                                    .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_RECORD_ID")?.Value)
                             .FirstOrDefault();
 
-                responseModel.Result = new TTRES4aModel
+
+                responseModel.Result = new OPRES4aModel
                 {
-                    DisciplineId = disciplineId!,
-                    AanvraagId = aanvraagId!,
-                    ObjectId = objectId!
+                    InID = inId ?? string.Empty
+                };
+                responseModel.IsSuccess = true;
+            }
+            catch (HttpRequestException ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 60004;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 60005;
+            }
+            return responseModel;
+        }
+        public async Task<ResponseModel<Res4aGetTemplateModel>> REQ4a_GetTemplateData(REQ4aGetTemplateModel model)
+        {
+            var responseModel = new ResponseModel<Res4aGetTemplateModel>();
+
+            try
+            {
+                using HttpClient client = new HttpClient();
+                string? requestUri = _configuration.GetSection("GoEfficient:EndPointUrl").Value;
+                string xmlRequest4a = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
+                                        <Request>
+	                                        {GetXMLHeader(model.RequestId)}
+	                                        <Body>
+		                                        <ReadOperation>
+			                                        <Fields>
+				                                        <Field>FIN.FIN_ID</Field>
+				                                        <Field>UDF.UDF_TYPE</Field>
+				                                        <Field>FIN.FIN_NAME</Field>
+				                                        <Field>FIN.FIN_RECORD_ID</Field>
+				                                        <Field>FIN.FIN_PATH</Field>
+				                                        <Field>FIN.FIN_DATE</Field>
+				                                        <Field>FIN.FIN_NUMBER</Field>
+				                                        <Field>FIN.FIN_MEMO</Field>
+				                                        <Field>FIN.FIN_FILE_EXT</Field>
+				                                        <Field>UDF.UDF_TYPEINFO</Field>
+				                                        <Field>UDF.UDF_LABEL</Field>
+				                                        <Field>PRO.PRO_ID</Field>
+			                                        </Fields>
+			                                        <Conditions>
+				                                        <Condition RightVariableType=""LiteralValue"" RightValue=""{model.ProId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""PRO.PRO_ID""/>
+			                                        </Conditions>
+			                                        <OperationName>FIN_PRO_READ</OperationName>
+		                                        </ReadOperation>
+	                                        </Body>
+                                        </Request>";
+
+                var content = new StringContent(xmlRequest4a, Encoding.UTF8, "application/xml");
+                string xmlResponse;
+                if (!string.IsNullOrEmpty(requestUri))
+                {
+                    var response = await client.PostAsync(requestUri, content);
+                    response.EnsureSuccessStatusCode();
+                    xmlResponse = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    var xmlResponseFilePath = Path.Combine(templateFolder!, $"GoEfficient_InstantiatedAttacmentsResponse_RES04a.xml");
+                    xmlResponse = File.ReadAllText(xmlResponseFilePath);
+                }
+
+                
+                XDocument xdoc = XDocument.Parse(xmlResponse);
+                var templateDictionary = new Dictionary<string, string>();
+                var dataRows = xdoc.Descendants("Row")
+                            .Select(row => new KeyValuePair<string,string>
+                            (key: row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_LABEL")?.Value!,
+                            value: row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_RECORD_ID")?.Value!)).ToList();
+                
+                foreach (var data in dataRows)
+                {
+                    templateDictionary.Add(data.Key, data.Value);
+                }
+
+                responseModel.Result = new Res4aGetTemplateModel
+                {
+                    TemplateDictionary = templateDictionary
                 };
                 responseModel.IsSuccess = true;
             }

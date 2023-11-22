@@ -36,7 +36,7 @@ namespace WMSBrokerProject.Controllers
                 {
                     foreach (var taskId in taskIds)
                     {
-                        var res4aResult = await orderProgressService.REQ4a_GetTemplateFromGoEfficient(
+                        var res4aResult = await orderProgressService.REQ4a_GetInID(
                             new OrderProcessingREQ4aModel
                             {
                                 RequestId = requestId,

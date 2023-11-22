@@ -1,0 +1,14 @@
+{
+  "WMSBeheerderMapping": {
+    //Note: Destination key name not to be changed.
+    //Destination : Source
+    "MA.nl-ObjectID": "inId",
+    "Betreft het een Hoog Laag of een Duplex woning?": "buildingType",
+    "ADRESS.ADRESS_TOWN": "city",
+    "ADRESS.ADRESS_ZIPCODE": "postalCode",
+    "ADRESS.ADRESS_HOUSNR": "houseNumber",
+    "ADRESS.ADRESS_HOUSNR_SFX": "houseNumberExtension",
+    "ADRESS.ADRESS_STREET": "streetName"
+  }
+}
+
