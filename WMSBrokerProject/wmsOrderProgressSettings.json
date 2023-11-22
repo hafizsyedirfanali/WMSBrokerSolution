@@ -3,7 +3,7 @@
       "Templates1": {
         "ActionType": "new connection",
         "TemplateID": "98789",
-        "WMSStatus": "Confirm",
+        "WMSStatus": "Confirm", //taskfetch ke reponse
         "GoEfficientStatus": "Confirmed"
       },
       "Templates2": {
