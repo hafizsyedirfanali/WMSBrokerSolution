@@ -27,6 +27,9 @@ namespace WMSBrokerProject.Controllers
             }).ConfigureAwait(false);
             if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
             Dictionary<string, string> dataDictionary = res4aResult.Result!.TemplateDictionary;
+            var opAttributeDataResult = await orderProgressService.GetOPAttributeData(new ReqOPDataDictionaryModel { TemplateDictionary = dataDictionary }).ConfigureAwait(false);
+            if (!opAttributeDataResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, opAttributeDataResult); }
+
 
             return Ok();
         }

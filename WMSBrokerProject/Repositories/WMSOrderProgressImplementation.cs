@@ -20,8 +20,10 @@ namespace WMSBrokerProject.Repositories
         private readonly GoEfficientCredentials goEfficientCredentials;
         private readonly OrderProgressConfigurationModel orderProgressSettings;
         private readonly ICorrelationServices correlationServices;
+        private readonly OrderProgressMappingOptions _orderProgressMappingOptions;
 
-        
+
+
         private readonly string clientId;
         private readonly string clientSecret;
         private readonly string endpointUrl;
@@ -36,6 +38,20 @@ namespace WMSBrokerProject.Repositories
                 templateSection.Bind(template);
                 orderProgressSettings.OrderProgressTemplates ??= new Dictionary<string, OrderProgressTemplate>();
                 orderProgressSettings.OrderProgressTemplates[templateSection.Key] = template;
+            }
+            _orderProgressMappingOptions = new OrderProgressMappingOptions
+            {
+                OrderProgressMapping = new Dictionary<string, string>()
+            };
+            var configSection = configuration.GetSection("OrderProgressMapping");
+            var configValues = configSection?.GetChildren().ToList();
+
+            if (configValues != null)
+            {
+                foreach (var item in configValues)
+                {
+                    _orderProgressMappingOptions.OrderProgressMapping[item.Key] = item.Value;
+                }
             }
 
             _configuration = configuration;
@@ -170,51 +186,29 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
 
-        public async Task<ResponseModel<Dictionary<string,string>>> GetKeyForRES4Mapping()
-        {
-            var responseModel = new ResponseModel<Dictionary<string, string>>();
-            try
-            {
-                var goEfficientMijnAansluitingMap = _configuration.GetSection("WMSBeheerderMapping").AsEnumerable();
-                var mappingDictionary = new Dictionary<string, string>();
-                foreach (var attribute in goEfficientMijnAansluitingMap)
-                {
-                    if (attribute.Value != null)
-                    {
-                        var key = attribute.Key;//Its key represents RHS
-                        var keyArray = key.Split(':');//in this array last but one will be key
-                        var sourceKey = attribute.Value;//value is source key
-                        var destinationKey = keyArray[keyArray.Length - 1];
-                        //responseModel.Result = destinationKey;
-                        mappingDictionary.Add(key, value);
-                    }
-                }
-                responseModel.Result = mappingDictionary;
-                responseModel.IsSuccess = true;
-            }
-            catch (Exception ex)
-            {
-                responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10017;
-            }
-            return responseModel;
-
-        }
+        
         public async Task<ResponseModel<ResOPAttributeData>> GetOPAttributeData(ReqOPDataDictionaryModel model)
         {
             var responseModel = new ResponseModel<ResOPAttributeData>();
 
             try
             {
-                //var value = GetKeyForRES4Mapping(key, value);
-                //call will give you dict.
+                var mappingDictionary = _orderProgressMappingOptions.OrderProgressMapping;
                 var dataDictionary = new Dictionary<string, string>();
                 foreach (var item in model.TemplateDictionary)
                 {
                     var key = item.Key;
-                    //serarch in dicti for this kkey
-                    //if key is available then get its value and add to datadictionay (key,value)
+                    if (mappingDictionary.ContainsKey(key))
+                    {
+                        var keyFromMappingDict = mappingDictionary[key];
+                        var value = item.Value;
+                        dataDictionary.Add(keyFromMappingDict, value);
+                    }
                 }
+                responseModel.Result = new ResOPAttributeData
+                {
+                    DataDictionary = dataDictionary
+                };
                 responseModel.IsSuccess = true;
             }
             catch (Exception ex)
@@ -361,7 +355,7 @@ namespace WMSBrokerProject.Repositories
                 
                 foreach (var data in dataRows)
                 {
-                    templateDictionary.Add(data.Key, data.Value);
+                    if(!templateDictionary.ContainsKey(data.Key)) templateDictionary.Add(data.Key, data.Value);
                 }
 
                 responseModel.Result = new Res4aGetTemplateModel

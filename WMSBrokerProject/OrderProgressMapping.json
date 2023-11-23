@@ -1,5 +1,5 @@
 {
-  "WMSBeheerderMapping": {
+  "OrderProgressMapping": {
     //Note: Destination key name not to be changed.
     //Destination : Source
     "MA.nl-ObjectID": "inId",
