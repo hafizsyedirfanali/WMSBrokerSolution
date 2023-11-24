@@ -2,13 +2,24 @@
   "OrderProgressMapping": {
     //Note: Destination key name not to be changed.
     //Destination : Source
-    "MA.nl-ObjectID": "inId",
-    "Betreft het een Hoog Laag of een Duplex woning?": "buildingType",
-    "ADRESS.ADRESS_TOWN": "city",
-    "ADRESS.ADRESS_ZIPCODE": "postalCode",
-    "ADRESS.ADRESS_HOUSNR": "houseNumber",
-    "ADRESS.ADRESS_HOUSNR_SFX": "houseNumberExtension",
-    "ADRESS.ADRESS_STREET": "streetName"
+    "cifwms-huurderid": "inId",
+    "cifwms-dhid": "DHid",
+    "cifwms-fibernumber": "fiberNumber",
+    "cifwms-updatecount": "updateCount",
+    "CIFWMS_AFT_STATUS": "status",
+    "CIFWMS_AFT_SUBSTATUS": "subStatus",
+    "CIFWMS_AFT_ACTION": "action",
+    "cifwms-reason": "reason",
+    "cifwms-clarification": "clarification",
+    "cifwms-areanetworktype": "areanetworkType",
+    "Omschrijving opdracht": "subject",
+    "Naam-aanvrager": "lastName",
+    "mobiel aanvrager": "phoneNumber",
+    "e-mail aanvrager": "email"
+
+    //"Betreft het een Hoog Laag of een Duplex woning?": "buildingType"
+
+
   }
 }
 
