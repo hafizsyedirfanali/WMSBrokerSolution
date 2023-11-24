@@ -1,7 +1,8 @@
 {
   "WMSBeheerderAttributes": {
     "PATCH": {
-      "inId": "taskInfo.hasInfo.DHid",
+      "inId": "taskId",
+      "DHid": "taskInfo.hasInfo.DHid",
       "fiberNumber": "taskInfo.hasInfo.fiberNumber",
       "pop": "taskInfo.popInfo.activeEquipmentEndpoint.pop",
       "frame": "taskInfo.popInfo.activeEquipmentEndpoint.frame",
@@ -17,7 +18,8 @@
       "houseNumber": "taskInfo.hasInfo.connectionAddress.houseNumber"
     },
     "DEPATCH": {
-      "inId": "taskInfo.hasInfo.DHid",
+      "inId": "taskId",
+      "DHid": "taskInfo.hasInfo.DHid",
       "pop": "taskInfo.popInfo.activeEquipmentEndpoint.pop",
       "frame": "taskInfo.popInfo.activeEquipmentEndpoint.frame",
       "block": "taskInfo.popInfo.activeEquipmentEndpoint.block",
@@ -33,23 +35,45 @@
       "houseNumber": "taskInfo.hasInfo.connectionAddress.houseNumber"
     },
     "NETWORK_INCIDENT": {
-      "inId": "taskInfo.connectionInfo.DHid",
+      "inId": "taskId",
+      "updateCount": "header.updateCount",
+      "status": "status.mainStatus",
+      "substatus": "status.subStatus",
+      "action": "action",
+      "DHid": "taskInfo.hasInfo.DHid",
+      "reason": "status.reason",
+      "clarification": "status.clarification",
+      "areanetworkType": "area.networkType",
       "fiberNumber": "taskInfo.connectionInfo.fiberNumber",
+      "subject": "taskInfo.networkInfo.subject",
+      "lastName": "taskInfo.networkInfo.reportedBy.lastName",
       "houseNumber": "taskInfo.connectionInfo.connectionAddress.houseNumber",
-      //"houseNumberExtension": "taskInfo.connectionInfo.connectionAddress.houseNumberExtension",
+      "houseNumberExtension": "taskInfo.connectionInfo.connectionAddress.houseNumberExtension",
       "streetName": "taskInfo.connectionInfo.connectionAddress.streetName",
       "city": "taskInfo.connectionInfo.connectionAddress.city",
       "country": "taskInfo.connectionInfo.connectionAddress.country",
       "postalCode": "taskInfo.connectionInfo.connectionAddress.postalCode",
-      "firstName": "taskInfo.networkInfo.reportedBy.firstName",
-      "lastName": "taskInfo.networkInfo.reportedBy.lastName",
       "phoneNumber": "taskInfo.networkInfo.reportedBy.phoneNumber",
-      "subject": "taskInfo.networkInfo.subject"
+      "email": "taskInfo.networkInfo.reportedBy.email"
+
+      //"inId": "taskInfo.connectionInfo.DHid",
+      //"fiberNumber": "taskInfo.connectionInfo.fiberNumber",
+      //"houseNumber": "taskInfo.connectionInfo.connectionAddress.houseNumber",
+      //"houseNumberExtension": "taskInfo.connectionInfo.connectionAddress.houseNumberExtension",
+      //"streetName": "taskInfo.connectionInfo.connectionAddress.streetName",
+      //"city": "taskInfo.connectionInfo.connectionAddress.city",
+      //"country": "taskInfo.connectionInfo.connectionAddress.country",
+      //"postalCode": "taskInfo.connectionInfo.connectionAddress.postalCode",
+      //"firstName": "taskInfo.networkInfo.reportedBy.firstName",
+      //"lastName": "taskInfo.networkInfo.reportedBy.lastName",
+      //"phoneNumber": "taskInfo.networkInfo.reportedBy.phoneNumber",
+      //"subject": "taskInfo.networkInfo.subject"
 
       //connectionInfo note available in yaml file
     },
     "CONNECTION_INCIDENT": {
-      "inId": "taskInfo.connectionInfo.DHid",
+      "inId": "taskId",
+      "DHid": "taskInfo.connectionInfo.DHid",
       "fiberNumber": "taskInfo.connectionInfo.fiberNumber",
       "houseNumber": "taskInfo.connectionInfo.connectionAddress.houseNumber",
       "houseNumberExtension": "taskInfo.connectionInfo.connectionAddress.houseNumberExtension",
@@ -60,7 +84,8 @@
       "subject": "taskInfo.connectionInfo.subject"
     },
     "FTU_REPLACEMENT": {
-      "inId": "taskInfo.hasInfo.DHid",
+      "inId": "taskId",
+      "DHid": "taskInfo.hasInfo.DHid",
       "fiberNumber": "taskInfo.hasInfo.fiberNumber",
       "streetName": "taskInfo.hasInfo.connectionAddress.streetName",
       "city": "taskInfo.hasInfo.connectionAddress.city",
@@ -69,7 +94,8 @@
       "country": "taskInfo.hasInfo.connectionAddress.country"
     },
     "NEW_CONNECTION": {
-      "inId": "taskInfo.hasInfo.DHid",
+      "inId": "taskId",
+      "DHid": "taskInfo.hasInfo.DHid",
       "fiberNumber": "taskInfo.hasInfo.fiberNumber",
       "houseNumber": "taskInfo.hasInfo.connectionAddress.houseNumber",
       "houseNumberExtension": "taskInfo.hasInfo.connectionAddress.houseNumberExtension",
@@ -88,7 +114,8 @@
       "buildingType": "taskInfo.hasInfo.buildingType"
     },
     "AFTER_CONNECT": {
-      "inId": "taskInfo.hasInfo.DHid",
+      "inId": "taskId",
+      "DHid": "taskInfo.hasInfo.DHid",
       "fiberNumber": "taskInfo.hasInfo.fiberNumber",
       "houseNumber": "taskInfo.hasInfo.connectionAddress.houseNumber",
       //"houseNumberExtension": "taskInfo.hasInfo.connectionAddress.houseNumberExtension",
@@ -106,7 +133,8 @@
       "odfTray": "taskInfo.popInfo.activeEquipmentEndpoint.odfTray"
     },
     "FTU_DISPLACEMENT": {
-      "inId": "taskInfo.hasInfo.DHid",
+      "inId": "taskId",
+      "DHid": "taskInfo.hasInfo.DHid",
       "fiberNumber": "taskInfo.hasInfo.fiberNumber",
       "houseNumber": "taskInfo.hasInfo.connectionAddress.houseNumber",
       "houseNumberExtension": "taskInfo.hasInfo.connectionAddress.houseNumberExtension",
@@ -116,7 +144,8 @@
       "postalCode": "taskInfo.hasInfo.connectionAddress.postalCode"
     },
     "TELCO_MIGRATION": {
-      "inId": "taskInfo.hasInfo.DHid",
+      "inId": "taskId",
+      "DHid": "taskInfo.hasInfo.DHid",
       "fiberNumber": "taskInfo.hasInfo.fiberNumber",
       "houseNumber": "taskInfo.hasInfo.connectionAddress.houseNumber",
       //"houseNumberExtension": "taskInfo.hasInfo.connectionAddress.houseNumberExtension",
@@ -134,7 +163,8 @@
       //"odfTray": "taskInfo.popInfo.activeEquipmentEndpoint.odfTray"
     },
     "PORT_MIGRATION": {
-      "inId": "taskInfo.hasInfo.DHid",
+      "inId": "taskId",
+      "DHid": "taskInfo.hasInfo.DHid",
       "fiberNumber": "taskInfo.hasInfo.fiberNumber",
       "houseNumber": "taskInfo.hasInfo.connectionAddress.houseNumber",
       //"houseNumberExtension": "taskInfo.hasInfo.connectionAddress.houseNumberExtension",

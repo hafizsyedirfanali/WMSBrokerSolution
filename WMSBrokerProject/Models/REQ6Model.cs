@@ -3,6 +3,6 @@
     public class REQ6Model
     {
         public string InId { get; set; }
-        public string FIN_UDF_ID_HuurderId { get; set; }
+        public string Huurder_UDF_Id { get; set; }
     }
 }

@@ -13,15 +13,20 @@
     //Here key name must be same as the key name in GoEFficientAttributes.json
     //Here value must be equal to the key of MijnAansluitingAttributes for 1:1
     //Destination : Source
-    "MA.nl-ObjectID": "inId"
-    //"cifwms-dhid": "inId",
-    //"cifwms-fibernumber": "fiberNumber",
-    //"ADRESS.ADRESS_HOUSNR": "houseNumber",
-    //"ADRESS.ADRESS_HOUSNR_SFX": "houseNumberExtension",
-    //"ADRESS.ADRESS_STREET": "streetName",
-    //"ADRESS.ADRESS_TOWN": "city",
-    //"ADRESS.ADRESS_CNTR_ISO3166A3": "country",
-    //"ADRESS.ADRESS_ZIPCODE": "postalCode"
+    "cifwms-huurderid": "inId",
+    "cifwms-dhid": "DHid",
+    "cifwms-fibernumber": "fiberNumber",
+    "cifwms-updatecount": "updateCount",
+    "CIFWMS_AFT_STATUS": "status",
+    "CIFWMS_AFT_SUBSTATUS": "subStatus",
+    "CIFWMS_AFT_ACTION": "action",
+    "cifwms-reason": "reason",
+    "cifwms-clarification": "clarification",
+    "cifwms-areanetworktype": "areanetworkType",
+    "Omschrijving opdracht": "subject",
+    "Naam-aanvrager": "lastName",
+    "mobiel aanvrager": "phoneNumber",
+    "e-mail aanvrager": "email"
   },
   "WMSBeheerderRES2FCMapping": {
     //Destination : Source

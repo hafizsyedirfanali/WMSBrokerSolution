@@ -6,23 +6,25 @@
   //Don't use colon : in keys
   //Destination : Mapping Name
   "GoEfficientAttributes": {
-    //"MA.nl-ObjectID": "ObjectId",
-    "MA.nl-AanvraagID": "AanvraagID",
-    "Naam-aanvrager": "Naam-aanvrager",
-    "Mobiel aanvrager": "TelefoonnummerMobiel",
-    "E-mail aanvrager": "Emailadres",
-    "Datum aanvraag ontvangen": "AanvraagDatum",
-    "Aanvraag ontvangen via?": "RequestReceived",
-    "Wensdatum": "WensJaar",
-    "Betreft het een Hoog Laag of een Duplex woning?": "Betreft het een Hoog Laag of een Duplex woning?",
-    "plattegrond": "plattegrond",
-    "situatieschets": "situatieschets",
-    "AanvragPDF": "AANSLUITING.NL OPDRACHT",
+    "cifwms-huurderid": "inId",
+    "cifwms-dhid": "DHid",
+    "cifwms-fibernumber": "fiberNumber",
+    "cifwms-updatecount": "updateCount",
+    "CIFWMS_AFT_STATUS": "status",
+    "CIFWMS_AFT_SUBSTATUS": "subStatus",
+    "CIFWMS_AFT_ACTION": "action",
+    "cifwms-reason": "reason",
+    "cifwms-clarification": "clarification",
+    "cifwms-areanetworktype": "areanetworkType",
+    "Omschrijving opdracht": "subject",
+    "Naam-aanvrager": "lastName",
+    "mobiel aanvrager": "phoneNumber",
     "ADRESS.ADRESS_TOWN": "Plaats",
     "ADRESS.ADRESS_ZIPCODE": "Postcode",
     "ADRESS.ADRESS_HOUSNR": "Huisnummer",
     "ADRESS.ADRESS_HOUSNR_SFX": "HuisnummerToevoeging",
     "ADRESS.ADRESS_STREET": "Straat"
+    //"Betreft het een Hoog Laag of een Duplex woning?": "Betreft het een Hoog Laag of een Duplex woning?"
   },
   "GoEfficientCredentials": {
     "Username": "P2ALinker",
