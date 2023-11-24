@@ -440,11 +440,15 @@ namespace WMSBrokerProject.Repositories
             var responseModel = new ResponseModel<TaskIndicationResponseModel>();
             try
             {
-                // correlationServices.Value1;
+                Random rand = new Random();
+                var correlationID = rand.Next(10000, 1000001).ToString();
+
+                correlationServices.inId = model.inId;
+                correlationServices.CorrelationID = correlationID;
 
                 using HttpClient httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
-                // httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
+                //httpClient.DefaultRequestHeaders.Add("CorrelationID", correlationID);
                 var dataJson = JsonConvert.SerializeObject(model);
                 var content = new StringContent(dataJson, Encoding.UTF8, "application/json");
                 HttpResponseMessage response =
