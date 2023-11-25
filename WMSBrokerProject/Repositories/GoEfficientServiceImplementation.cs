@@ -490,13 +490,13 @@ namespace WMSBrokerProject.Repositories
                 //2. fill the values from res2 into above
 
 
-                List<RES4aAddress> addresses = (from row in xdoc.Descendants("Row")
+                List<RES4aTemplate> addresses = (from row in xdoc.Descendants("Row")
                                                 let udfTypeValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value
                                                 where udfTypeValue == "A"
                                                 let udfLabelValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_LABEL")?.Value
                                                 let finNameValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value
                                                 let udfFIN_IDValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_ID")?.Value
-                                                select new RES4aAddress
+                                                select new RES4aTemplate
                                                 {
                                                     HouseNo = udfLabelValue,
                                                     FIN_Id = udfFIN_IDValue,

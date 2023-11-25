@@ -2,6 +2,6 @@
 {
     public class ReqOPDataDictionaryModel
     {
-        public Dictionary<string, string> TemplateDictionary { get; set; }
+        public List<RES4aTemplateFields> Templates { get; set; }
     }
 }

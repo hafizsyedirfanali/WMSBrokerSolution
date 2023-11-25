@@ -26,8 +26,8 @@ namespace WMSBrokerProject.Controllers
                 ProId = inId
             }).ConfigureAwait(false);
             if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
-            Dictionary<string, string> dataDictionary = res4aResult.Result!.TemplateDictionary;
-            var opAttributeDataResult = await orderProgressService.GetOPAttributeData(new ReqOPDataDictionaryModel { TemplateDictionary = dataDictionary }).ConfigureAwait(false);
+            var templates = res4aResult.Result!.Templates;
+            var opAttributeDataResult = await orderProgressService.GetOPAttributeData(new ReqOPDataDictionaryModel { Templates = templates }).ConfigureAwait(false);
             if (!opAttributeDataResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, opAttributeDataResult); }
 
 

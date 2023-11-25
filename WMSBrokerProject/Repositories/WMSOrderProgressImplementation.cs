@@ -195,14 +195,41 @@ namespace WMSBrokerProject.Repositories
             {
                 var mappingDictionary = _orderProgressMappingOptions.OrderProgressMapping;
                 var dataDictionary = new Dictionary<string, string>();
-                foreach (var item in model.TemplateDictionary)
+                foreach (var item in model.Templates)
                 {
-                    var key = item.Key;
+                    var key = item.FIN_NAME;
                     if (mappingDictionary.ContainsKey(key))
                     {
                         var keyFromMappingDict = mappingDictionary[key];
-                        var value = item.Value;
-                        dataDictionary.Add(keyFromMappingDict, value);
+                        switch (item.UDF_TYPE)
+                        {
+                            case "T":
+                                dataDictionary.Add(keyFromMappingDict, item.FIN_PATH);
+                                break;
+                            case "D":
+                                dataDictionary.Add(keyFromMappingDict, item.FIN_DATE);
+                                break;
+                            case "N":
+                                dataDictionary.Add(keyFromMappingDict, item.FIN_NUMBER);
+                                break;
+                            case "FC":
+                                var code = item.FIN_PATH;
+                                //logic to get value from code
+                                var value = "Hoogbouw";
+                                dataDictionary.Add(keyFromMappingDict, value);
+                                break;
+                            //case "DT":
+                            //    dataDictionary.Add(keyFromMappingDict, item.FIN_NUMBER);
+                            //    break;
+                            //case "B":
+                            //    dataDictionary.Add(keyFromMappingDict, item.FIN_NUMBER);
+                            //    break;
+                            //case "A":
+                            //    dataDictionary.Add(keyFromMappingDict, item.FIN_NUMBER);
+                            //    break;
+                        }
+                        
+                        
                     }
                 }
                 responseModel.Result = new ResOPAttributeData
@@ -347,20 +374,53 @@ namespace WMSBrokerProject.Repositories
 
                 
                 XDocument xdoc = XDocument.Parse(xmlResponse);
-                var templateDictionary = new Dictionary<string, string>();
-                var dataRows = xdoc.Descendants("Row")
-                            .Select(row => new KeyValuePair<string,string>
-                            (key: row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_LABEL")?.Value!,
-                            value: row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_RECORD_ID")?.Value!)).ToList();
-                
-                foreach (var data in dataRows)
-                {
-                    if(!templateDictionary.ContainsKey(data.Key)) templateDictionary.Add(data.Key, data.Value);
-                }
+                //var templateDictionary = new Dictionary<string, string>();
+                //var dataRows = xdoc.Descendants("Row")
+                //            .Select(row => new KeyValuePair<string,string>
+                //            (key: row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_LABEL")?.Value!,
+                //            value: row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_RECORD_ID")?.Value!)).ToList();
+                //foreach (var data in dataRows)
+                //{
+                //    if (!templateDictionary.ContainsKey(data.Key)) templateDictionary.Add(data.Key, data.Value);
+                //}
+
+
+                var templates = (from row in xdoc.Descendants("Row")
+                                                let udfFIN_IDValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_ID")?.Value
+                                                let udfTypeValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value
+                                                let finNameValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value
+                                                let finRecordIdValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_RECORD_ID")?.Value
+                                                let finPathValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_PATH")?.Value
+                                                let finDateValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_DATE")?.Value
+                                                let finNumberValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NUMBER")?.Value
+                                                let finMemoValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_MEMO")?.Value
+                                                let finFileExtValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_FILE_EXT")?.Value
+                                                let udfTypeInfoValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value
+                                                let udfLabelValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_LABEL")?.Value
+                                                let proIdValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_ID")?.Value
+
+                                                select new RES4aTemplateFields
+                                                {
+                                                   FIN_ID = udfFIN_IDValue,
+                                                   UDF_TYPE = udfTypeValue,
+                                                   FIN_NAME = finNameValue,
+                                                    FIN_RECORD_ID = finRecordIdValue,
+                                                    FIN_PATH = finPathValue,
+                                                    FIN_DATE = finDateValue,
+                                                    FIN_NUMBER = finNumberValue,
+                                                    FIN_MEMO = finMemoValue,
+                                                    FIN_FILE_EXT = finFileExtValue,
+                                                    UDF_TYPEINFO = udfTypeInfoValue,
+                                                    UDF_LABEL = udfLabelValue,
+                                                    PRO_ID = proIdValue
+
+                                                }).ToList();
+
+               
 
                 responseModel.Result = new Res4aGetTemplateModel
                 {
-                    TemplateDictionary = templateDictionary
+                    Templates = templates
                 };
                 responseModel.IsSuccess = true;
             }

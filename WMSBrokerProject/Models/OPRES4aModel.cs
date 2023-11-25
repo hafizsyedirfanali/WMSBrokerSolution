@@ -6,7 +6,7 @@
     }
     public class Res4aGetTemplateModel
     {
-        public Dictionary<string,string> TemplateDictionary { get; set; }
+        public List<RES4aTemplateFields> Templates { get; set; }
     }
 
 }

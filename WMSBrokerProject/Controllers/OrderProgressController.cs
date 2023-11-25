@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using System.ComponentModel.DataAnnotations;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
@@ -15,7 +16,8 @@ namespace WMSBrokerProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BeginProcess()
+        [Route("OrderProgress")]
+        public async Task<IActionResult> BeginOrderProgress()
         {
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();
@@ -74,6 +76,31 @@ namespace WMSBrokerProject.Controllers
 
             return Ok("Process completed successfully");    
         }
-        
+
+
+        [HttpGet]
+        [Route("TaskFetch")]
+        public async Task<IActionResult> BeginTaskFetch(
+            [FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId,
+            [FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId,
+            [FromHeader][StringLength(36, MinimumLength = 1)] string xRequestID,
+            [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
+            [FromHeader] bool? xWMSTest,
+            [FromHeader][StringLength(8, MinimumLength = 1)] string xWMSAPIVersion)
+        {
+
+            var res4aResult = await orderProgressService.REQ4a_GetTemplateData(new REQ4aGetTemplateModel
+            {
+                RequestId = xRequestID,
+                ProId = inId
+            }).ConfigureAwait(false);
+            if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
+
+            return Ok(res4aResult.Result);
+            //return Ok(new
+            //{
+            //    res4aResult.Result
+            //});
+        }
     }
 }

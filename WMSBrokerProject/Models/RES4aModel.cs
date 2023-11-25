@@ -14,15 +14,20 @@
         public string FinName { get; set; }
         public Dictionary<string, string> SelectListItems { get; set; }
     }
-    public class RES4aAddress
+    public class RES4aTemplateFields
     {
-        public string City { get; set; }
-        public string PostalCode { get; set; }
-        public string HouseNo { get; set; }
-        public string HouseNoSuffix { get; set; }
-        public string Street { get; set; }
-        public string FIN_Id { get; set; }
-        public string FIN_Name { get; set; }
+        public string FIN_ID { get; set; }
+        public string UDF_TYPE { get; set; }
+        public string FIN_NAME { get; set; }
+        public string FIN_RECORD_ID { get; set; }
+        public string FIN_PATH { get; set; }
+        public string FIN_DATE { get; set; }
+        public string FIN_NUMBER { get; set; }
+        public string FIN_MEMO { get; set; }
+        public string FIN_FILE_EXT { get; set; }
+        public string UDF_TYPEINFO { get; set; }
+        public string UDF_LABEL { get; set; }
+        public string PRO_ID { get; set; }
     }
     public class GoEfficientTemplateAttributesClass
     {
