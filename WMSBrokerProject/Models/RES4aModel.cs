@@ -4,11 +4,23 @@
     {
 
         public string? FIN_ID { get; set; }
-        //public List<RES4aAddress> Addresses { get; set; }
+        public List<RES4aAddress> Addresses { get; set; }
         public RES4aTemplate Template { get; set; }
         public List<FinNameFC> FinNameFCList { get; set; }
 
     }
+
+    public class RES4aAddress
+    {
+        public string City { get; set; }
+        public string PostalCode { get; set; }
+        public string HouseNo { get; set; }
+        public string HouseNoSuffix { get; set; }
+        public string Street { get; set; }
+        public string FIN_Id { get; set; }
+        public string FIN_Name { get; set; }
+    }
+
     public class FinNameFC
     {
         public string FinName { get; set; }

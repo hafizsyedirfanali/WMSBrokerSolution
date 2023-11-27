@@ -26,7 +26,7 @@
           <Value FieldName="UDF.UDF_TYPE">FC</Value>
           <Value FieldName="FIN.FIN_NAME">Aanvraag ontvangen via?</Value>
           <Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
-          <Value FieldName="FIN.FIN_PATH"/>
+          <Value FieldName="FIN.FIN_PATH">WEB</Value>
           <Value FieldName="FIN.FIN_DATE"/>
           <Value FieldName="FIN.FIN_NUMBER"/>
           <Value FieldName="FIN.FIN_MEMO"/>

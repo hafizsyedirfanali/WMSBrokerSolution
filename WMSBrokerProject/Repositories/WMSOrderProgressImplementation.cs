@@ -36,12 +36,12 @@ namespace WMSBrokerProject.Repositories
             {
                 var template = new OrderProgressTemplate();
                 templateSection.Bind(template);
-                orderProgressSettings.OrderProgressTemplates ??= new Dictionary<string, OrderProgressTemplate>();
+                orderProgressSettings.OrderProgressTemplates ??= new Dictionary<string, OrderProgressTemplate>(StringComparer.OrdinalIgnoreCase);
                 orderProgressSettings.OrderProgressTemplates[templateSection.Key] = template;
             }
             _orderProgressMappingOptions = new OrderProgressMappingOptions
             {
-                OrderProgressMapping = new Dictionary<string, string>()
+                OrderProgressMapping = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
             };
             var configSection = configuration.GetSection("OrderProgressMapping");
             var configValues = configSection?.GetChildren().ToList();
@@ -186,7 +186,24 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
 
-        
+        private string GetValueForKeyInFCField(string inputString, string keyToSearch)
+        {
+            var keyValuePairs = inputString.Split(';');
+            foreach (var pair in keyValuePairs)
+            {
+                int startIndex = pair.IndexOf('<');
+                int endIndex = pair.IndexOf('>');
+                if (startIndex != -1 && endIndex != -1)
+                {
+                    var extractedKey = pair.Substring(startIndex + 1, endIndex - startIndex - 1).Trim();
+                    if (string.Equals(extractedKey, keyToSearch, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return pair.Substring(endIndex + 1).Trim('=', ';');
+                    }
+                }
+            }
+            return null;
+        }
         public async Task<ResponseModel<ResOPAttributeData>> GetOPAttributeData(ReqOPDataDictionaryModel model)
         {
             var responseModel = new ResponseModel<ResOPAttributeData>();
@@ -194,7 +211,7 @@ namespace WMSBrokerProject.Repositories
             try
             {
                 var mappingDictionary = _orderProgressMappingOptions.OrderProgressMapping;
-                var dataDictionary = new Dictionary<string, string>();
+                var dataDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
                 foreach (var item in model.Templates)
                 {
                     var key = item.FIN_NAME;
@@ -214,8 +231,7 @@ namespace WMSBrokerProject.Repositories
                                 break;
                             case "FC":
                                 var code = item.FIN_PATH;
-                                //logic to get value from code
-                                var value = "Hoogbouw";
+                                var value = GetValueForKeyInFCField(item.UDF_TYPEINFO, code);
                                 dataDictionary.Add(keyFromMappingDict, value);
                                 break;
                             //case "DT":
@@ -508,7 +524,7 @@ namespace WMSBrokerProject.Repositories
 
                 using HttpClient httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
-                //httpClient.DefaultRequestHeaders.Add("CorrelationID", correlationID);
+                httpClient.DefaultRequestHeaders.Add("CorrelationID", correlationID);
                 var dataJson = JsonConvert.SerializeObject(model);
                 var content = new StringContent(dataJson, Encoding.UTF8, "application/json");
                 HttpResponseMessage response =

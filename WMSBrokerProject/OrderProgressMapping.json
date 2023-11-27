@@ -2,7 +2,8 @@
   "OrderProgressMapping": {
     //Note: Destination key name not to be changed.
     //Destination : Source
-    "cifwms-huurderid": "inId",
+    //"cifwms-huurderid": "inId",
+    "Aanvraag ontvangen via?": "inId",
     "cifwms-dhid": "DHid",
     "cifwms-fibernumber": "fiberNumber",
     "cifwms-updatecount": "updateCount",
