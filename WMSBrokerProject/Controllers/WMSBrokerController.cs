@@ -50,7 +50,7 @@ namespace WMSBrokerProject.Controllers
             var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
             {
                 //InId = inId,
-                InId = taskFetchResponse.originator,
+                InId = taskFetchResponse.originatorId,
                 Huurder_UDF_Id = actionConfiguration!.Huurder_UDF_Id!
             }).ConfigureAwait(false);
             if (!responseREQ6.IsSuccess) { }
