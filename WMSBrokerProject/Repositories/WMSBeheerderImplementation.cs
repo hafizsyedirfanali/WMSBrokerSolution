@@ -63,7 +63,6 @@ namespace WMSBrokerProject.Repositories
 
                 HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
                 response.EnsureSuccessStatusCode();
-                var result = await response.Content.ReadAsStringAsync();
 
                 if (response.IsSuccessStatusCode)
                 {
