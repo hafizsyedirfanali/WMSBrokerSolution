@@ -7,7 +7,7 @@ namespace WMSBrokerProject.Models
     {
         public string inId { get; set; }
         public TaskInfo taskInfo { get; set; }
-        public string originator { get; set; }
+        public string originatorId { get; set; }
         public Header header { get; set; }
         public Status status { get; set; }
         public string action { get; set; }

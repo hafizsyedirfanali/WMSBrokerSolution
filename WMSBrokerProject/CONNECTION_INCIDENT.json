@@ -1,0 +1,120 @@
+{
+  "taskInfo": {
+    "hasInfo": {
+      "DHid": "dhid1_2073137401",
+      "connectionAddress": {
+        "postalCode": "3903LA",
+        "houseNumber": 1,
+        "houseNumberExtension": "B",
+        "city": "VEENENDAAL",
+        "streetName": "Wageningselaan",
+        "country": "NLD"
+      },
+      "fiberNumber": "FIBER_1",
+      "outletStatus": "ANDE"
+    },
+    "connectionInfo": {
+      "technicalPath": {
+        "pop": "ed-02",
+        "row": 99,
+        "frame": 101,
+        "tray": 5,
+        "position": 27
+      },
+      "activeEquipmentEndpoint": {
+        "pop": "ed-02",
+        "frame": 9999,
+        "block": "Z",
+        "port": "4/10",
+        "connector": "C",
+        "row": 99,
+        "odfTray": 99
+      },
+      "contactPerson": {
+        "lastName": "AAA_4606",
+        "phoneNumber": "0618412441",
+        "additionalPhoneNumber": "0618412441",
+        "email": "centraaltestmanagem@deltafibernederland.nl"
+      },
+      "subject": "Algemeen - Bepaalde websites niet benaderbaar",
+      "problemDescription": "Algemeen - Algemeen - Bepaalde websites niet benaderbaar\n \nFTTH ODF positie: ED.2.101.5.27\nFTTH switch: cn-ed-wp2-cs03.caiw.net\nFTTH poort: GigabitEthernet4/10\n \nTicket aangemaakt door: Annika Hartman\nTicket gecontroleerd door: Amal Hussen\nContactvoorkeur: E-mail en telefoon\n \nProbleemomschrijving: Algemeen - Bepaalde websites niet benaderbaar\n \nNotitie van medewerker:\n",
+      "connectionAddress": {
+        "postalCode": "3903LA",
+        "houseNumber": 1,
+        "houseNumberExtension": "B",
+        "city": "VEENENDAAL",
+        "streetName": "Wageningselaan",
+        "country": "NLD"
+      },
+      "DHid": "dhid1_2073137401",
+      "fiberNumber": "FIBER_1",
+      "mechanicOnSite": false,
+      "deliveryIssue": false
+    }
+  },
+  "originatorId": "50002396-14",
+  "header": {
+    "from": {
+      "orgId": "DFN",
+      "systemId": "WMS"
+    },
+    "updateCount": 2,
+    "created": "2023-08-29T13:00:24.4874362Z"
+  },
+  "status": {
+    "mainStatus": "NEW"
+  },
+  "action": "CONNECTION_INCIDENT",
+  "urgency": "NORMAL",
+  "taskId": "WMS002530553",
+  "area": {
+    "areaCode": "40",
+    "networkType": "FttH"
+  },
+  "comments": [
+    {
+      "party": {
+        "orgId": "CAIW",
+        "systemId": "CRS"
+      },
+      "author": {
+        "firstName": "Timo",
+        "lastName": "Vuuren",
+        "intercalation": "van"
+      },
+      "created": "2023-08-29T12:45:44Z",
+      "note": "Timo van Vuuren heeft het mobiele nummer gewijzigd van '062948267135' naar '0618412441'",
+      "id": "5c6f2f84-4267-4b9c-973c-585252c6caa5"
+    },
+    {
+      "party": {
+        "orgId": "DFN",
+        "systemId": "WMS"
+      },
+      "author": {
+        "firstName": "DFN",
+        "lastName": "WMS"
+      },
+      "created": "2023-08-29T13:00:19.5422335Z",
+      "note": "Ticket status update: RECEIVED naar NETWORK_CHECK",
+      "id": "4c88056d-6b28-41a1-8b4a-b3751b4db3ec"
+    },
+    {
+      "party": {
+        "orgId": "DFN",
+        "systemId": "WMS"
+      },
+      "author": {
+        "firstName": "DFN",
+        "lastName": "WMS"
+      },
+      "created": "2023-08-29T13:00:24.5309424Z",
+      "note": "Ticket status update: NETWORK_CHECK naar CONFIRMED",
+      "id": "d1f57071-f6c0-4a22-a3dc-e10f203f6744"
+    }
+  ],
+  "contractant": "DFN",
+  "readOnly": false,
+  "activeOperator": "CAIW",
+  "iSP": "DELTA"
+}
