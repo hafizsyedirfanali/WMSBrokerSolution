@@ -51,7 +51,7 @@ namespace WMSBrokerProject.Controllers
             {
                 //InId = inId,
                 InId = taskFetchResponse.originatorId,
-                Huurder_UDF_Id = actionConfiguration!.Huurder_UDF_Id!
+                Huurder_UDF_Id = actionConfiguration.Huurder_UDF_Id
             }).ConfigureAwait(false);
             if (!responseREQ6.IsSuccess) { }
             if (!responseREQ6.Result.IsRecordExist)
