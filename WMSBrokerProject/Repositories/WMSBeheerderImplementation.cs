@@ -47,35 +47,50 @@ namespace WMSBrokerProject.Repositories
 			var responseModel = new ResponseModel<TaskFetchResponseModel>();
 			try
 			{
-				string responseContent = File.ReadAllText("response2.json");
-				TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
-				responseModel.Result = taskFetchResponse;
-				responseModel.IsSuccess = true;
-				//+++++++++++++++UnComment Following lines in live environment and comment above lines
-				//model.InID = "9245949";//this line to be removed
-				//using HttpClient httpClient = new HttpClient();
-				//string? endPointUrl = "https://uat-gke.cif-operator.com/";
-				//string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
+                //string responseContent = File.ReadAllText("response2.json");
+                //TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
+                //responseModel.Result = taskFetchResponse;
+                //responseModel.IsSuccess = true;
+                //+++++++++++++++UnComment Following lines in live environment and comment above lines
+                //model.InID = "9245949";//this line to be removed
+                //using HttpClient httpClient = new HttpClient();
+                //string? endPointUrl = "https://uat-gke.cif-operator.com/";
+                //string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
 
-				////httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
-				//httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                ////httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
+                //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-				//// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
+                //// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
 
-				//HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
-				//if (response.IsSuccessStatusCode)
-				//{
-				//	string responseContent = await response.Content.ReadAsStringAsync();
-				//	TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
-				//	responseModel.Result = taskFetchResponse;
-				//	responseModel.IsSuccess = true;
-				//}
-				//else
-				//{
-				//	responseModel.ErrorCode = (int)response.StatusCode;
-				//	responseModel.ErrorMessage = $"Task fetch call failure with status/code:{response.StatusCode}";
-				//}
-			}
+                //HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
+                //if (response.IsSuccessStatusCode)
+                //{
+                //	string responseContent = await response.Content.ReadAsStringAsync();
+                //	TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
+                //	responseModel.Result = taskFetchResponse;
+                //	responseModel.IsSuccess = true;
+                //}
+                //else
+                //{
+                //	responseModel.ErrorCode = (int)response.StatusCode;
+                //	responseModel.ErrorMessage = $"Task fetch call failure with status/code:{response.StatusCode}";
+                //}
+                Random rand = new Random();
+                var correlationId = rand.Next(10000, 1000001).ToString();
+
+
+                var client = new HttpClient();
+                var request = new HttpRequestMessage(HttpMethod.Get, "https://uat-gke.cif-operator.com/wms-beheerder-api/contractor/Circet/tasks/WMS002530553");
+                request.Headers.Add("X-WMS-Test", "false");
+                request.Headers.Add("X-Request-ID", model.InID);
+                request.Headers.Add("X-Correlation-ID", correlationId);
+                request.Headers.Add("Accept", "text/plain");
+                request.Headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im5rbWIiLCJuYW1laWQiOiJhN2M4YTAzYS0xYWU5LTQxYWEtOTA5ZC03Y2QwMWNiZTZjYzUiLCJyb2xlIjoiQmVoZWVyZGVyIiwiUGFydGllcyI6Ilt7XCJJZFwiOlwiMjQwXCIsXCJOYW1lXCI6XCJDaXJjZXRcIixcIlN5c3RlbU5hbWVcIjpcIk5LTVwiLFwiVHlwZVwiOjF9XSIsIm5ldHdvcmtPd25lcnMiOlsiQ2l0aXVzIiwiREZOIl0sIm5iZiI6MTY5NTk1NDMwNiwiZXhwIjoxNzI3NTExMjMyLCJpYXQiOjE2OTU5NTQzMDZ9.djzPpKcbSWOIV2MFw4VXxvjoSPDGSMwNMwO9LP3nVhI");
+                request.Headers.Add("Cookie", "INGRESSCOOKIE=1701205238.251.103.617994|12428f53f11a724d940598e930467e0d");
+                var response = await client.SendAsync(request);
+                response.EnsureSuccessStatusCode();
+
+            }
             catch (HttpRequestException ex)
 			{
 				responseModel.ErrorMessage = ex.Message;
