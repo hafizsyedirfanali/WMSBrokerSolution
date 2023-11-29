@@ -89,6 +89,7 @@ namespace WMSBrokerProject.Repositories
                 request.Headers.Add("Cookie", "INGRESSCOOKIE=1701205238.251.103.617994|12428f53f11a724d940598e930467e0d");
                 var response = await client.SendAsync(request);
                 response.EnsureSuccessStatusCode();
+				var result = await response.Content.ReadAsStringAsync();
 
             }
             catch (HttpRequestException ex)
