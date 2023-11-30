@@ -16,7 +16,7 @@ builder.Configuration.AddJsonFile("wmsOrderProgressSettings.json", optional: tru
 builder.Configuration.AddJsonFile("OrderProgressMapping.json", optional: true, reloadOnChange: true);
 
 
-//builder.Services.Configure<Dictionary<string, ActionConfiguration>>(configuration.GetSection("Actions"));
+builder.Services.Configure<Dictionary<string, ActionConfiguration>>(configuration.GetSection("Actions"));
 builder.Services.Configure<OrderProgressConfigurationModel>(configuration.GetSection("OrderProgressTemplates"));
 builder.Services.Configure<OrderProgressMappingOptions>(configuration.GetSection("OrderProgressMapping"));
 
