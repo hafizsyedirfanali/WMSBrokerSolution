@@ -17,6 +17,7 @@ builder.Configuration.AddJsonFile("OrderProgressMapping.json", optional: true, r
 
 
 builder.Services.Configure<Dictionary<string, ActionConfiguration>>(configuration.GetSection("Actions"));
+builder.Services.Configure<GoEfficientCredentials>(configuration.GetSection("GoEfficientCredentials"));
 builder.Services.Configure<OrderProgressConfigurationModel>(configuration.GetSection("OrderProgressTemplates"));
 builder.Services.Configure<OrderProgressMappingOptions>(configuration.GetSection("OrderProgressMapping"));
 
