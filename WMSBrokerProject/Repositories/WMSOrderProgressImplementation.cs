@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.Globalization;
 using System.Text;
@@ -704,25 +705,76 @@ namespace WMSBrokerProject.Repositories
                         <ContinueOnError>true</ContinueOnError>
                     </Header>";
         }
-        //private HeaderType GetHeaderObject()
-        //{
-        //    var time = DateTime.UtcNow;
-        //    return new HeaderType
-        //    {
-        //        MessageID = "1000053176",
-        //        RepeatCount = 0,
-        //        SenderID = "RBCIF",
-        //        RecipientID = "LIP",
-        //        MessageVersion = "v0103",
-        //        //MessageID = Guid.NewGuid().ToString(),
-        //        //RepeatCount = 0,
-        //        //SenderID = "Waternet",
-        //        //RecipientID = "LIP",
-        //        //MessageVersion = "v0103",
-        //        //SendTime = time,
-        //        //CreateTime = time,
-        //    };
-        //}
 
+        public async Task<ResponseModel<Dictionary<string, string>>> GetWMSBeheerderAttributesByActionName(string actionName)
+        {
+            var responseModel = new ResponseModel<Dictionary<string, string>>();
+            try
+            {
+                var resultDictionary = new Dictionary<string, string>();
+                var wMSBeheerderAttributesSection = _configuration.GetSection("WMSBeheerderAttributes");
+                if(wMSBeheerderAttributesSection != null)
+                {
+                    var actionSection = wMSBeheerderAttributesSection.GetSection(actionName);
+                    if(actionSection != null)
+                    {
+                        foreach (var child in actionSection.GetChildren())
+                        {
+                            resultDictionary[child.Key] = child.Value??"";
+                        }
+                    }
+                }
+                responseModel.Result = resultDictionary;
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 40015;
+            }
+            return responseModel;
+        }
+
+        public async Task<ResponseModel<Dictionary<string, string>>> GetGoEfficientAttributes()
+        {
+            var responseModel = new ResponseModel<Dictionary<string, string>>();
+            try
+            {
+                var resultDictionary = new Dictionary<string, string>();
+                var goEfficientAttributesSection = _configuration.GetSection("GoEfficientAttributes");
+                if (goEfficientAttributesSection != null)
+                {
+                    foreach (var child in goEfficientAttributesSection.GetChildren())
+                    {
+                        resultDictionary[child.Key] = child.Value ?? "";
+                    }
+                }
+                responseModel.Result = resultDictionary;
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 40016;
+            }
+            return responseModel;
+        }
+        public async Task<ResponseModel<string>> MapData(List<RES4aTemplateFields> dataList, 
+            Dictionary<string,string> goEfficientAttributes, Dictionary<string,string> wmsBeheerderAttributes)
+        {
+            var responseModel = new ResponseModel<string>();
+            foreach (var item in dataList)
+            {
+                if (goEfficientAttributes.TryGetValue(item.FIN_NAME, out var goEfficientValue))
+                {
+                    if (wmsBeheerderAttributes.TryGetValue(goEfficientValue, out var wmsBeheerderActionValue))
+                    {
+                        
+                    }
+                }
+            }
+
+            return responseModel;
+        }
     }
 }

@@ -14,5 +14,7 @@ namespace WMSBrokerProject.Interfaces
         Task<ResponseModel<TaskIndicationResponseModel>> RequestTaskIndication(TaskIndicationRequestModel model);
        // Task<ResponseModel<TTRES4Model>> REQ4_TrackAndTrace(TTREQ4Model model);
         Task<ResponseModel<CTRES7aModel>> REQ7a(CTREQ7aModel model);
+        Task<ResponseModel<Dictionary<string, string>>> GetGoEfficientAttributes();
+        Task<ResponseModel<Dictionary<string,string>>> GetWMSBeheerderAttributesByActionName(string actionName);
     }
 }

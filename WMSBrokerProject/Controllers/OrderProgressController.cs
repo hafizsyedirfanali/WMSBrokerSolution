@@ -100,12 +100,11 @@ namespace WMSBrokerProject.Controllers
                 ProId = inId
             }).ConfigureAwait(false);
             if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
+            
 
-            return Ok(res4aResult.Result);
-            //return Ok(new
-            //{
-            //    res4aResult.Result
-            //});
+
+            //Json to be passed with OK Status
+            return Ok();
         }
     }
 }
