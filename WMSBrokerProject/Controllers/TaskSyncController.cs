@@ -20,15 +20,16 @@ namespace WMSBrokerProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BeginProcess(
-            [FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId,
-            [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
-            [FromHeader] string? reason
-            )
+        public async Task<IActionResult> BeginProcess([FromBody] TaskSyncOPRequestModel model)
+        //[FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId,
+        //[FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
+
         {
-            if(xCorrelationID.ToLower() == correlationServices.CorrelationID.ToLower())
+            var correlationID = "451";
+
+            if (correlationID.ToLower() == correlationServices.CorrelationID.ToLower())
             {
-                if (string.IsNullOrEmpty(reason))
+                if (string.IsNullOrEmpty(model.status.reason))
                 {
                     var res7aResult = await orderProgressService.REQ7a(new CTREQ7aModel
                     {
