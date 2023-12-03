@@ -39,7 +39,10 @@ builder.Services.AddTransient<IWMSBeheerderService, WMSBeheerderImplementation>(
 builder.Services.AddTransient<IOrderProgressService, WMSOrderProgressImplementation>();
 builder.Services.AddSingleton<ICorrelationServices, CorrelationImplementation>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(type => type.FullName);
+});
 
 var app = builder.Build();
 
