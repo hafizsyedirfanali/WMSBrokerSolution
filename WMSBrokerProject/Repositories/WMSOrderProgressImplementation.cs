@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -218,35 +219,8 @@ namespace WMSBrokerProject.Repositories
                     var key = item.FIN_NAME;
                     if (mappingDictionary.ContainsKey(key))
                     {
-                        var keyFromMappingDict = mappingDictionary[key];
-                        switch (item.UDF_TYPE)
-                        {
-                            case "T":
-                                dataDictionary.Add(keyFromMappingDict, item.FIN_PATH);
-                                break;
-                            case "D":
-                                dataDictionary.Add(keyFromMappingDict, item.FIN_DATE);
-                                break;
-                            case "N":
-                                dataDictionary.Add(keyFromMappingDict, item.FIN_NUMBER);
-                                break;
-                            case "FC":
-                                var code = item.FIN_PATH;
-                                var value = GetValueForKeyInFCField(item.UDF_TYPEINFO, code);
-                                dataDictionary.Add(keyFromMappingDict, value);
-                                break;
-                            //case "DT":
-                            //    dataDictionary.Add(keyFromMappingDict, item.FIN_NUMBER);
-                            //    break;
-                            //case "B":
-                            //    dataDictionary.Add(keyFromMappingDict, item.FIN_NUMBER);
-                            //    break;
-                            //case "A":
-                            //    dataDictionary.Add(keyFromMappingDict, item.FIN_NUMBER);
-                            //    break;
-                        }
-                        
-                        
+                        var keyFromMappingDict = mappingDictionary[key];                       
+                        dataDictionary.Add(keyFromMappingDict, GetValueFrom4aResponseRow(item));                    
                     }
                 }
                 responseModel.Result = new ResOPAttributeData
@@ -706,7 +680,7 @@ namespace WMSBrokerProject.Repositories
                     </Header>";
         }
 
-        public async Task<ResponseModel<Dictionary<string, string>>> GetWMSBeheerderAttributesByActionName(string actionName)
+        private async Task<ResponseModel<Dictionary<string, string>>> GetWMSBeheerderAttributesByActionName(string actionName)
         {
             var responseModel = new ResponseModel<Dictionary<string, string>>();
             try
@@ -715,7 +689,7 @@ namespace WMSBrokerProject.Repositories
                 var wMSBeheerderAttributesSection = _configuration.GetSection("WMSBeheerderAttributes");
                 if(wMSBeheerderAttributesSection != null)
                 {
-                    var actionSection = wMSBeheerderAttributesSection.GetSection(actionName);
+                    var actionSection = wMSBeheerderAttributesSection.GetSection(actionName.ToLowerInvariant());
                     if(actionSection != null)
                     {
                         foreach (var child in actionSection.GetChildren())
@@ -735,7 +709,7 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
 
-        public async Task<ResponseModel<Dictionary<string, string>>> GetGoEfficientAttributes()
+        private async Task<ResponseModel<Dictionary<string, string>>> GetGoEfficientAttributes()
         {
             var responseModel = new ResponseModel<Dictionary<string, string>>();
             try
@@ -759,22 +733,114 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-        public async Task<ResponseModel<string>> MapData(List<RES4aTemplateFields> dataList, 
+        private string GetValueFrom4aResponseRow(RES4aTemplateFields row)
+        {
+            var result = string.Empty;
+            switch (row.UDF_TYPE)
+            {
+                case "T":
+                    result = row.FIN_PATH;
+                    break;
+                case "D":
+                    result = row.FIN_DATE;
+                    break;
+                case "N":
+                    result = row.FIN_NUMBER;
+                    break;
+                case "FC":
+                    var code = row.FIN_PATH;
+                    result = GetValueForKeyInFCField(row.UDF_TYPEINFO, code);
+                    break;
+                    //case "DT":
+                    //    dataDictionary.Add(keyFromMappingDict, item.FIN_NUMBER);
+                    //    break;
+                    //case "B":
+                    //    dataDictionary.Add(keyFromMappingDict, item.FIN_NUMBER);
+                    //    break;
+                    //case "A":
+                    //    dataDictionary.Add(keyFromMappingDict, item.FIN_NUMBER);
+                    //    break;
+            }
+            return result;
+        }
+        private async Task<ResponseModel<List<TaskFetchResponseMappedModel>>> MapDataForTaskFetchResponse(List<RES4aTemplateFields> dataList, 
             Dictionary<string,string> goEfficientAttributes, Dictionary<string,string> wmsBeheerderAttributes)
         {
-            var responseModel = new ResponseModel<string>();
-            foreach (var item in dataList)
+            var responseModel = new ResponseModel<List<TaskFetchResponseMappedModel>>();
+            try
             {
-                if (goEfficientAttributes.TryGetValue(item.FIN_NAME, out var goEfficientValue))
+                var mappedList = new List<TaskFetchResponseMappedModel>();
+                foreach (var item in dataList)
                 {
-                    if (wmsBeheerderAttributes.TryGetValue(goEfficientValue, out var wmsBeheerderActionValue))
+                    if (goEfficientAttributes.TryGetValue(item.FIN_NAME, out var goEfficientValue))
                     {
-                        
+                        if (wmsBeheerderAttributes.TryGetValue(goEfficientValue, out var wmsBeheerderActionPath))
+                        {
+                            mappedList.Add(new TaskFetchResponseMappedModel
+                            {
+                                FIN_NAME = item.FIN_NAME,
+                                WMSBeheerderActionPath = wmsBeheerderActionPath, //contains path
+                                Value = GetValueFrom4aResponseRow(item)
+                            });
+                        }
                     }
                 }
+                responseModel.Result = mappedList;
+                responseModel.IsSuccess = true;
             }
-
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 40017;
+            }
             return responseModel;
+        }
+        public async Task<ResponseModel<JObject>> GetJsonResultForTaskFetchResponse(Res4aGetTemplateModel templateModel, string actionName)
+        {
+            var responseModel = new ResponseModel<JObject>();
+            try
+            {
+                var wmsBeheerderAttributesResponse = await GetWMSBeheerderAttributesByActionName(actionName).ConfigureAwait(false);
+                if (!wmsBeheerderAttributesResponse.IsSuccess) { throw new Exception($"Error Code: {wmsBeheerderAttributesResponse.ErrorCode}; Error Message: {wmsBeheerderAttributesResponse.ErrorMessage}"); }
+                
+                var goEfficientAttributesResponse = await GetGoEfficientAttributes().ConfigureAwait(false);
+                if(!goEfficientAttributesResponse.IsSuccess) { throw new Exception($"Error Code: {goEfficientAttributesResponse.ErrorCode}; Error Message: {goEfficientAttributesResponse.ErrorMessage}"); }
+                
+                var mapDataForTaskFetchResponse = await MapDataForTaskFetchResponse(
+                    templateModel.Templates, goEfficientAttributesResponse.Result!, 
+                    wmsBeheerderAttributesResponse.Result!).ConfigureAwait(false);
+                if(!mapDataForTaskFetchResponse.IsSuccess) { throw new Exception($"Error Code: {mapDataForTaskFetchResponse.ErrorCode}; Error Message: {mapDataForTaskFetchResponse.ErrorMessage}"); }
+                JObject resultObject = new JObject();
+                foreach (var item in mapDataForTaskFetchResponse.Result)
+                {
+                    var propertyNames = item.WMSBeheerderActionPath.Split('.');
+                    BuildJsonStructure(resultObject, propertyNames, item.Value);
+                }
+                responseModel.Result = resultObject;
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 40018;
+            }
+            return responseModel;
+        }
+        private void BuildJsonStructure(JObject currentObject, string[] propertyNames, object value)
+        {
+            if (propertyNames.Length == 1)
+            {
+                currentObject[propertyNames[0]] = JToken.FromObject(value);// If it's the last property, add the value
+            }
+            else
+            {
+                var propertyName = propertyNames[0];
+                if (!currentObject.ContainsKey(propertyName))
+                {
+                    currentObject[propertyName] = new JObject();
+                }
+                BuildJsonStructure((JObject)currentObject[propertyName], propertyNames[1..], value);
+            }
         }
     }
 }

@@ -20,7 +20,7 @@ namespace WMSBrokerProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BeginProcess([FromBody] TaskSyncOPRequestModel model)
+        public async Task<IActionResult> BeginTaskSyncProcess([FromBody] TaskSyncOPRequestModel model)
         //[FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId,
         //[FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
 

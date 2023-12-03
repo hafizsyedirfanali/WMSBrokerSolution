@@ -1,0 +1,16 @@
+{
+    "OrderProgressTemplates": {
+      "Templates1": {
+        "ActionType": "new connection",
+        "TemplateID": "98789",
+        "WMSStatus": "Confirm", //taskfetch ke reponse
+        "GoEfficientStatus": "Confirmed"
+      },
+      "Templates2": {
+        "ActionType": "new connection",
+        "TemplateID": "98790",
+        "WMSStatus": "In Process",
+        "GoEfficientStatus": "In Process"
+      }
+    }
+}

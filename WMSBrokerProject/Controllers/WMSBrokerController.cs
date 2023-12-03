@@ -32,7 +32,7 @@ namespace WMSBrokerProject.Controllers
 		
 		[Route("TaskIndication")]
         [HttpPost]
-        public async Task<IActionResult> BeginProcess([FromBody] TaskIndicationRequestModel model)
+        public async Task<IActionResult> BeginTaskIndicationProcess([FromBody] TaskIndicationRequestModel model)
         {
             ///Request 1 
             if(model is null || string.IsNullOrEmpty(model.inId))

@@ -9,11 +9,22 @@ var builder = WebApplication.CreateBuilder(args);
 var configuration = builder.Configuration;
 
 builder.Configuration.AddJsonFile("wmssettings.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile($"wmssettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
 builder.Configuration.AddJsonFile("goEfficientSettings.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile($"goEfficientSettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
 builder.Configuration.AddJsonFile("WMSBeheerderAttributesSettings.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile($"WMSBeheerderAttributesSettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
 builder.Configuration.AddJsonFile("wmsBeheerderMapping.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile($"wmsBeheerderMapping.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
 builder.Configuration.AddJsonFile("wmsOrderProgressSettings.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile($"wmsOrderProgressSettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
 builder.Configuration.AddJsonFile("OrderProgressMapping.json", optional: true, reloadOnChange: true);
+builder.Configuration.AddJsonFile($"OrderProgressMapping.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
 
 builder.Services.Configure<Dictionary<string, ActionConfiguration>>(configuration.GetSection("Actions"));

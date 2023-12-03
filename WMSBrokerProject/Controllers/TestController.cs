@@ -15,7 +15,7 @@ namespace WMSBrokerProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BeginProcess()
+        public async Task<IActionResult> BeginTestProcess()
         {
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();

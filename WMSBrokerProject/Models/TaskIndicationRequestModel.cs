@@ -1,10 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using Swashbuckle.AspNetCore.Annotations;
+using System.ComponentModel.DataAnnotations;
+using System.Runtime.Serialization;
+
 
 namespace WMSBrokerProject.Models;
 
 public class TaskIndicationRequestModel
 {
+    [JsonProperty("header")]
     public Header header { get; set; }
+    [JsonProperty("inId")]
     public string inId { get; set; }
 
 

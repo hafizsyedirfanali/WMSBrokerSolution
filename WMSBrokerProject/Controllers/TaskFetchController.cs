@@ -18,7 +18,7 @@ namespace WMSBrokerProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BeginProcess(
+        public async Task<IActionResult> BeginTaskFetchProcess(
             [FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId,
             [FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId,
             [FromHeader][StringLength(36, MinimumLength = 1)] string xRequestID,

@@ -84,7 +84,7 @@ namespace WMSBrokerProject.Controllers
 
 
         [HttpGet]
-        [Route("TaskFetch")]
+        [Route("TaskFetchProcess")]
         public async Task<IActionResult> BeginTaskFetch(
             [FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId,
             [FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId,
@@ -100,11 +100,13 @@ namespace WMSBrokerProject.Controllers
                 ProId = inId
             }).ConfigureAwait(false);
             if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
-            
 
+            var jsonResultForTaskFetchResponse = await orderProgressService.GetJsonResultForTaskFetchResponse(
+                res4aResult.Result!, "PATCH").ConfigureAwait(false);
+            if (!jsonResultForTaskFetchResponse.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, jsonResultForTaskFetchResponse); }
 
             //Json to be passed with OK Status
-            return Ok();
+            return Ok(jsonResultForTaskFetchResponse.Result);
         }
     }
 }
