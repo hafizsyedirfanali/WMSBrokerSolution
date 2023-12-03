@@ -1,16 +1,9 @@
-﻿using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Runtime.Serialization;
-
-namespace WMSBrokerProject.Models
+﻿namespace WMSBrokerProject.Models
 {
     public class TaskSyncOPRequestModel
     {
-        [JsonProperty("taskId")]
         public string taskId { get; set; }
-        [JsonProperty("header")]
         public Header header { get; set; }
-        [JsonProperty("status")]
         public Status status { get; set; }
 
         public class From
