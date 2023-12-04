@@ -206,6 +206,7 @@ namespace WMSBrokerProject.Repositories
             }
             return null;
         }
+        [Obsolete("Don't use it", error:true)]
         public async Task<ResponseModel<ResOPAttributeData>> GetOPAttributeData(ReqOPDataDictionaryModel model)
         {
             var responseModel = new ResponseModel<ResOPAttributeData>();
