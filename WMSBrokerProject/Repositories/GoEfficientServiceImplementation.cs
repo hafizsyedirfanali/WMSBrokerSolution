@@ -162,7 +162,8 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
 
-        public async Task<ResponseModel<RES4aTemplate>> FillFCDataIn4aTemplate(RES4aModel res4aModel, TaskFetchResponse2Model model)
+        public async Task<ResponseModel<RES4aTemplate>> FillFCDataIn4aTemplate(RES4aModel res4aModel, 
+            TaskFetchResponse2Model model)
         {
             var responseModel = new ResponseModel<RES4aTemplate>();
             try
@@ -217,10 +218,7 @@ namespace WMSBrokerProject.Repositories
                         }
                     }
                 }
-                if (mappedValues.Any())
-                {
-                    
-                }
+                
                 foreach (var map in mappedValues)
                 {
                     res4aModel.Template.GoEfficientTemplateValues.Add(map.Key, map.Value);

@@ -132,7 +132,8 @@ namespace WMSBrokerProject.Controllers
                     });
                 if (!responseFilledFCDataResult.IsSuccess)
                 {
-                    return StatusCode(StatusCodes.Status404NotFound,new {
+                    return StatusCode(StatusCodes.Status404NotFound, new
+                    {
                         responseFilledFCDataResult.ErrorMessage,
                         responseFilledFCDataResult.ErrorCode
                     });
