@@ -20,14 +20,14 @@ namespace WMSBrokerProject.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> BeginTaskSyncProcess([FromBody] TaskSyncOPRequestModel model)
+        public async Task<IActionResult> BeginTaskSyncProcess([FromBody] TaskSyncOPRequestModel model,
+            [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID)
         //[FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId,
         //[FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
 
         {
-            var correlationID = "451";
 
-            if (correlationID.ToLower() == correlationServices.CorrelationID.ToLower())
+            if (xCorrelationID.ToLower() == correlationServices.CorrelationID.ToLower())
             {
                 if (string.IsNullOrEmpty(model.status.reason))
                 {

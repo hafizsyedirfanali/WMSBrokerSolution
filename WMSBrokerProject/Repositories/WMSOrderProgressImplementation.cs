@@ -22,7 +22,7 @@ namespace WMSBrokerProject.Repositories
         private readonly GoEfficientCredentials goEfficientCredentials;
         private readonly OrderProgressConfigurationModel orderProgressSettings;
         private readonly ICorrelationServices correlationServices;
-        private readonly OrderProgressMappingOptions _orderProgressMappingOptions;
+        //private readonly OrderProgressMappingOptions _orderProgressMappingOptions;
 
 
 
@@ -41,20 +41,20 @@ namespace WMSBrokerProject.Repositories
                 orderProgressSettings.OrderProgressTemplates ??= new Dictionary<string, OrderProgressTemplate>(StringComparer.OrdinalIgnoreCase);
                 orderProgressSettings.OrderProgressTemplates[templateSection.Key] = template;
             }
-            _orderProgressMappingOptions = new OrderProgressMappingOptions
-            {
-                OrderProgressMapping = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
-            };
-            var configSection = configuration.GetSection("OrderProgressMapping");
-            var configValues = configSection?.GetChildren().ToList();
+            //_orderProgressMappingOptions = new OrderProgressMappingOptions
+            //{
+            //    OrderProgressMapping = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            //};
+            //var configSection = configuration.GetSection("OrderProgressMapping");
+            //var configValues = configSection?.GetChildren().ToList();
 
-            if (configValues != null)
-            {
-                foreach (var item in configValues)
-                {
-                    _orderProgressMappingOptions.OrderProgressMapping[item.Key] = item.Value;
-                }
-            }
+            //if (configValues != null)
+            //{
+            //    foreach (var item in configValues)
+            //    {
+            //        _orderProgressMappingOptions.OrderProgressMapping[item.Key] = item.Value;
+            //    }
+            //}
 
             _configuration = configuration;
             this.hostEnvironment = hostEnvironment;
@@ -206,37 +206,7 @@ namespace WMSBrokerProject.Repositories
             }
             return null;
         }
-        [Obsolete("Don't use it", error:true)]
-        public async Task<ResponseModel<ResOPAttributeData>> GetOPAttributeData(ReqOPDataDictionaryModel model)
-        {
-            var responseModel = new ResponseModel<ResOPAttributeData>();
-
-            try
-            {
-                var mappingDictionary = _orderProgressMappingOptions.OrderProgressMapping;
-                var dataDictionary = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-                foreach (var item in model.Templates)
-                {
-                    var key = item.FIN_NAME;
-                    if (mappingDictionary.ContainsKey(key))
-                    {
-                        var keyFromMappingDict = mappingDictionary[key];                       
-                        dataDictionary.Add(keyFromMappingDict, GetValueFrom4aResponseRow(item));                    
-                    }
-                }
-                responseModel.Result = new ResOPAttributeData
-                {
-                    DataDictionary = dataDictionary
-                };
-                responseModel.IsSuccess = true;
-            }
-            catch (Exception ex)
-            {
-                responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 60005;
-            }
-            return responseModel;
-        }
+       
         public async Task<ResponseModel<OPRES4aModel>> REQ4a_GetInID(OrderProcessingREQ4aModel model)
         {
             var responseModel = new ResponseModel<OPRES4aModel>();

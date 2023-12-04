@@ -23,14 +23,14 @@ builder.Configuration.AddJsonFile($"wmsBeheerderMapping.{builder.Environment.Env
 builder.Configuration.AddJsonFile("wmsOrderProgressSettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile($"wmsOrderProgressSettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
-builder.Configuration.AddJsonFile("OrderProgressMapping.json", optional: true, reloadOnChange: true);
-builder.Configuration.AddJsonFile($"OrderProgressMapping.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
+//builder.Configuration.AddJsonFile("OrderProgressMapping.json", optional: true, reloadOnChange: true);
+//builder.Configuration.AddJsonFile($"OrderProgressMapping.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
 
 builder.Services.Configure<Dictionary<string, ActionConfiguration>>(configuration.GetSection("Actions"));
 builder.Services.Configure<GoEfficientCredentials>(configuration.GetSection("GoEfficientCredentials"));
 builder.Services.Configure<OrderProgressConfigurationModel>(configuration.GetSection("OrderProgressTemplates"));
-builder.Services.Configure<OrderProgressMappingOptions>(configuration.GetSection("OrderProgressMapping"));
+//builder.Services.Configure<OrderProgressMappingOptions>(configuration.GetSection("OrderProgressMapping"));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();

@@ -24,7 +24,7 @@
         <Row>
           <Value FieldName="FIN.FIN_ID">71407674</Value>
           <Value FieldName="UDF.UDF_TYPE">FC</Value>
-          <Value FieldName="FIN.FIN_NAME">Aanvraag ontvangen via?</Value>
+          <Value FieldName="FIN.FIN_NAME">cifwms-fibernumber</Value>
           <Value FieldName="FIN.FIN_RECORD_ID">9246345</Value>
           <Value FieldName="FIN.FIN_PATH">WEB</Value>
           <Value FieldName="FIN.FIN_DATE"/>
@@ -66,11 +66,11 @@
         <Row>
           <Value FieldName="FIN.FIN_ID">71068882</Value>
           <Value FieldName="UDF.UDF_TYPE">N</Value>
-          <Value FieldName="FIN.FIN_NAME">23 KLIC meldnummer</Value>
+          <Value FieldName="FIN.FIN_NAME">cifwms-dhid</Value>
           <Value FieldName="FIN.FIN_RECORD_ID">9242119</Value>
           <Value FieldName="FIN.FIN_PATH" />
           <Value FieldName="FIN.FIN_DATE" />
-          <Value FieldName="FIN.FIN_NUMBER" />
+          <Value FieldName="FIN.FIN_NUMBER" >123</Value>
           <Value FieldName="FIN.FIN_MEMO" />
           <Value FieldName="FIN.FIN_FILE_EXT" />
           <Value FieldName="UDF.UDF_TYPEINFO" />
