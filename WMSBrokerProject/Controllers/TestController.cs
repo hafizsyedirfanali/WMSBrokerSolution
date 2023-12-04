@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
@@ -31,8 +34,8 @@ namespace WMSBrokerProject.Controllers
             var jsonResultForTaskFetchResponse = await orderProgressService.GetJsonResultForTaskFetchResponse(
                 res4aResult.Result!, "PATCH").ConfigureAwait(false);
             if (!jsonResultForTaskFetchResponse.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, jsonResultForTaskFetchResponse); }
-
-            return Ok(jsonResultForTaskFetchResponse.Result.Root);
+            string jsonString = jsonResultForTaskFetchResponse.Result.ToString(Formatting.None);
+            return new JsonResult(JsonDocument.Parse(jsonString).RootElement);
         }
     }
 }
