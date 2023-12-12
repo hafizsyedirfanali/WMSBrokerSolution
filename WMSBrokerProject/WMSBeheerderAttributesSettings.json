@@ -1,6 +1,6 @@
 {
   "WMSBeheerderAttributes": {
-    "PATCH": {
+    "PATCH_INCIDENT": {
       "inId": "taskId",
       "DHid": "taskInfo.hasInfo.DHid",
       "fiberNumber": "taskInfo.hasInfo.fiberNumber",

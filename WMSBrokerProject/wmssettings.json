@@ -2,61 +2,61 @@
   "token":"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im5rbWIiLCJuYW1laWQiOiJhN2M4YTAzYS0xYWU5LTQxYWEtOTA5ZC03Y2QwMWNiZTZjYzUiLCJyb2xlIjoiQmVoZWVyZGVyIiwiUGFydGllcyI6Ilt7XCJJZFwiOlwiMjQwXCIsXCJOYW1lXCI6XCJDaXJjZXRcIixcIlN5c3RlbU5hbWVcIjpcIk5LTVwiLFwiVHlwZVwiOjF9XSIsIm5ldHdvcmtPd25lcnMiOlsiQ2l0aXVzIiwiREZOIl0sIm5iZiI6MTY5NTk1NDMwNiwiZXhwIjoxNzI3NTExMjMyLCJpYXQiOjE2OTU5NTQzMDZ9.djzPpKcbSWOIV2MFw4VXxvjoSPDGSMwNMwO9LP3nVhI",
   "orgId":"Circet",
 
-  "Actions":{
-    "PATCH":{
-      "PRO_ID":"6744412",
-      "Indicator2":"6999459;6999459;9244608",
-      "Huurder_UDF_Id":"1462"
+  "Actions": {
+    "PATCH_INCIDENT": {
+      "PRO_ID": "6842038",
+      "Indicator2": "2023;2023-12;6842031",
+      "Huurder_UDF_Id": "1462"
     },
-    "DEPATCH":{
-      "PRO_ID":"6744412",
-      "Indicator2":"6999459;6999459;9244608",
-      "Huurder_UDF_Id":"1462"
-    },
-    "NETWORK_INCIDENT":{
-      "PRO_ID":"6842031",
-      "Indicator2":"6999459;6999459;7007726",
-      "Huurder_UDF_Id":"1462"
-    },
-    "CONNECTION_INCIDENT":{
-      "PRO_ID":"6744412",
-      "Indicator2":"6999459;6999459;9244608",
-      "Huurder_UDF_Id":"1462"
-    },
-    "FTU_REPLACEMENT":{
-      "PRO_ID":"6744412",
-      "Indicator2":"6999459;6999459;9244608",
-      "Huurder_UDF_Id":"1462"
-    },
-    "NEW_CONNECTION":{
-      "PRO_ID":"6744412",
-      "Indicator2":"6999459;6999459;9244608",
-      "Huurder_UDF_Id":"1462"
-    },
-    "AFTER_CONNECT":{
+    "DEPATCH": {
       "PRO_ID": "6744412",
       "Indicator2": "6999459;6999459;9244608",
       "Huurder_UDF_Id": "1462"
     },
-    "FTU_DISPLACEMENT":{
-      "PRO_ID":"6744412",
-      "Indicator2":"6999459;6999459;9244608",
-      "Huurder_UDF_Id":"1462"
+    "NETWORK_INCIDENT": {
+      "PRO_ID": "6842031",
+      "Indicator2": "6999459;6999459;7007726",
+      "Huurder_UDF_Id": "1462"
     },
-    "TELCO_MIGRATION":{
-      "PRO_ID":"6744412",
-      "Indicator2":"6999459;6999459;9244608",
-      "Huurder_UDF_Id":"1462"
+    "CONNECTION_INCIDENT": {
+      "PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
+      "Huurder_UDF_Id": "1462"
     },
-    "PORT_MIGRATION":{
-      "PRO_ID":"6744412",
-      "Indicator2":"6999459;6999459;9244608",
-      "Huurder_UDF_Id":"1462"
+    "FTU_REPLACEMENT": {
+      "PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
+      "Huurder_UDF_Id": "1462"
     },
-    "AFTERCARE":{
-      "PRO_ID":"6744412",
-      "Indicator2":"6999459;6999459;9244608",
-      "Huurder_UDF_Id":"1462"
+    "NEW_CONNECTION": {
+      "PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
+      "Huurder_UDF_Id": "1462"
+    },
+    "AFTER_CONNECT": {
+      "PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
+      "Huurder_UDF_Id": "1462"
+    },
+    "FTU_DISPLACEMENT": {
+      "PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
+      "Huurder_UDF_Id": "1462"
+    },
+    "TELCO_MIGRATION": {
+      "PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
+      "Huurder_UDF_Id": "1462"
+    },
+    "PORT_MIGRATION": {
+      "PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
+      "Huurder_UDF_Id": "1462"
+    },
+    "AFTERCARE": {
+      "PRO_ID": "6744412",
+      "Indicator2": "6999459;6999459;9244608",
+      "Huurder_UDF_Id": "1462"
     }
 
     // Add more action types as needed
