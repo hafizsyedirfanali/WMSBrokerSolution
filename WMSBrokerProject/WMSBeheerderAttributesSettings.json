@@ -1,4 +1,56 @@
 {
+  "WMSBeheerderAddresses": [
+    {
+      "connectionAddress": {
+        "postalCode": "taskInfo.connectionInfo.connectionAddress.postalCode",
+        "houseNumber": "taskInfo.connectionInfo.connectionAddress.houseNumber",
+        "houseNumberExtension": "taskInfo.connectionInfo.connectionAddress.houseNumberExtension",
+        "city": "taskInfo.connectionInfo.connectionAddress.city",
+        "streetName": "taskInfo.connectionInfo.connectionAddress.streetName",
+        "country": "taskInfo.connectionInfo.connectionAddress.country"
+      }
+    },
+    {
+      "custAddress": {
+        "postalCode": "taskInfo.hasInfo.connectionAddress.postalCode",
+        "houseNumber": "taskInfo.hasInfo.connectionAddress.houseNumber",
+        "houseNumberExtension": "taskInfo.hasInfo.connectionAddress.houseNumberExtension",
+        "city": "taskInfo.hasInfo.connectionAddress.city",
+        "streetName": "taskInfo.hasInfo.connectionAddress.streetName",
+        "country": "taskInfo.hasInfo.connectionAddress.country"
+      }
+    },
+    {
+      "custMailingAddress": {
+        "postalCode": "taskInfo.hasInfo.contactPerson.mailingAddress.postalCode",
+        "houseNumber": "taskInfo.hasInfo.contactPerson.mailingAddress.houseNumber",
+        "houseNumberExtension": "taskInfo.hasInfo.contactPerson.mailingAddress.houseNumberExtension",
+        "city": "taskInfo.hasInfo.contactPerson.mailingAddress.city",
+        "streetName": "taskInfo.hasInfo.contactPerson.mailingAddress.streetName",
+        "country": "taskInfo.hasInfo.contactPerson.mailingAddress.country"
+      }
+    },
+    {
+      "connMailingAddress": {
+        "postalCode": "taskInfo.connectionInfo.contactPerson.mailingAddress.postalCode",
+        "houseNumber": "taskInfo.connectionInfo.contactPerson.mailingAddress.houseNumber",
+        "houseNumberExtension": "taskInfo.connectionInfo.contactPerson.mailingAddress.houseNumberExtension",
+        "city": "taskInfo.connectionInfo.contactPerson.mailingAddress.city",
+        "streetName": "taskInfo.connectionInfo.contactPerson.mailingAddress.streetName",
+        "country": "taskInfo.connectionInfo.contactPerson.mailingAddress.country"
+      }
+    },
+    {
+      "netwReportedByMailingAddress": {
+        "postalCode": "taskInfo.networkInfo.reportedBy.mailingAddress.postalCode",
+        "houseNumber": "taskInfo.networkInfo.reportedBy.mailingAddress.houseNumber",
+        "houseNumberExtension": "taskInfo.networkInfo.reportedBy.mailingAddress.houseNumberExtension",
+        "city": "taskInfo.networkInfo.reportedBy.mailingAddress.city",
+        "streetName": "taskInfo.networkInfo.reportedBy.mailingAddress.country",
+        "country": "taskInfo.networkInfo.reportedBy.mailingAddress.country"
+      }
+    }
+  ],
   "WMSBeheerderAttributes": {
     "PATCH_INCIDENT": {
       "inId": "taskId",

@@ -12,6 +12,7 @@ using System.Collections;
 using Newtonsoft.Json;
 using System;
 using WMSBrokerProject.ConfigModels;
+using Newtonsoft.Json.Linq;
 
 namespace WMSBrokerProject.Repositories
 {
@@ -566,7 +567,7 @@ namespace WMSBrokerProject.Repositories
                 responseModel.Result = new RES4aModel
                 {
                     Template = template,
-                    //Addresses = addresses,
+                    Addresses = addresses,
                     FIN_ID = addresses.Select(s => s.FIN_Id).FirstOrDefault(),
                     FinNameFCList = finNameFCList
                 };
@@ -648,7 +649,69 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
+        public async Task<ResponseModel<Dictionary<string,string>>> GetKeyValuesFromWMSBeheerderAddresses(string addressKeyName)
+        {
+            var responseModel = new ResponseModel<Dictionary<string, string>>();
+            try
+            {
+                var sectionName = "WMSBeheerderAddresses";
+                var addressesSection = _configuration.GetSection(sectionName);
+                if (addressesSection.Exists())
+                {
+                    foreach (var address in addressesSection.Get<List<JObject>>())
+                    {
+                        if (address.ContainsKey(addressKeyName))
+                        {
+                            responseModel.Result = address[addressKeyName].ToObject<Dictionary<string, string>>();
+                            break;//Don't waste time and get out.
+                        }
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Section '{sectionName}' not found in the WMSBeheerderAttributesSettings.json.");
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10025;
+            }
+            return responseModel;
+        }
+        public async Task<ResponseModel<string?>> GetWMSBeheerderRES4AddressMappingValue(string addressKeyName)
+        {
+            var responseModel = new ResponseModel<string?>();
+            try
+            {
+                var sectionName = "WMSBeheerderRES4AddressMapping";
+                var mappingSection = _configuration.GetSection(sectionName);
+                if (mappingSection.Exists())
+                {
+                    var lowercaseKeyToCheck = addressKeyName.ToLower();
 
+                    if (mappingSection.GetChildren().Any(kv => kv.Key.ToLower() == lowercaseKeyToCheck))
+                    {
+                        responseModel.Result = mappingSection.GetValue<string>(addressKeyName);
+                        responseModel.IsSuccess = true;
+                    }
+                    else
+                    {
+                        throw new Exception($"Key '{addressKeyName}' not found in section '{sectionName}'.");
+                    }
+                }
+                else
+                {
+                    throw new Exception($"Section '{sectionName}' not found in the wmsBeheerderMapping.json.");
+                }
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10024;
+            }
+            return responseModel;
+        }
         public async Task<ResponseModel<RES5aModel>> REQ5a_SaveAddressToGoEfficient(REQ5aModel model)
         {
             var responseModel = new ResponseModel<RES5aModel>();

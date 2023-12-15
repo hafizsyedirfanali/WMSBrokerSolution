@@ -110,7 +110,7 @@ namespace WMSBrokerProject.Controllers
                 #endregion
                 var fin_Id = res4aResult.Result.FIN_ID;
 
-                //var addresses = res4aResult.Result.Addresses;
+                var addresses = res4aResult.Result.Addresses;
 
                 var responseFilledDataResult = await goEfficientService
                     .FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model

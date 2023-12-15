@@ -20,6 +20,7 @@ namespace WMSBrokerProject.Interfaces
         Task<ResponseModel<Dictionary<string, object>>> FillSourcePathInBeheerderAttributesDictionary(TaskFetchResponseModel model);
         Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponseModel model, Dictionary<string, object> sourcePathInBeheerderAttributesDictionary);
         Task<ResponseModel<REQ4Model>> FillDataForRequest4(Dictionary<string, object> dataDictionary);
-     
-	}
+        Task<ResponseModel<string?>> GetWMSBeheerderRES4AddressMappingValue(string addressKeyName);
+        Task<ResponseModel<Dictionary<string, string>>> GetKeyValuesFromWMSBeheerderAddresses(string addressKeyName);
+    }
 }

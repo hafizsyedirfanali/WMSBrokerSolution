@@ -1,4 +1,11 @@
 {
+  "WMSBeheerderRES4AddressMapping": {
+    "HAS-address": "hasAddress",
+    "Conn-address": "connAddress",
+    "HAS-mailing-address": "custMailingAddress",
+    "Conn-mailing-address": "connMailingAddress",
+    "Netw-mailing-ReportedBy": "netwReportedByMailingAddress"
+  },
   "WMSBeheerderRES4Mapping": {
     //Note: Destination key name not to be changed.
     //Destination : Source 
