@@ -111,6 +111,8 @@ namespace WMSBrokerProject.Controllers
                 var fin_Id = res4aResult.Result.FIN_ID;
 
                 var addresses = res4aResult.Result.Addresses;
+                
+                
 
                 var responseFilledDataResult = await goEfficientService
                     .FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
@@ -161,25 +163,37 @@ namespace WMSBrokerProject.Controllers
                 }).ConfigureAwait(false);
                 if (res5Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Record service returned null" });
                 if (!res5Result.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5Result);
-				#endregion
+                #endregion
 
-				#region REQ5a RHS Save Addresses
-				var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
-				{
-					InId = inId,
-					PRO_ID_3 = proId,
-					Username = "",
-					Password = "",
-					Address_FIN_ID = fin_Id,
-					City = taskFetchForReq4.Result!.CityName,
-					HouseNo = taskFetchForReq4.Result!.HouseNumber,
-					HouseNoSuffix = taskFetchForReq4.Result!.HouseNumberExtension,
-					PostalCode = taskFetchForReq4.Result!.PostalCode,
-					Street = taskFetchForReq4.Result!.StreetName,
-					Template = responseFilledAddressDataResult.Result
-				}).ConfigureAwait(false);
-				if (res5aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Address service returned null" });
-				if (!res5aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5aResult);
+                #region REQ5a RHS Save Addresses
+                foreach (var address in addresses)
+                {
+                    var addressKeyName = await goEfficientService.GetWMSBeheerderRES4AddressMappingValue(address.FIN_Name);
+                    if (addressKeyName is null || !addressKeyName.IsSuccess) { continue; }
+                    var addressDictionary = await goEfficientService.GetKeyValuesFromWMSBeheerderAddresses(addressKeyName.Result!);
+                    if (addressDictionary is null || !addressDictionary.IsSuccess) { continue; }
+                    //
+
+
+                    var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
+                    {
+                        InId = inId,
+                        PRO_ID_3 = proId,
+                        Username = "",
+                        Password = "",
+                        Address_FIN_ID = fin_Id,
+                        City = taskFetchForReq4.Result!.CityName,
+                        HouseNo = taskFetchForReq4.Result!.HouseNumber,
+                        HouseNoSuffix = taskFetchForReq4.Result!.HouseNumberExtension,
+                        PostalCode = taskFetchForReq4.Result!.PostalCode,
+                        Street = taskFetchForReq4.Result!.StreetName,
+                        Template = responseFilledAddressDataResult.Result
+                    }).ConfigureAwait(false);
+                    if (res5aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Address service returned null" });
+                    if (!res5aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5aResult);
+                }
+                
+                
 				#endregion
 
 				//foreach (var address in addresses)
