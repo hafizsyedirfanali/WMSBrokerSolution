@@ -726,6 +726,16 @@ namespace WMSBrokerProject.Repositories
                 {
                     valueText += @$"<Value FieldName=""{templateField.Key}"">{templateField.Value}</Value>";
                 }
+
+                //Address Values from Dictionary
+                foreach (var addressValue in model.ExtractedAddressValues)
+                {
+                    valueText += @$"<Value FieldName=""{addressValue.Key}"">{addressValue.Value}</Value>";
+                }
+
+
+
+
                 var dict = model.Template.GoEfficientAddressTemplateValues;
                 dict.TryGetValue("ADRESS.ADRESS_STREET", out object? straat);
                 dict.TryGetValue("ADRESS.ADRESS_HOUSNR", out object? huisnummer);

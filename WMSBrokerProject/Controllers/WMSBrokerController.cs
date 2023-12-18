@@ -183,6 +183,7 @@ namespace WMSBrokerProject.Controllers
 
                     var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
                     {
+                        ExtractedAddressValues = extractedAddressValues,
                         InId = inId,
                         PRO_ID_3 = proId,
                         Username = "",

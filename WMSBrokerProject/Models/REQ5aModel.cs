@@ -14,6 +14,6 @@
         public string Address_FIN_ID { get; set; }
         public RES4aTemplate Template { get; set; }
         //public RES2Model RES2Response { get; set; }
-        public Dictionary<string, string> RES2FieldValues { get; set; }
+        public Dictionary<string, string> ExtractedAddressValues { get; set; }
     }
 }
