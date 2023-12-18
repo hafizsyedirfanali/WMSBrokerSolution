@@ -53,7 +53,8 @@ namespace WMSBrokerProject.Models
 			public string fiberNumber { get; set; }
 			public string subject { get; set; }
 			public ConnectionAddress connectionAddress { get; set; }
-		}
+            public ContactPerson contactPerson { get; set; }
+        }
 
 		public class NetworkInfo
 		{
@@ -67,9 +68,28 @@ namespace WMSBrokerProject.Models
             public string lastName { get; set; }
             public string phoneNumber { get; set; }
             public string email { get; set; }
+            public MailingAddress mailingAddress { get; set; }
+        }
+
+        public class ReportedBy
+        {
+            public string firstName { get; set; }
+            public string lastName { get; set; }
+            public string phoneNumber { get; set; }
+            public MailingAddress mailingAddress { get; set; }
         }
 
         public class ConnectionAddress
+        {
+            public string postalCode { get; set; }
+            public int houseNumber { get; set; }
+            public string city { get; set; }
+            public string houseNumberExtension { get; set; }
+            public string streetName { get; set; }
+            public string country { get; set; }
+        }
+
+        public class MailingAddress
         {
             public string postalCode { get; set; }
             public int houseNumber { get; set; }
@@ -106,13 +126,6 @@ namespace WMSBrokerProject.Models
 			public string connector { get; set; }
 			public string row { get; set; }
 			public string odfTray { get; set; }
-		}
-
-		public class ReportedBy
-		{
-			public string firstName { get; set; }
-			public string lastName { get; set; }
-			public string phoneNumber { get; set; }
 		}
 
 		public class Header
