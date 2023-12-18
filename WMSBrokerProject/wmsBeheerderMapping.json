@@ -56,7 +56,8 @@
       "PoP-ActiveEquipmentEndpointPort": "popActiveEquipmentEndPointPort",
       "PoP-ActiveEquipmentEndpointConnector": "popActiveEquipmentEndPointConnector",
       "PoP-ActiveEquipmentEndpointRow": "popActiveEquipmentEndPointRow",
-      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray"
+      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray",
+      "PoP-FiberNumber": "fiberNumber"
     },
     "NEW_CONNECTION": {
       "HAS-DHid": "custDHid",
@@ -69,7 +70,8 @@
       "PoP-ActiveEquipmentEndpointPort": "popActiveEquipmentEndPointPort",
       "PoP-ActiveEquipmentEndpointConnector": "popActiveEquipmentEndPointConnector",
       "PoP-ActiveEquipmentEndpointRow": "popActiveEquipmentEndPointRow",
-      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray"
+      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray",
+      "PoP-FiberNumber": "fiberNumber"
     },
     "AFTER_CONNECT": {
       "HAS-DHid": "custDHid",
@@ -82,7 +84,8 @@
       "PoP-ActiveEquipmentEndpointPort": "popActiveEquipmentEndPointPort",
       "PoP-ActiveEquipmentEndpointConnector": "popActiveEquipmentEndPointConnector",
       "PoP-ActiveEquipmentEndpointRow": "popActiveEquipmentEndPointRow",
-      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray"
+      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray",
+      "PoP-FiberNumber": "fiberNumber"
     },
     "FTU_REPLACEMENT": {
       "HAS-DHid": "custDHid",
@@ -93,21 +96,8 @@
       "HAS-FiberNumber": "custFiberNumber"
     },
     "TELCO_MIGRATION": {
-      "PoP-DHid": "popDHid",
-      "PoP-FiberNumber": "fiberNumber"
-    },
-    "PORT_MIGRATION": {
-      "PoP-DHid": "popDHid",
-      "PoP-PrevActiveEndpointLoc": "popPrevActiveEndPointLoc",
-      "PoP-PrevActiveEndpointFrame": "popPrevActiveEndPointFrame",
-      "PoP-PrevActiveEndpointBlock": "popPrevActiveEndPointBlock",
-      "PoP-PrevActiveEndpointModule": "popPrevActiveEndPointModule",
-      "PoP-PrevActiveEndpointPort": "popPrevActiveEndPointPort",
-      "PoP-PrevActiveEndpointConnector": "popPrevActiveEndPointConnector",
-      "PoP-PrevActiveEndpointRow": "popPrevActiveEndPointRow",
-      "PoP-PrevActiveEndpointTray": "popPrevActiveEndPointOdfTray"
-    },
-    "AFTERCARE": {
+      "HAS-DHid": "custDHid",
+      "HAS-FiberNumber": "custFiberNumber",
       "PoP-DHid": "popDHid",
       "PoP-ActiveEquipmentEndpointLoc": "popActiveEquipmentEndPointLoc",
       "PoP-ActiveEquipmentEndpointFrame": "popActiveEquipmentEndPointFrame",
@@ -116,11 +106,71 @@
       "PoP-ActiveEquipmentEndpointPort": "popActiveEquipmentEndPointPort",
       "PoP-ActiveEquipmentEndpointConnector": "popActiveEquipmentEndPointConnector",
       "PoP-ActiveEquipmentEndpointRow": "popActiveEquipmentEndPointRow",
-      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray"
+      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray",
+      "PoP-FiberNumber": "fiberNumber"
+    },
+    "PORT_MIGRATION": {
+      "HAS-DHid": "custDHid",
+      "PoP-DHid": "popDHid",
+      "PoP-ActiveEquipmentEndp  ointLoc": "popActiveEquipmentEndPointLoc",
+      "PoP-ActiveEquipmentEndpointFrame": "popActiveEquipmentEndPointFrame",
+      "PoP-ActiveEquipmentEndpointBlock": "popActiveEquipmentEndPointBlock",
+      "PoP-ActiveEquipmentEndpointModule": "popActiveEquipmentEndPointModule",
+      "PoP-ActiveEquipmentEndpointPort": "popActiveEquipmentEndPointPort",
+      "PoP-ActiveEquipmentEndpointConnector": "popActiveEquipmentEndPointConnector",
+      "PoP-ActiveEquipmentEndpointRow": "popActiveEquipmentEndPointRow",
+      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray",
+      "PoP-FiberNumber": "fiberNumber",
+      "PoP-PrevActiveEndpointLoc": "popPrevActiveEndPointLoc",
+      "PoP-PrevActiveEndpointFrame": "popPrevActiveEndPointFrame",
+      "PoP-PrevActiveEndpointBlock": "popPrevActiveEndPointBlock",
+      "PoP-PrevActiveEndpointModule": "popPrevActiveEndPointModule",
+      "PoP-PrevActiveEndpointPort": "popPrevActiveEndPointPort",
+      "PoP-PrevActiveEndpointConnector": "popPrevActiveEndPointConnector",
+      "PoP-PrevActiveEndpointRow": "popPrevActiveEndPointRow",
+      "PoP-PrevActiveEndpointTray": "popPrevActiveEndPointOdfTray"
+
+    },
+    "AFTERCARE": {
+      "HAS-DHid": "custDHid",
+      "PoP-DHid": "popDHid",
+      "PoP-ActiveEquipmentEndp  ointLoc": "popActiveEquipmentEndPointLoc",
+      "PoP-ActiveEquipmentEndpointFrame": "popActiveEquipmentEndPointFrame",
+      "PoP-ActiveEquipmentEndpointBlock": "popActiveEquipmentEndPointBlock",
+      "PoP-ActiveEquipmentEndpointModule": "popActiveEquipmentEndPointModule",
+      "PoP-ActiveEquipmentEndpointPort": "popActiveEquipmentEndPointPort",
+      "PoP-ActiveEquipmentEndpointConnector": "popActiveEquipmentEndPointConnector",
+      "PoP-ActiveEquipmentEndpointRow": "popActiveEquipmentEndPointRow",
+      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray",
+      "PoP-FiberNumber": "fiberNumber"
     },
     "FTU_CHANGE": {
+      "HAS-DHid": "custDHid",
       "HAS-ftuType": "custFTUType",
       "HAS-targetFtuType": "targetFTUType"
+    },
+    "NETWORK_INCIDENT": {
+      "Conn-DHid": "connDHid",
+      "Conn-Room": "connRoom",
+      "Conn-FiberNumber": "connFiberNumber",
+      "Conn-CategoryLevel1": "connClosureLvl1",
+      "Conn-CategoryLevel2": "connClosureLvl2",
+      "Conn-CategoryLevel3": "connClosureLvl3",
+      "Netw-ReportedByLastName": "netwReportedByLastName",
+      "Netw-ReportedByPhoneNumber": "netwReportedByPhoneNumber",
+      "Netw-ReportedByAddnlPhoneNumber": "netwReportedByAddnlPhoneNumber",
+      "Netw-ReportedByEmail": "netwReportedByEmail",
+      "Netw-Subject": "netwSubject",
+      "Netw-Priority": "netwPriority"
+    },
+    "CONNECTION_INCIDENT": {
+      "Conn-DHid": "connDHid",
+      "Conn-Room": "connRoom",
+      "Conn-FiberNumber": "connFiberNumber",
+      "Conn-CategoryLevel1": "connClosureLvl1",
+      "Conn-CategoryLevel2": "connClosureLvl2",
+      "Conn-CategoryLevel3": "connClosureLvl3",
+      "Conn-Subject": "connSubject"
     }
 
   },
