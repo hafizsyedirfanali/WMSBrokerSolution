@@ -990,7 +990,7 @@ namespace WMSBrokerProject.Repositories
             return $"{date.Year}-{week:00}";
         }
 
-		public async Task<ResponseModel<Dictionary<string, object>>> FillSourcePathInBeheerderAttributesDictionary(TaskFetchResponseModel model)
+		public async Task<ResponseModel<Dictionary<string, object>>> FillSourcePathInBeheerderAttributesDictionary(TaskFetchResponse model)
 		{
 			var responseModel = new ResponseModel<Dictionary<string, object>>();
 			try
@@ -1013,7 +1013,7 @@ namespace WMSBrokerProject.Repositories
 			}
 			return responseModel;
 		}
-		public async Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponseModel model, Dictionary<string, object> sourcePathInBeheerderAttributesDictionary)
+		public async Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponse model, Dictionary<string, object> sourcePathInBeheerderAttributesDictionary)
 		{
 			var responseModel = new ResponseModel<Dictionary<string, object>>();
 			try

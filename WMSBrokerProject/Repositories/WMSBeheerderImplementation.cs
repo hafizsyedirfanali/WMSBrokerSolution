@@ -63,12 +63,18 @@ namespace WMSBrokerProject.Repositories
 
                 HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
                 response.EnsureSuccessStatusCode();
-
-                if (response.IsSuccessStatusCode)
+                
+                if (response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType == "application/json")
                 {
-                    string responseContent = await response.Content.ReadAsStringAsync();
-                    TaskFetchResponseModel taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponseModel>(responseContent)!;
-                    responseModel.Result = taskFetchResponse;
+                    string jsonResponse = await response.Content.ReadAsStringAsync();
+                    var jsonObject = JObject.Parse(jsonResponse);
+
+                    TaskFetchResponse taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponse>(jsonResponse)!;
+                    responseModel.Result = new TaskFetchResponseModel
+                    {
+                        TaskFetchResponseObject = taskFetchResponse,
+                        JSONObject = jsonObject,
+                    };
                     responseModel.IsSuccess = true;
                 }
                 else

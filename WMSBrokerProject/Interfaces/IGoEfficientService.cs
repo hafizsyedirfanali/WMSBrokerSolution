@@ -17,8 +17,8 @@ namespace WMSBrokerProject.Interfaces
         Task<ResponseModel<string>> GetKeyForValueInRES3aMapping(string value);
         Task<ResponseModel<string>> GetKeyForRES4Mapping();
         Task<ResponseModel<RES4aTemplate>> FillDataIn4aAddressTemplate(RES4aTemplate template, TaskFetchResponse2Model model);
-        Task<ResponseModel<Dictionary<string, object>>> FillSourcePathInBeheerderAttributesDictionary(TaskFetchResponseModel model);
-        Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponseModel model, Dictionary<string, object> sourcePathInBeheerderAttributesDictionary);
+        Task<ResponseModel<Dictionary<string, object>>> FillSourcePathInBeheerderAttributesDictionary(TaskFetchResponse model);
+        Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponse model, Dictionary<string, object> sourcePathInBeheerderAttributesDictionary);
         Task<ResponseModel<REQ4Model>> FillDataForRequest4(Dictionary<string, object> dataDictionary);
         Task<ResponseModel<string?>> GetWMSBeheerderRES4AddressMappingValue(string addressKeyName);
         Task<ResponseModel<Dictionary<string, string>>> GetKeyValuesFromWMSBeheerderAddresses(string addressKeyName);

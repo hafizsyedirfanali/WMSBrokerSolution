@@ -1,9 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json.Linq;
 using static WMSBrokerProject.Models.TaskFetchResponseModel;
 
 namespace WMSBrokerProject.Models
 {
     public class TaskFetchResponseModel
+    {
+        public TaskFetchResponse TaskFetchResponseObject { get; set; }
+        public JObject JSONObject { get; set; }
+    }
+    public class TaskFetchResponse
     {
         public string inId { get; set; }
         public TaskInfo taskInfo { get; set; }

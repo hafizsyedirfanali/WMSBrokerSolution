@@ -1,12 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Newtonsoft.Json;
-using Swashbuckle.AspNetCore.Swagger;
-using System.IO;
-using System.IO.Pipelines;
-using System.Net;
-using System.Reflection.Emit;
+using Newtonsoft.Json.Linq;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
@@ -18,49 +12,49 @@ namespace WMSBrokerProject.Controllers
     public class WMSBrokerController : ControllerBase
     {
         private string inId;
-		private readonly IGoEfficientService goEfficientService;
-		private readonly IWMSBeheerderService wMSBeheerderService;
+        private readonly IGoEfficientService goEfficientService;
+        private readonly IWMSBeheerderService wMSBeheerderService;
         private readonly IOptions<Dictionary<string, ActionConfiguration>> actionOptions;
 
-		public WMSBrokerController(IGoEfficientService goEfficientService, IOptions<Dictionary<string, ActionConfiguration>> actionOptions, IWMSBeheerderService wMSBeheerderService)
-		{
-			this.goEfficientService = goEfficientService;
-			this.actionOptions = actionOptions;
-			this.wMSBeheerderService = wMSBeheerderService;
-		}
-		
-		
-		[Route("TaskIndication")]
+        public WMSBrokerController(IGoEfficientService goEfficientService, IOptions<Dictionary<string, ActionConfiguration>> actionOptions, IWMSBeheerderService wMSBeheerderService)
+        {
+            this.goEfficientService = goEfficientService;
+            this.actionOptions = actionOptions;
+            this.wMSBeheerderService = wMSBeheerderService;
+        }
+
+
+        [Route("TaskIndication")]
         [HttpPost]
         public async Task<IActionResult> BeginTaskIndicationProcess([FromBody] TaskIndicationRequestModel model)
         {
             ///Request 1 
-            if(model is null || string.IsNullOrEmpty(model.inId))
+            if (model is null || string.IsNullOrEmpty(model.inId))
             {
                 return BadRequest("The 'inId' is required.");
             }
 
             inId = model.inId;
 
-			var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = inId }).ConfigureAwait(false);
+            var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = inId }).ConfigureAwait(false);
             if (!response2TaskFetch.IsSuccess) { }//{ return StatusCode(StatusCodes.Status500InternalServerError, response2TaskFetch); }
-
-			TaskFetchResponseModel taskFetchResponse = response2TaskFetch.Result!;
+            JObject taskFetchJsonObject = response2TaskFetch.Result!.JSONObject;
+            TaskFetchResponse taskFetchResponse = response2TaskFetch.Result!.TaskFetchResponseObject!;
             actionOptions.Value.TryGetValue(taskFetchResponse.action, out var actionConfiguration);
             var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
             {
                 //InId = inId,
                 InId = taskFetchResponse.originatorId,
-                Huurder_UDF_Id = actionConfiguration.Huurder_UDF_Id
+                Huurder_UDF_Id = actionConfiguration!.Huurder_UDF_Id!
             }).ConfigureAwait(false);
             if (!responseREQ6.IsSuccess) { }
-            if (!responseREQ6.Result.IsRecordExist)
+            if (!responseREQ6.Result!.IsRecordExist)
             {
                 var taskFetchResponse2 = await goEfficientService
                     .FillSourcePathInBeheerderAttributesDictionary(taskFetchResponse).ConfigureAwait(false);
                 if (!taskFetchResponse2.IsSuccess) { }
                 //above service gives key and path
-                var taskFetchResponseData = await goEfficientService.FillDataInBeheerderAttributesDictionary(taskFetchResponse, taskFetchResponse2.Result).ConfigureAwait(false);
+                var taskFetchResponseData = await goEfficientService.FillDataInBeheerderAttributesDictionary(taskFetchResponse, taskFetchResponse2.Result!).ConfigureAwait(false);
                 if (!taskFetchResponseData.IsSuccess) { }
 
 
@@ -111,14 +105,14 @@ namespace WMSBrokerProject.Controllers
                 var fin_Id = res4aResult.Result.FIN_ID;
 
                 var addresses = res4aResult.Result.Addresses;
-                
-                
+
+
 
                 var responseFilledDataResult = await goEfficientService
                     .FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
                     {
                         WMSBeheerderAttributes = dataDictionary!
-					});
+                    });
                 if (!responseFilledDataResult.IsSuccess)
                 {
                     return StatusCode(StatusCodes.Status404NotFound, new
@@ -144,11 +138,11 @@ namespace WMSBrokerProject.Controllers
                     .FillDataIn4aAddressTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
                     {
                         WMSBeheerderAttributes = dataDictionary
-					});
+                    });
 
                 Dictionary<string, object?> goEfficientTemplateValues = responseFilledDataResult.Result!
                     .GoEfficientTemplateValues;
-               
+
                 //var goEfficientAddressTemplateValues = responseFilledDataResult.Result.GoEfficientAddressTemplateValues;
 
                 #region REQ5 RHS Save Record
@@ -172,8 +166,20 @@ namespace WMSBrokerProject.Controllers
                     if (addressKeyName is null || !addressKeyName.IsSuccess) { continue; }
                     var addressDictionary = await goEfficientService.GetKeyValuesFromWMSBeheerderAddresses(addressKeyName.Result!);
                     if (addressDictionary is null || !addressDictionary.IsSuccess) { continue; }
-                    //
-
+                    var extractedAddressValues = new Dictionary<string, string>();
+                    foreach (var kvp in addressDictionary.Result!)
+                    {
+                        var path = kvp.Value;
+                        var token = taskFetchJsonObject.SelectToken(path);
+                        if (token != null)
+                        {
+                            extractedAddressValues[kvp.Key] = token.ToString();
+                        }
+                        else
+                        {
+                            // Handle the case where the path does not exist in the JSON
+                        }
+                    }
 
                     var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
                     {
@@ -192,35 +198,35 @@ namespace WMSBrokerProject.Controllers
                     if (res5aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Address service returned null" });
                     if (!res5aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5aResult);
                 }
-                
-                
-				#endregion
 
-				//foreach (var address in addresses)
-				//{
-				//    #region REQ5a RHS Save Addresses
-				//    var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
-				//    {
-				//        InId = inId,
-				//        PRO_ID_3 = proId,
-				//        Username = "",
-				//        Password = "",
-				//        Address_FIN_ID = fin_Id,
-				//        City = address.City,
-				//        HouseNo = address.HouseNo,
-				//        HouseNoSuffix = address.HouseNoSuffix,
-				//        PostalCode = address.PostalCode,
-				//        Street = address.Street,
-				//        Template = responseFilledAddressDataResult.Result
-				//    }).ConfigureAwait(false);
-				//    if (res5aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Address service returned null" });
-				//    if (!res5aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5aResult);
-				//    #endregion
-				//}
 
-			}
+                #endregion
 
-			var taskSyncResponse = await wMSBeheerderService.RequestTaskSync(new TaskSyncRequestModel
+                //foreach (var address in addresses)
+                //{
+                //    #region REQ5a RHS Save Addresses
+                //    var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
+                //    {
+                //        InId = inId,
+                //        PRO_ID_3 = proId,
+                //        Username = "",
+                //        Password = "",
+                //        Address_FIN_ID = fin_Id,
+                //        City = address.City,
+                //        HouseNo = address.HouseNo,
+                //        HouseNoSuffix = address.HouseNoSuffix,
+                //        PostalCode = address.PostalCode,
+                //        Street = address.Street,
+                //        Template = responseFilledAddressDataResult.Result
+                //    }).ConfigureAwait(false);
+                //    if (res5aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Address service returned null" });
+                //    if (!res5aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5aResult);
+                //    #endregion
+                //}
+
+            }
+
+            var taskSyncResponse = await wMSBeheerderService.RequestTaskSync(new TaskSyncRequestModel
             {
                 taskId = taskFetchResponse.inId,
                 header = new TaskSyncRequestModel.Header
@@ -229,7 +235,7 @@ namespace WMSBrokerProject.Controllers
                     {
                         orgId = taskFetchResponse.header.from.orgId,
                         systemId = taskFetchResponse.header.from.systemId
-					},
+                    },
                     updateCount = taskFetchResponse.header.updateCount,
                     created = taskFetchResponse.header.created
                 },
@@ -246,6 +252,6 @@ namespace WMSBrokerProject.Controllers
 
             return Ok("Process completed successfully");
         }
-        
+
     }
 }
