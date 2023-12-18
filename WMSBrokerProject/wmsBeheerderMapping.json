@@ -20,20 +20,109 @@
     //Here key name must be same as the key name in GoEFficientAttributes.json
     //Here value must be equal to the key of MijnAansluitingAttributes for 1:1
     //Destination : Source
-    "cifwms-huurderid": "inId",
-    "cifwms-dhid": "DHid",
-    "cifwms-fibernumber": "fiberNumber",
-    "cifwms-updatecount": "updateCount",
-    "CIFWMS_AFT_STATUS": "status",
-    "CIFWMS_AFT_SUBSTATUS": "subStatus",
-    "CIFWMS_AFT_ACTION": "action",
-    "cifwms-reason": "reason",
-    "cifwms-clarification": "clarification",
-    "cifwms-areanetworktype": "areanetworkType",
-    "Omschrijving opdracht": "subject",
-    "Naam-aanvrager": "lastName",
-    "mobiel aanvrager": "phoneNumber",
-    "e-mail aanvrager": "email"
+
+    "Generic": {
+      "CIFWMS-OrderUid": "inId",
+      "CIFWMS-UpdateCount": "updateCount",
+      "CIFWMS-Aft-Status": "status",
+      "CIFWMS-Aft-SubStatus": "subStatus",
+      "CIFWMS-Aft-Action": "action",
+      "CIFWMS-reason": "reason",
+      "CIFWMS-clarification": "clarification",
+      "CIFWMS-AreaNetworkType": "areaNetworkType"
+    },
+    "PATCH": {
+      "HAS-DHid": "custDHid",
+      "HAS-FiberNumber": "custFiberNumber",
+      "PoP-DHid": "popDHid",
+      "PoP-ActiveEquipmentEndpointLoc": "popActiveEquipmentEndPointLoc",
+      "PoP-ActiveEquipmentEndpointFrame": "popActiveEquipmentEndPointFrame",
+      "PoP-ActiveEquipmentEndpointBlock": "popActiveEquipmentEndPointBlock",
+      "PoP-ActiveEquipmentEndpointModule": "popActiveEquipmentEndPointModule",
+      "PoP-ActiveEquipmentEndpointPort": "popActiveEquipmentEndPointPort",
+      "PoP-ActiveEquipmentEndpointConnector": "popActiveEquipmentEndPointConnector",
+      "PoP-ActiveEquipmentEndpointRow": "popActiveEquipmentEndPointRow",
+      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray",
+      "PoP-FiberNumber": "fiberNumber"
+    },
+    "DEPATCH": {
+      "HAS-DHid": "custDHid",
+      "HAS-FiberNumber": "custFiberNumber",
+      "PoP-DHid": "popDHid",
+      "PoP-ActiveEquipmentEndpointLoc": "popActiveEquipmentEndPointLoc",
+      "PoP-ActiveEquipmentEndpointFrame": "popActiveEquipmentEndPointFrame",
+      "PoP-ActiveEquipmentEndpointBlock": "popActiveEquipmentEndPointBlock",
+      "PoP-ActiveEquipmentEndpointModule": "popActiveEquipmentEndPointModule",
+      "PoP-ActiveEquipmentEndpointPort": "popActiveEquipmentEndPointPort",
+      "PoP-ActiveEquipmentEndpointConnector": "popActiveEquipmentEndPointConnector",
+      "PoP-ActiveEquipmentEndpointRow": "popActiveEquipmentEndPointRow",
+      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray"
+    },
+    "NEW_CONNECTION": {
+      "HAS-DHid": "custDHid",
+      "HAS-FiberNumber": "custFiberNumber",
+      "PoP-DHid": "popDHid",
+      "PoP-ActiveEquipmentEndpointLoc": "popActiveEquipmentEndPointLoc",
+      "PoP-ActiveEquipmentEndpointFrame": "popActiveEquipmentEndPointFrame",
+      "PoP-ActiveEquipmentEndpointBlock": "popActiveEquipmentEndPointBlock",
+      "PoP-ActiveEquipmentEndpointModule": "popActiveEquipmentEndPointModule",
+      "PoP-ActiveEquipmentEndpointPort": "popActiveEquipmentEndPointPort",
+      "PoP-ActiveEquipmentEndpointConnector": "popActiveEquipmentEndPointConnector",
+      "PoP-ActiveEquipmentEndpointRow": "popActiveEquipmentEndPointRow",
+      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray"
+    },
+    "AFTER_CONNECT": {
+      "HAS-DHid": "custDHid",
+      "HAS-FiberNumber": "custFiberNumber",
+      "PoP-DHid": "popDHid",
+      "PoP-ActiveEquipmentEndpointLoc": "popActiveEquipmentEndPointLoc",
+      "PoP-ActiveEquipmentEndpointFrame": "popActiveEquipmentEndPointFrame",
+      "PoP-ActiveEquipmentEndpointBlock": "popActiveEquipmentEndPointBlock",
+      "PoP-ActiveEquipmentEndpointModule": "popActiveEquipmentEndPointModule",
+      "PoP-ActiveEquipmentEndpointPort": "popActiveEquipmentEndPointPort",
+      "PoP-ActiveEquipmentEndpointConnector": "popActiveEquipmentEndPointConnector",
+      "PoP-ActiveEquipmentEndpointRow": "popActiveEquipmentEndPointRow",
+      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray"
+    },
+    "FTU_REPLACEMENT": {
+      "HAS-DHid": "custDHid",
+      "HAS-FiberNumber": "custFiberNumber"
+    },
+    "FTU_DISPLACEMENT": {
+      "HAS-DHid": "custDHid",
+      "HAS-FiberNumber": "custFiberNumber"
+    },
+    "TELCO_MIGRATION": {
+      "PoP-DHid": "popDHid",
+      "PoP-FiberNumber": "fiberNumber"
+    },
+    "PORT_MIGRATION": {
+      "PoP-DHid": "popDHid",
+      "PoP-PrevActiveEndpointLoc": "popPrevActiveEndPointLoc",
+      "PoP-PrevActiveEndpointFrame": "popPrevActiveEndPointFrame",
+      "PoP-PrevActiveEndpointBlock": "popPrevActiveEndPointBlock",
+      "PoP-PrevActiveEndpointModule": "popPrevActiveEndPointModule",
+      "PoP-PrevActiveEndpointPort": "popPrevActiveEndPointPort",
+      "PoP-PrevActiveEndpointConnector": "popPrevActiveEndPointConnector",
+      "PoP-PrevActiveEndpointRow": "popPrevActiveEndPointRow",
+      "PoP-PrevActiveEndpointTray": "popPrevActiveEndPointOdfTray"
+    },
+    "AFTERCARE": {
+      "PoP-DHid": "popDHid",
+      "PoP-ActiveEquipmentEndpointLoc": "popActiveEquipmentEndPointLoc",
+      "PoP-ActiveEquipmentEndpointFrame": "popActiveEquipmentEndPointFrame",
+      "PoP-ActiveEquipmentEndpointBlock": "popActiveEquipmentEndPointBlock",
+      "PoP-ActiveEquipmentEndpointModule": "popActiveEquipmentEndPointModule",
+      "PoP-ActiveEquipmentEndpointPort": "popActiveEquipmentEndPointPort",
+      "PoP-ActiveEquipmentEndpointConnector": "popActiveEquipmentEndPointConnector",
+      "PoP-ActiveEquipmentEndpointRow": "popActiveEquipmentEndPointRow",
+      "PoP-ActiveEquipmentEndpointTray": "popActiveEquipmentEndPointOdfTray"
+    },
+    "FTU_CHANGE": {
+      "HAS-ftuType": "custFTUType",
+      "HAS-targetFtuType": "targetFTUType"
+    }
+
   },
   "WMSBeheerderRES2FCMapping": {
     //Destination : Source
