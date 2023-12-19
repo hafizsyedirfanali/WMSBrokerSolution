@@ -13,6 +13,7 @@ using Newtonsoft.Json;
 using System;
 using WMSBrokerProject.ConfigModels;
 using Newtonsoft.Json.Linq;
+using static System.Collections.Specialized.BitVector32;
 
 namespace WMSBrokerProject.Repositories
 {
@@ -131,24 +132,36 @@ namespace WMSBrokerProject.Repositories
 			var responseModel = new ResponseModel<RES4aTemplate>();
             try
             {
-                var goEfficientMijnAansluitingMap = _configuration.GetSection("WMSBeheerderRES2Mapping").AsEnumerable();
-                
-                Dictionary<string, object?> mappedValues = new();
-                foreach (var attribute in goEfficientMijnAansluitingMap)
+                var section = _configuration.GetSection($"WMSBeheerderRES2Mapping:{model.ActionName}");
+                var mappedValues = new Dictionary<string, object?>();
+                foreach (var config in section.GetChildren())
                 {
-                    if (attribute.Value != null)
-                    {
-                        var key = attribute.Key;//Its key represents RHS
-                        var keyArray = key.Split(':');//in this array last but one will be key
-                        var sourceKey = attribute.Value;//value is source key
-                        var destinationKey = keyArray[keyArray.Length - 1];
-
-						var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-						
-						mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
-
-					}
+                    var sourceKey = config.Value;
+                    var destinationKey = config.Key;
+                    var valueTuple = GetOneToOneValue(model, sourceKey ?? string.Empty, destinationKey);//blank string is entered if value is null. blank values can be ignored by using if
+                    mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
                 }
+                //Arshad!! Test this mappedValues Dictionary and check if it is getting values as expected or not and inform me
+
+
+                //           var goEfficientMijnAansluitingMap = _configuration.GetSection("WMSBeheerderRES2Mapping").AsEnumerable();
+
+                //           Dictionary<string, object?> mappedValues = new();
+                //           foreach (var attribute in goEfficientMijnAansluitingMap)
+                //           {
+                //               if (attribute.Value != null)
+                //               {
+                //                   var key = attribute.Key;//Its key represents RHS
+                //                   var keyArray = key.Split(':');//in this array last but one will be key
+                //                   var sourceKey = attribute.Value;//value is source key
+                //                   var destinationKey = keyArray[keyArray.Length - 1];
+
+                //	var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
+
+                //	mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
+
+                //}
+                //           }
 
 
                 template.GoEfficientTemplateValues = mappedValues;

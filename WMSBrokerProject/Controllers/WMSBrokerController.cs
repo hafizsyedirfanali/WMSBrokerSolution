@@ -112,7 +112,8 @@ namespace WMSBrokerProject.Controllers
                 var responseFilledDataResult = await goEfficientService
                     .FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
                     {
-                        WMSBeheerderAttributes = dataDictionary!
+                        WMSBeheerderAttributes = dataDictionary!,
+                        ActionName = taskFetchResponse.action
                     });
                 if (!responseFilledDataResult.IsSuccess)
                 {
