@@ -59,6 +59,34 @@ namespace WMSBrokerProject.Controllers
 
             var addresses = res4aResult.Result.Addresses;
 
+            var responseFilledDataResult = await goEfficientService
+                    .FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
+                    {
+                        WMSBeheerderAttributes = dataDictionary!,
+                        ActionName = taskFetchResponse.action
+                    });
+            if (!responseFilledDataResult.IsSuccess)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, new
+                {
+                    responseFilledDataResult.ErrorMessage,
+                    responseFilledDataResult.ErrorCode
+                });
+            }
+            var responseFilledFCDataResult = await goEfficientService
+                .FillFCDataIn4aTemplate(res4aResult.Result, new TaskFetchResponse2Model
+                {
+                    WMSBeheerderAttributes = dataDictionary!
+                });
+            if (!responseFilledFCDataResult.IsSuccess)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, new
+                {
+                    responseFilledFCDataResult.ErrorMessage,
+                    responseFilledFCDataResult.ErrorCode
+                });
+            }
+
             var responseFilledAddressDataResult = await goEfficientService
                     .FillDataIn4aAddressTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
                     {
