@@ -39,6 +39,7 @@ namespace WMSBrokerProject.Controllers
             var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = inId }).ConfigureAwait(false);
             if (!response2TaskFetch.IsSuccess) { }//{ return StatusCode(StatusCodes.Status500InternalServerError, response2TaskFetch); }
             JObject taskFetchJsonObject = response2TaskFetch.Result!.JSONObject;
+           
             TaskFetchResponse taskFetchResponse = response2TaskFetch.Result!.TaskFetchResponseObject!;
             actionOptions.Value.TryGetValue(taskFetchResponse.action, out var actionConfiguration);
             var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
