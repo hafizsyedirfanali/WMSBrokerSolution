@@ -15,10 +15,12 @@ namespace WMSBrokerProject.Controllers
     public class Test2Controller : AppBaseController
     {
         private readonly IWMSBeheerderService wMSBeheerderService;
+        private readonly IOptions<Dictionary<string, ActionConfiguration>> actionOptions;
 
-        public Test2Controller(IGoEfficientService goEfficientService, IConfiguration configuration, IOptions<GoEfficientCredentials> goEfficientCredentials, IOrderProgressService orderProgressService, ICorrelationServices correlationServices, IWMSBeheerderService wMSBeheerderService) : base(goEfficientService, configuration, goEfficientCredentials, orderProgressService, correlationServices)
+        public Test2Controller(IGoEfficientService goEfficientService, IConfiguration configuration, IOptions<GoEfficientCredentials> goEfficientCredentials, IOrderProgressService orderProgressService, ICorrelationServices correlationServices, IWMSBeheerderService wMSBeheerderService, IOptions<Dictionary<string, ActionConfiguration>> actionOptions) : base(goEfficientService, configuration, goEfficientCredentials, orderProgressService, correlationServices)
         {
             this.wMSBeheerderService = wMSBeheerderService;
+            this.actionOptions = actionOptions;
         }
 
         [HttpGet]
@@ -28,6 +30,16 @@ namespace WMSBrokerProject.Controllers
             if (!response2TaskFetch.IsSuccess) { }//{ return StatusCode(StatusCodes.Status500InternalServerError, response2TaskFetch); }
             JObject taskFetchJsonObject = response2TaskFetch.Result!.JSONObject;
             TaskFetchResponse taskFetchResponse = response2TaskFetch.Result!.TaskFetchResponseObject!;
+
+           
+            actionOptions.Value.TryGetValue(taskFetchResponse.action, out var actionConfiguration);
+            var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
+            {
+                //InId = inId,
+                InId = taskFetchResponse.originatorId,
+                Huurder_UDF_Id = actionConfiguration!.Huurder_UDF_Id!
+            }).ConfigureAwait(false);
+            if (!responseREQ6.IsSuccess) { }
 
             var responseGoEfficientAttr = await goEfficientService.GetGoEfficientAttributes();
             var responseGoEfficientFileAttr = await goEfficientService.GetGoEfficientFileAttributes();
