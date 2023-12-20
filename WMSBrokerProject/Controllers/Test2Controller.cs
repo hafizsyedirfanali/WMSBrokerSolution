@@ -24,7 +24,7 @@ namespace WMSBrokerProject.Controllers
         [HttpGet]
         public async Task<IActionResult> BeginTestProcess()
         {
-            var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = "12456" }).ConfigureAwait(false);
+            var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = "WMS002530553" }).ConfigureAwait(false);
             if (!response2TaskFetch.IsSuccess) { }//{ return StatusCode(StatusCodes.Status500InternalServerError, response2TaskFetch); }
             JObject taskFetchJsonObject = response2TaskFetch.Result!.JSONObject;
             TaskFetchResponse taskFetchResponse = response2TaskFetch.Result!.TaskFetchResponseObject!;
