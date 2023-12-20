@@ -2,7 +2,7 @@
   "WMSBeheerderRES4AddressMapping": {
     "HAS-address": "hasAddress",
     "Conn-address": "connAddress",
-    "HAS-mailing-address": "custMailingAddress",
+    "HAS-mailing-address": "custAddress",
     "Conn-mailing-address": "connMailingAddress",
     "Netw-mailing-ReportedBy": "netwReportedByMailingAddress"
   },

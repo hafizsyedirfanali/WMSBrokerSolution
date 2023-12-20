@@ -662,7 +662,41 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-        public async Task<ResponseModel<Dictionary<string,string>>> GetKeyValuesFromWMSBeheerderAddresses(string addressKeyName)
+        //public async Task<ResponseModel<Dictionary<string, string>>> GetKeyValuesFromWMSBeheerderAddresses(string addressKeyName)
+        //{
+        //    var responseModel = new ResponseModel<Dictionary<string, string>>();
+        //    try
+        //    {
+        //        var sectionName = "WMSBeheerderAddresses";
+
+        //        var addressesSection = _configuration.GetSection(sectionName);
+        //        if (addressesSection.Exists())
+        //        {
+        //            var list = addressesSection.Get<List<JObject>>();
+        //            var l = list.Select(x => x?.ToObject<Dictionary<string, string>>()).ToList();
+        //            foreach (var address in list)
+        //            {
+        //                if (address.ContainsKey(addressKeyName))
+        //                {
+        //                    responseModel.Result = address[addressKeyName].ToObject<Dictionary<string, string>>();
+        //                    break;//Don't waste time and get out.
+        //                }
+        //            }
+        //        }
+        //        else
+        //        {
+        //            throw new Exception($"Section '{sectionName}' not found in the WMSBeheerderAttributesSettings.json.");
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        responseModel.ErrorMessage = ex.Message;
+        //        responseModel.ErrorCode = 10025;
+        //    }
+        //    return responseModel;
+        //}
+
+        public async Task<ResponseModel<Dictionary<string, string>>> GetKeyValuesFromWMSBeheerderAddresses(string addressKeyName)
         {
             var responseModel = new ResponseModel<Dictionary<string, string>>();
             try
@@ -671,13 +705,14 @@ namespace WMSBrokerProject.Repositories
                 var addressesSection = _configuration.GetSection(sectionName);
                 if (addressesSection.Exists())
                 {
-                    foreach (var address in addressesSection.Get<List<JObject>>())
+                    var nestedObj = addressesSection[addressKeyName];
+                    if (nestedObj != null)
                     {
-                        if (address.ContainsKey(addressKeyName))
-                        {
-                            responseModel.Result = address[addressKeyName].ToObject<Dictionary<string, string>>();
-                            break;//Don't waste time and get out.
-                        }
+                        responseModel.Result = nestedObj.ToObject<Dictionary<string, string>>();
+                    }
+                    else
+                    {
+                        throw new Exception($"Key '{addressKeyName}' not found in section '{sectionName}'.");
                     }
                 }
                 else
@@ -692,6 +727,10 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
+
+
+
+
         public async Task<ResponseModel<string?>> GetWMSBeheerderRES4AddressMappingValue(string addressKeyName)
         {
             var responseModel = new ResponseModel<string?>();
