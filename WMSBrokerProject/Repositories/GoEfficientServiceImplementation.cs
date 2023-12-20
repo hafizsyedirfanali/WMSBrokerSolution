@@ -657,39 +657,6 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-        //public async Task<ResponseModel<Dictionary<string, string>>> GetKeyValuesFromWMSBeheerderAddresses(string addressKeyName)
-        //{
-        //    var responseModel = new ResponseModel<Dictionary<string, string>>();
-        //    try
-        //    {
-        //        var sectionName = "WMSBeheerderAddresses";
-
-        //        var addressesSection = _configuration.GetSection(sectionName);
-        //        if (addressesSection.Exists())
-        //        {
-        //            var list = addressesSection.Get<List<JObject>>();
-        //            var l = list.Select(x => x?.ToObject<Dictionary<string, string>>()).ToList();
-        //            foreach (var address in list)
-        //            {
-        //                if (address.ContainsKey(addressKeyName))
-        //                {
-        //                    responseModel.Result = address[addressKeyName].ToObject<Dictionary<string, string>>();
-        //                    break;//Don't waste time and get out.
-        //                }
-        //            }
-        //        }
-        //        else
-        //        {
-        //            throw new Exception($"Section '{sectionName}' not found in the WMSBeheerderAttributesSettings.json.");
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        responseModel.ErrorMessage = ex.Message;
-        //        responseModel.ErrorCode = 10025;
-        //    }
-        //    return responseModel;
-        //}
 
         public async Task<ResponseModel<Dictionary<string, string>>> GetKeyValuesFromWMSBeheerderAddresses(string addressKeyName)
         {
@@ -697,17 +664,16 @@ namespace WMSBrokerProject.Repositories
             try
             {
                 IConfigurationSection section = _configuration.GetSection($"WMSBeheerderAddresses:{addressKeyName}");
-                if (section.Exists()) 
+                Dictionary<string, string> addressDict = new Dictionary<string, string>();
+                if (section.Exists())
                 {
-                    JObject sectionObject = JObject.FromObject(section.Value);
-                    foreach (var property in sectionObject.Properties())
+                    foreach (var child in section.GetChildren())
                     {
-                        var key = property.Name;
-                        var value = property.Value;
+                        addressDict.Add(child.Key,child.Value??string.Empty);//Here blank is inserted if value not found for the key.
                     }
-
                 }
-                
+                responseModel.Result = addressDict;
+                responseModel.IsSuccess = true;
             }
             catch (Exception ex)
             {
@@ -716,7 +682,6 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-
 
         public async Task<ResponseModel<string?>> GetWMSBeheerderRES4AddressMappingValue(string addressKeyName)
         {
