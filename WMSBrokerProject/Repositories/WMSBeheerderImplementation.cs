@@ -52,7 +52,7 @@ namespace WMSBrokerProject.Repositories
 
                 using HttpClient httpClient = new HttpClient();
                 string? endPointUrl = "https://uat-gke.cif-operator.com/";
-                string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}-H");
+                string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 httpClient.DefaultRequestHeaders.Add("X-WMS-Test", "false");
                 httpClient.DefaultRequestHeaders.Add("X-Request-ID", model.InID);
