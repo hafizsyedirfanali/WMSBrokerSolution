@@ -1,19 +1,14 @@
-﻿using WMSBrokerProject.Interfaces;
-using WMSBrokerProject.Models;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
+using System.Collections;
 using System.Globalization;
-using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Collections;
-using Newtonsoft.Json;
-using System;
 using WMSBrokerProject.ConfigModels;
-using Newtonsoft.Json.Linq;
-using static System.Collections.Specialized.BitVector32;
+using WMSBrokerProject.Interfaces;
+using WMSBrokerProject.Models;
 
 namespace WMSBrokerProject.Repositories
 {
@@ -55,14 +50,14 @@ namespace WMSBrokerProject.Repositories
             model.WMSBeheerderAttributes.TryGetValue(sourceKey, out value);
             return value;
         }
-        
+
         public (string DestinationKey, object? Value) GetOneToOneValue(TaskFetchResponse2Model model, string sourceKey, string destinationKey)
         {
             object? value;
             model.WMSBeheerderAttributes.TryGetValue(sourceKey, out value);
             return (destinationKey, value);
         }
-        
+
         public DateTime GetFridayFromDate(int weekNumber, int year)
         {
             DateTime jan1 = new DateTime(year, 1, 1);
@@ -128,8 +123,8 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
         public async Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template, TaskFetchResponse2Model model)
-		{
-			var responseModel = new ResponseModel<RES4aTemplate>();
+        {
+            var responseModel = new ResponseModel<RES4aTemplate>();
             try
             {
                 var section = _configuration.GetSection($"WMSBeheerderRES2Mapping:{model.ActionName}");
@@ -176,14 +171,14 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
 
-        public async Task<ResponseModel<RES4aTemplate>> FillFCDataIn4aTemplate(RES4aModel res4aModel, 
+        public async Task<ResponseModel<RES4aTemplate>> FillFCDataIn4aTemplate(RES4aModel res4aModel,
             TaskFetchResponse2Model model)
         {
             var responseModel = new ResponseModel<RES4aTemplate>();
             try
             {
                 var goEfficientMijnAansluitingMap = _configuration.GetSection("WMSBeheerderRES2FCMapping").AsEnumerable();
-                if(res4aModel.Template is null) res4aModel.Template = new RES4aTemplate();
+                if (res4aModel.Template is null) res4aModel.Template = new RES4aTemplate();
                 Dictionary<string, object?> mappedValues = new();
                 var fcMapping = res4aModel.FinNameFCList;
                 foreach (var attribute in goEfficientMijnAansluitingMap)
@@ -194,13 +189,13 @@ namespace WMSBrokerProject.Repositories
                         var keyArray = key.Split(':');//in this array last but one will be key
                         var sourceKey = attribute.Value;//value is source key
                         var destinationKey = keyArray[keyArray.Length - 1];
-                        if(fcMapping.Where(s => s.FinName == destinationKey).Any())
+                        if (fcMapping.Where(s => s.FinName == destinationKey).Any())
                         {
                             Dictionary<string, string>? finNameSelectList = fcMapping.Where(s => s.FinName == destinationKey).Select(s => s.SelectListItems).FirstOrDefault();
-                            if(finNameSelectList is not null)
+                            if (finNameSelectList is not null)
                             {
                                 var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-                                if(finNameSelectList.Any(s=>s.Key == valueTuple.Value.ToString()))
+                                if (finNameSelectList.Any(s => s.Key == valueTuple.Value.ToString()))
                                 {
                                     string? fcValue = finNameSelectList.Where(s => s.Key == valueTuple.Value.ToString()).Select(s => s.Value).FirstOrDefault();
                                     if (!string.IsNullOrEmpty(fcValue))
@@ -232,7 +227,7 @@ namespace WMSBrokerProject.Repositories
                         }
                     }
                 }
-                
+
                 foreach (var map in mappedValues)
                 {
                     res4aModel.Template.GoEfficientTemplateValues.Add(map.Key, map.Value);
@@ -253,7 +248,7 @@ namespace WMSBrokerProject.Repositories
             try
             {
                 var goEfficientMijnAansluitingMap = _configuration.GetSection("WMSBeheerderRES2AddressMapping").AsEnumerable();
-                
+
                 Dictionary<string, object?> mappedValues = new();
                 foreach (var attribute in goEfficientMijnAansluitingMap)
                 {
@@ -264,9 +259,9 @@ namespace WMSBrokerProject.Repositories
                         var sourceKey = attribute.Value;//value is source key
                         var destinationKey = keyArray[keyArray.Length - 1];
                         var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-                        mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);                        
+                        mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
                     }
-				}
+                }
                 template.GoEfficientAddressTemplateValues = mappedValues;
                 responseModel.Result = template;
                 responseModel.IsSuccess = true;
@@ -346,7 +341,7 @@ namespace WMSBrokerProject.Repositories
                 var year = date.ToString("yyyy");
                 var year_week = GetYearWeekISO(DateTime.Now);
                 var yearweek = year + "-" + year_week;
-                
+
                 string? requestUri = _configuration.GetSection("GoEfficient:EndPointUrl").Value;
 
                 string xmlRequest4 = string.Empty;
@@ -369,7 +364,7 @@ namespace WMSBrokerProject.Repositories
                                      </Body>
                                  </Request>";
 
-				var content = new StringContent(xmlRequest4, Encoding.UTF8, "application/xml");
+                var content = new StringContent(xmlRequest4, Encoding.UTF8, "application/xml");
                 string xmlResponse;
                 if (!string.IsNullOrEmpty(requestUri))
                 {
@@ -382,7 +377,7 @@ namespace WMSBrokerProject.Repositories
                     var xmlResponseFilePath = Path.Combine(templateFolder!, $"GoEfficient_InstanceTemplateResponse_RES04.xml");
                     xmlResponse = File.ReadAllText(xmlResponseFilePath);
                 }
-                
+
                 XDocument xdoc = XDocument.Parse(xmlResponse);
 
                 var proId3Value = xdoc.Descendants("Value")
@@ -452,7 +447,7 @@ namespace WMSBrokerProject.Repositories
 
                 var content = new StringContent(xmlRequest4a, Encoding.UTF8, "application/xml");
                 string xmlResponse;
-                if (!string.IsNullOrEmpty(requestUri))
+                if (false)// (!string.IsNullOrEmpty(requestUri))
                 {
                     var response = await client.PostAsync(requestUri, content);
                     response.EnsureSuccessStatusCode();
@@ -701,24 +696,18 @@ namespace WMSBrokerProject.Repositories
             var responseModel = new ResponseModel<Dictionary<string, string>>();
             try
             {
-                var sectionName = "WMSBeheerderAddresses";
-                var addressesSection = _configuration.GetSection(sectionName);
-                if (addressesSection.Exists())
+                IConfigurationSection section = _configuration.GetSection($"WMSBeheerderAddresses:{addressKeyName}");
+                if (section.Exists()) 
                 {
-                    var nestedObj = addressesSection[addressKeyName];
-                    if (nestedObj != null)
+                    JObject sectionObject = JObject.FromObject(section.Value);
+                    foreach (var property in sectionObject.Properties())
                     {
-                        responseModel.Result = nestedObj.ToObject<Dictionary<string, string>>();
+                        var key = property.Name;
+                        var value = property.Value;
                     }
-                    else
-                    {
-                        throw new Exception($"Key '{addressKeyName}' not found in section '{sectionName}'.");
-                    }
+
                 }
-                else
-                {
-                    throw new Exception($"Section '{sectionName}' not found in the WMSBeheerderAttributesSettings.json.");
-                }
+                
             }
             catch (Exception ex)
             {
@@ -727,8 +716,6 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-
-
 
 
         public async Task<ResponseModel<string?>> GetWMSBeheerderRES4AddressMappingValue(string addressKeyName)
@@ -874,7 +861,7 @@ namespace WMSBrokerProject.Repositories
                                   </Request>";
 
                 var content = new StringContent(xmlRequest5b, Encoding.UTF8, "application/xml");
-                
+
                 string xmlResponse;
                 if (!string.IsNullOrEmpty(requestUri))
                 {
@@ -934,7 +921,7 @@ namespace WMSBrokerProject.Repositories
                 var content = new StringContent(xmlRequest6, Encoding.UTF8, "application/xml");
 
                 string xmlResponse;
-                if (!string.IsNullOrEmpty(requestUri))
+                if (false)// (!string.IsNullOrEmpty(requestUri))
                 {
                     var response = await client.PostAsync(requestUri, content);
                     response.EnsureSuccessStatusCode();
@@ -945,7 +932,7 @@ namespace WMSBrokerProject.Repositories
                     var xmlResponseFilePath = Path.Combine(templateFolder!, $"GoEfficient_InstanceTemplateRequest_RES06.xml");
                     xmlResponse = File.ReadAllText(xmlResponseFilePath);
                 }
-                
+
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.LoadXml(xmlResponse);
                 string countValue = xmlDoc.SelectSingleNode("//Rows").Attributes["Count"].Value;
@@ -1052,199 +1039,199 @@ namespace WMSBrokerProject.Repositories
             return $"{date.Year}-{week:00}";
         }
 
-		public async Task<ResponseModel<Dictionary<string, object>>> FillSourcePathInBeheerderAttributesDictionary(TaskFetchResponse model)
-		{
-			var responseModel = new ResponseModel<Dictionary<string, object>>();
-			try
-			{
-				Dictionary<string, object?> beheerderAttributes = new Dictionary<string, object>();
-				if (_configuration.GetSection("WMSBeheerderAttributes").GetChildren().Any(x => x.Key == model.action))
-				{
-					beheerderAttributes = _configuration.GetSection($"WMSBeheerderAttributes:{model.action}")
-						.GetChildren()
-						.ToDictionary(x => x.Key, x => (object?) x.Value);
-				}
+        public async Task<ResponseModel<Dictionary<string, object>>> FillSourcePathInBeheerderAttributesDictionary(TaskFetchResponse model)
+        {
+            var responseModel = new ResponseModel<Dictionary<string, object>>();
+            try
+            {
+                Dictionary<string, object?> beheerderAttributes = new Dictionary<string, object>();
+                if (_configuration.GetSection("WMSBeheerderAttributes").GetChildren().Any(x => x.Key == model.action))
+                {
+                    beheerderAttributes = _configuration.GetSection($"WMSBeheerderAttributes:{model.action}")
+                        .GetChildren()
+                        .ToDictionary(x => x.Key, x => (object?)x.Value);
+                }
 
-				responseModel.Result = beheerderAttributes;
-				responseModel.IsSuccess = true;
-			}			
-			catch (Exception ex)
-			{
-				responseModel.ErrorMessage = ex.Message;
-				responseModel.ErrorCode = 10018;
-			}
-			return responseModel;
-		}
-		public async Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponse model, Dictionary<string, object> sourcePathInBeheerderAttributesDictionary)
-		{
-			var responseModel = new ResponseModel<Dictionary<string, object>>();
-			try
-			{
-				Dictionary<string, object?> beheerderData = new Dictionary<string, object>();
+                responseModel.Result = beheerderAttributes;
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10018;
+            }
+            return responseModel;
+        }
+        public async Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponse model, Dictionary<string, object> sourcePathInBeheerderAttributesDictionary)
+        {
+            var responseModel = new ResponseModel<Dictionary<string, object>>();
+            try
+            {
+                Dictionary<string, object?> beheerderData = new Dictionary<string, object>();
                 foreach (var pair in sourcePathInBeheerderAttributesDictionary)
                 {
                     var key = pair.Key;
                     var valuePath = pair.Value;
-					var value = GetPropertyValueOrField(obj: model, propertyPath: valuePath.ToString());
+                    var value = GetPropertyValueOrField(obj: model, propertyPath: valuePath.ToString());
                     beheerderData.Add(key, value);
-				}
+                }
 
-				responseModel.Result = beheerderData;
-				responseModel.IsSuccess = true;
-			}
-			catch (Exception ex)
-			{
-				responseModel.ErrorMessage = ex.Message;
-				responseModel.ErrorCode = 10019;
-			}
-			return responseModel;
-		}
+                responseModel.Result = beheerderData;
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10019;
+            }
+            return responseModel;
+        }
 
-		public async Task<ResponseModel<REQ4Model>> FillDataForRequest4(Dictionary<string, object> dataDictionary)
-		{
-			var responseModel = new ResponseModel<REQ4Model>();
-			try
-			{
-				var goEfficientWMSMap = _configuration.GetSection("WMSBeheerderRES4Mapping").AsEnumerable();
+        public async Task<ResponseModel<REQ4Model>> FillDataForRequest4(Dictionary<string, object> dataDictionary)
+        {
+            var responseModel = new ResponseModel<REQ4Model>();
+            try
+            {
+                var goEfficientWMSMap = _configuration.GetSection("WMSBeheerderRES4Mapping").AsEnumerable();
 
-				Dictionary<string, object?> mappedValues = new();
-				foreach (var attribute in goEfficientWMSMap)
-				{
-					if (attribute.Value != null)
-					{
-						var key = attribute.Key;//Its key represents RHS
-						var keyArray = key.Split(':');//in this array last but one will be key
-						
-                        var sourceKey = attribute.Value;//value is source key
-						var destinationKey = keyArray[keyArray.Length - 1];
-
-						//var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-						var isValueAvailable = dataDictionary.TryGetValue(sourceKey, out object? value);
-						mappedValues.Add(destinationKey, value);
-					}
-				}
-                mappedValues.TryGetValue("streetName", out object? streetName);
-				mappedValues.TryGetValue("cityName", out object? cityName);
-				mappedValues.TryGetValue("country", out object? country);
-				mappedValues.TryGetValue("houseNumber", out object? houseNumber);
-				mappedValues.TryGetValue("postalCode", out object? postalCode);
-				mappedValues.TryGetValue("houseNumberExtension", out object? houseNumberExtension);
-				//mappedValues.TryGetValue("streetName", out object? streetName);
-
-				responseModel.Result = new REQ4Model
+                Dictionary<string, object?> mappedValues = new();
+                foreach (var attribute in goEfficientWMSMap)
                 {
-                    StreetName = streetName!=null? streetName.ToString()!:"",
-					CityName = cityName != null? cityName.ToString()!:"",
-					Country = country != null? country.ToString()!:"",
-					HouseNumber = houseNumber != null? houseNumber.ToString()!:"",
-					PostalCode = postalCode != null? postalCode.ToString()!:"",
-					HouseNumberExtension = houseNumberExtension != null? houseNumberExtension.ToString()!:""
-				};
-				responseModel.IsSuccess = true;
-			}
-			catch (Exception ex)
-			{
-				responseModel.ErrorMessage = ex.Message;
-				responseModel.ErrorCode = 10017;
-			}
-			return responseModel;
-		}
+                    if (attribute.Value != null)
+                    {
+                        var key = attribute.Key;//Its key represents RHS
+                        var keyArray = key.Split(':');//in this array last but one will be key
 
-		#region Helper Functions of Response 2
-		public object GetPropertyValueOrField(object obj, string propertyPath)
-		{
-			if (obj == null) throw new ArgumentNullException(nameof(obj));
-			if (propertyPath == null) throw new ArgumentNullException(nameof(propertyPath));
+                        var sourceKey = attribute.Value;//value is source key
+                        var destinationKey = keyArray[keyArray.Length - 1];
 
-			Type objType = obj.GetType();
-			foreach (var part in propertyPath.Split('.'))
-			{
-				if (obj == null) { return null; }
+                        //var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
+                        var isValueAvailable = dataDictionary.TryGetValue(sourceKey, out object? value);
+                        mappedValues.Add(destinationKey, value);
+                    }
+                }
+                mappedValues.TryGetValue("streetName", out object? streetName);
+                mappedValues.TryGetValue("cityName", out object? cityName);
+                mappedValues.TryGetValue("country", out object? country);
+                mappedValues.TryGetValue("houseNumber", out object? houseNumber);
+                mappedValues.TryGetValue("postalCode", out object? postalCode);
+                mappedValues.TryGetValue("houseNumberExtension", out object? houseNumberExtension);
+                //mappedValues.TryGetValue("streetName", out object? streetName);
 
-				// Check if the part has an indexer
-				var match = Regex.Match(part, @"(.*?)\[(\d+)\]");
-				if (match.Success)
-				{
-					var propertyName = match.Groups[1].Value;
-					var index = int.Parse(match.Groups[2].Value);
+                responseModel.Result = new REQ4Model
+                {
+                    StreetName = streetName != null ? streetName.ToString()! : "",
+                    CityName = cityName != null ? cityName.ToString()! : "",
+                    Country = country != null ? country.ToString()! : "",
+                    HouseNumber = houseNumber != null ? houseNumber.ToString()! : "",
+                    PostalCode = postalCode != null ? postalCode.ToString()! : "",
+                    HouseNumberExtension = houseNumberExtension != null ? houseNumberExtension.ToString()! : ""
+                };
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10017;
+            }
+            return responseModel;
+        }
 
-					obj = GetValue(obj, objType, propertyName);
+        #region Helper Functions of Response 2
+        public object GetPropertyValueOrField(object obj, string propertyPath)
+        {
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            if (propertyPath == null) throw new ArgumentNullException(nameof(propertyPath));
 
-					if (obj is IList list && index < list.Count)
-					{
-						if (list.Count > 1)
-						{
-							return null;
-						}
-						obj = list[index];
-						var count = list.Count;
-					}
-					else
-					{
-						return null;
-					}
+            Type objType = obj.GetType();
+            foreach (var part in propertyPath.Split('.'))
+            {
+                if (obj == null) { return null; }
 
-					objType = obj?.GetType();
-					continue;
-				}
+                // Check if the part has an indexer
+                var match = Regex.Match(part, @"(.*?)\[(\d+)\]");
+                if (match.Success)
+                {
+                    var propertyName = match.Groups[1].Value;
+                    var index = int.Parse(match.Groups[2].Value);
 
-				obj = GetValue(obj, objType, part);
+                    obj = GetValue(obj, objType, propertyName);
 
-				objType = obj?.GetType();
-			}
-			return obj;
-		}
-		public int? GetArrayPropertyCount(object obj, string propertyPath)
-		{
-			if (obj == null) throw new ArgumentNullException(nameof(obj));
-			if (propertyPath == null) throw new ArgumentNullException(nameof(propertyPath));
+                    if (obj is IList list && index < list.Count)
+                    {
+                        if (list.Count > 1)
+                        {
+                            return null;
+                        }
+                        obj = list[index];
+                        var count = list.Count;
+                    }
+                    else
+                    {
+                        return null;
+                    }
 
-			Type objType = obj.GetType();
-			foreach (var part in propertyPath.Split('.'))
-			{
-				if (obj == null) { return null; }
+                    objType = obj?.GetType();
+                    continue;
+                }
 
-				var match = Regex.Match(part, @"(.*?)\[(.*?)\]");
-				if (match.Success)
-				{
-					var propertyName = match.Groups[1].Value;
+                obj = GetValue(obj, objType, part);
 
-					obj = GetValue(obj, objType, propertyName);
+                objType = obj?.GetType();
+            }
+            return obj;
+        }
+        public int? GetArrayPropertyCount(object obj, string propertyPath)
+        {
+            if (obj == null) throw new ArgumentNullException(nameof(obj));
+            if (propertyPath == null) throw new ArgumentNullException(nameof(propertyPath));
 
-					if (obj is IList list)
-					{
-						return list.Count;
-					}
-					else
-					{
-						return null;
-					}
-				}
-				obj = GetValue(obj, objType, part);
-				objType = obj?.GetType();
-			}
-			return null;
-		}
-		private object GetValue(object obj, Type objType, string part)
-		{
-			var propertyInfo = objType.GetProperty(part);
-			if (propertyInfo != null)
-			{
-				return propertyInfo.GetValue(obj, null);
-			}
+            Type objType = obj.GetType();
+            foreach (var part in propertyPath.Split('.'))
+            {
+                if (obj == null) { return null; }
 
-			var fieldInfo = objType.GetField(part);
-			if (fieldInfo != null)
-			{
-				return fieldInfo.GetValue(obj);
-			}
+                var match = Regex.Match(part, @"(.*?)\[(.*?)\]");
+                if (match.Success)
+                {
+                    var propertyName = match.Groups[1].Value;
 
-			return null;
-		}
+                    obj = GetValue(obj, objType, propertyName);
 
-		
-		#endregion
-	}
+                    if (obj is IList list)
+                    {
+                        return list.Count;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                obj = GetValue(obj, objType, part);
+                objType = obj?.GetType();
+            }
+            return null;
+        }
+        private object GetValue(object obj, Type objType, string part)
+        {
+            var propertyInfo = objType.GetProperty(part);
+            if (propertyInfo != null)
+            {
+                return propertyInfo.GetValue(obj, null);
+            }
+
+            var fieldInfo = objType.GetField(part);
+            if (fieldInfo != null)
+            {
+                return fieldInfo.GetValue(obj);
+            }
+
+            return null;
+        }
+
+
+        #endregion
+    }
 
 
 }

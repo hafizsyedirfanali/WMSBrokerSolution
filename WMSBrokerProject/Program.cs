@@ -23,6 +23,7 @@ builder.Configuration.AddJsonFile($"wmsBeheerderMapping.{builder.Environment.Env
 builder.Configuration.AddJsonFile("wmsOrderProgressSettings.json", optional: true, reloadOnChange: true);
 builder.Configuration.AddJsonFile($"wmsOrderProgressSettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 
+builder.Configuration.AddJsonFile("WMSBeheerderAddresses.json", optional: true, reloadOnChange: true);
 //builder.Configuration.AddJsonFile("OrderProgressMapping.json", optional: true, reloadOnChange: true);
 //builder.Configuration.AddJsonFile($"OrderProgressMapping.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true);
 

@@ -46,8 +46,8 @@ namespace WMSBrokerProject.Repositories
             var responseModel = new ResponseModel<TaskFetchResponseModel>();
             try
             {
-                //Random rand = new Random();
-                //var correlationId = rand.Next(10000, 1000001).ToString();
+                Random rand = new Random();
+                var correlationId = rand.Next(10000, 1000001).ToString();
                 //var taskId = "WMS002530553";
 
                 //using HttpClient httpClient = new HttpClient();

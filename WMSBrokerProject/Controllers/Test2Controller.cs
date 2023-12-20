@@ -15,19 +15,31 @@ namespace WMSBrokerProject.Controllers
     public class Test2Controller : AppBaseController
     {
         private readonly IWMSBeheerderService wMSBeheerderService;
+        private readonly IOptions<Dictionary<string, ActionConfiguration>> actionOptions;
 
-        public Test2Controller(IGoEfficientService goEfficientService, IConfiguration configuration, IOptions<GoEfficientCredentials> goEfficientCredentials, IOrderProgressService orderProgressService, ICorrelationServices correlationServices, IWMSBeheerderService wMSBeheerderService) : base(goEfficientService, configuration, goEfficientCredentials, orderProgressService, correlationServices)
+        public Test2Controller(IGoEfficientService goEfficientService, IConfiguration configuration, IOptions<GoEfficientCredentials> goEfficientCredentials, IOrderProgressService orderProgressService, ICorrelationServices correlationServices, IWMSBeheerderService wMSBeheerderService, IOptions<Dictionary<string, ActionConfiguration>> actionOptions) : base(goEfficientService, configuration, goEfficientCredentials, orderProgressService, correlationServices)
         {
             this.wMSBeheerderService = wMSBeheerderService;
+            this.actionOptions = actionOptions;
         }
 
         [HttpGet]
         public async Task<IActionResult> BeginTestProcess()
         {
-            var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = "12456" }).ConfigureAwait(false);
+            var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = "WMS002530553" }).ConfigureAwait(false);
             if (!response2TaskFetch.IsSuccess) { }//{ return StatusCode(StatusCodes.Status500InternalServerError, response2TaskFetch); }
             JObject taskFetchJsonObject = response2TaskFetch.Result!.JSONObject;
             TaskFetchResponse taskFetchResponse = response2TaskFetch.Result!.TaskFetchResponseObject!;
+
+           
+            actionOptions.Value.TryGetValue(taskFetchResponse.action, out var actionConfiguration);
+            var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
+            {
+                //InId = inId,
+                InId = taskFetchResponse.originatorId,
+                Huurder_UDF_Id = actionConfiguration!.Huurder_UDF_Id!
+            }).ConfigureAwait(false);
+            if (!responseREQ6.IsSuccess) { }
 
             var responseGoEfficientAttr = await goEfficientService.GetGoEfficientAttributes();
             var responseGoEfficientFileAttr = await goEfficientService.GetGoEfficientFileAttributes();
@@ -58,6 +70,34 @@ namespace WMSBrokerProject.Controllers
             var fin_Id = res4aResult.Result.FIN_ID;
 
             var addresses = res4aResult.Result.Addresses;
+
+            var responseFilledDataResult = await goEfficientService
+                    .FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
+                    {
+                        WMSBeheerderAttributes = dataDictionary!,
+                        ActionName = taskFetchResponse.action
+                    });
+            if (!responseFilledDataResult.IsSuccess)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, new
+                {
+                    responseFilledDataResult.ErrorMessage,
+                    responseFilledDataResult.ErrorCode
+                });
+            }
+            var responseFilledFCDataResult = await goEfficientService
+                .FillFCDataIn4aTemplate(res4aResult.Result, new TaskFetchResponse2Model
+                {
+                    WMSBeheerderAttributes = dataDictionary!
+                });
+            if (!responseFilledFCDataResult.IsSuccess)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, new
+                {
+                    responseFilledFCDataResult.ErrorMessage,
+                    responseFilledFCDataResult.ErrorCode
+                });
+            }
 
             var responseFilledAddressDataResult = await goEfficientService
                     .FillDataIn4aAddressTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
