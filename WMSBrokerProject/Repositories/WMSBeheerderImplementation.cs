@@ -31,7 +31,8 @@ namespace WMSBrokerProject.Repositories
 		public WMSBeheerderImplementation(IConfiguration configuration, IWebHostEnvironment hostEnvironment,
 			IOptions<GoEfficientCredentials> goEfficientCredentials)
 		{
-			this.token = configuration.GetSection("token").Value!;
+			//this.token = configuration.GetSection("token").Value!;
+			this.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im5rbWIiLCJuYW1laWQiOiJhN2M4YTAzYS0xYWU5LTQxYWEtOTA5ZC03Y2QwMWNiZTZjYzUiLCJyb2xlIjoiQmVoZWVyZGVyIiwiUGFydGllcyI6Ilt7XCJJZFwiOlwiMjQwXCIsXCJOYW1lXCI6XCJDaXJjZXRcIixcIlN5c3RlbU5hbWVcIjpcIk5LTVwiLFwiVHlwZVwiOjF9XSIsIm5ldHdvcmtPd25lcnMiOlsiREZOIiwiQ2l0aXVzIl0sIm5iZiI6MTcwMjM2Njc1NCwiZXhwIjoxNzMzOTIzNjgwLCJpYXQiOjE3MDIzNjY3NTR9.r1rndWf_X8fEtbnFdF-m22JtoyP0MxbBXVprLpdcVgY";
 			this.orgId = configuration.GetSection("orgId").Value!;
 			_configuration = configuration;
 			this.hostEnvironment = hostEnvironment;
@@ -49,17 +50,17 @@ namespace WMSBrokerProject.Repositories
                 Random rand = new Random();
                 var correlationId = rand.Next(10000, 1000001).ToString();
                 //var taskId = "WMS002530553";
-              
+                //var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im5rbWIiLCJuYW1laWQiOiJhN2M4YTAzYS0xYWU5LTQxYWEtOTA5ZC03Y2QwMWNiZTZjYzUiLCJyb2xlIjoiQmVoZWVyZGVyIiwiUGFydGllcyI6Ilt7XCJJZFwiOlwiMjQwXCIsXCJOYW1lXCI6XCJDaXJjZXRcIixcIlN5c3RlbU5hbWVcIjpcIk5LTVwiLFwiVHlwZVwiOjF9XSIsIm5ldHdvcmtPd25lcnMiOlsiREZOIiwiQ2l0aXVzIl0sIm5iZiI6MTcwMjM2Njc1NCwiZXhwIjoxNzMzOTIzNjgwLCJpYXQiOjE3MDIzNjY3NTR9.r1rndWf_X8fEtbnFdF-m22JtoyP0MxbBXVprLpdcVgY";
                 using HttpClient httpClient = new HttpClient();
                 string? endPointUrl = " https://uat-gke.cif-operator.com/";
                 string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                httpClient.DefaultRequestHeaders.Add("X-WMS-Test", "false");
-                httpClient.DefaultRequestHeaders.Add("X-Request-ID", model.InID);
-                httpClient.DefaultRequestHeaders.Add("X-Correlation-ID", correlationId);
-                httpClient.DefaultRequestHeaders.Add("Accept", "text/plain");
-                httpClient.DefaultRequestHeaders.Add("Cookie", "INGRESSCOOKIE=1701205238.251.103.617994|12428f53f11a724d940598e930467e0d");
-                // httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
+                //httpClient.DefaultRequestHeaders.Add("X-WMS-Test", "false");
+                //httpClient.DefaultRequestHeaders.Add("X-Request-ID", model.InID);
+                //httpClient.DefaultRequestHeaders.Add("X-Correlation-ID", correlationId);
+                //httpClient.DefaultRequestHeaders.Add("Accept", "text/plain");
+                //httpClient.DefaultRequestHeaders.Add("Cookie", "INGRESSCOOKIE=1701205238.251.103.617994|12428f53f11a724d940598e930467e0d");
+                //// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
 
                 HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
                 response.EnsureSuccessStatusCode();

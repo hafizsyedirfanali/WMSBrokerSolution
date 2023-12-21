@@ -341,7 +341,7 @@ namespace WMSBrokerProject.Repositories
                 var year = date.ToString("yyyy");
                 var year_week = GetYearWeekISO(DateTime.Now);
                 var yearweek = year + "-" + year_week;
-
+                var yearmonth = year + "-" + date.Month;
                 string? requestUri = _configuration.GetSection("GoEfficient:EndPointUrl").Value;
 
                 string xmlRequest4 = string.Empty;
@@ -356,7 +356,7 @@ namespace WMSBrokerProject.Repositories
                                              <OperationName>PRO_CREATE_TREE_FROM_TEMPL</OperationName>
                                              <Values>
                                                  <Value FieldName=""PRO.PRO_ID"">{model.PRO_ID}</Value>
-                                                 <Value FieldName=""Indicator"">{year};{year_week};{model.CityName} {model.StreetName} {model.HouseNumber} {houseNumberExtension}{model.PostalCode} {model.InId}</Value>
+                                                 <Value FieldName=""Indicator"">{year};{yearmonth};{model.CityName} {model.StreetName} {model.HouseNumber} {houseNumberExtension}{model.PostalCode} {model.InId}</Value>
                                                  <Value FieldName=""Indicator2"">{model.Indicator2}</Value>
                                                  <Value FieldName=""Indicator3"">P</Value>
                                              </Values>
@@ -447,7 +447,7 @@ namespace WMSBrokerProject.Repositories
 
                 var content = new StringContent(xmlRequest4a, Encoding.UTF8, "application/xml");
                 string xmlResponse;
-                if (false)// (!string.IsNullOrEmpty(requestUri))
+                if (!string.IsNullOrEmpty(requestUri))
                 {
                     var response = await client.PostAsync(requestUri, content);
                     response.EnsureSuccessStatusCode();
@@ -874,9 +874,11 @@ namespace WMSBrokerProject.Repositories
                                                     <Field>PRO.PRO_ID</Field>
                                                 </Fields>
                                                 <Conditions>
-                                                    <Condition RightVariableType=""LiteralValue"" RightValue=""{model.InId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_PATH""/>
+                                                    <Condition RightVariableType=""LiteralValue"" RightValue=""'{model.InId}'"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_PATH""/>
                                                     <Condition RightVariableType=""LiteralValue"" RightValue=""{model.Huurder_UDF_Id}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_UDF_ID""/>
                                                     <Condition RightVariableType=""LiteralValue"" RightValue=""'CIFWMS-OrderUid'"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""FIN.FIN_NAME_L""/>
+
+                                                    
                                                 </Conditions>
                                                 <OperationName>PRO_READ_M_V1</OperationName>
                                             </ReadOperation>
@@ -886,7 +888,7 @@ namespace WMSBrokerProject.Repositories
                 var content = new StringContent(xmlRequest6, Encoding.UTF8, "application/xml");
 
                 string xmlResponse;
-                if (false)// (!string.IsNullOrEmpty(requestUri))
+                if (!string.IsNullOrEmpty(requestUri))
                 {
                     var response = await client.PostAsync(requestUri, content);
                     response.EnsureSuccessStatusCode();

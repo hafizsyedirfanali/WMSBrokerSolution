@@ -164,7 +164,7 @@
       "Netw-Priority": "netwPriority"
     },
     "CONNECTION_INCIDENT": {
-      "Conn-DHid": "connDHid",
+      "Conn-DHid": "DHid",
       "Conn-Room": "connRoom",
       "Conn-FiberNumber": "connFiberNumber",
       "Conn-CategoryLevel1": "connClosureLvl1",
