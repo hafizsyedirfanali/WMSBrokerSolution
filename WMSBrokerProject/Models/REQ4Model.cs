@@ -16,6 +16,7 @@
         public string Country { get; set; }
         public string PRO_ID { get; set; }
         public string Indicator2 { get; set; }
+        public string RequestId { get; set; }
         
     }
 

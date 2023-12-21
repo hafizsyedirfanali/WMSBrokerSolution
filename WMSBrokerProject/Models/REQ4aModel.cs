@@ -6,6 +6,7 @@
         public string Password { get; set; }
         public string? InId { get; set; }
         public string? ProId { get; set; }
+        public string RequestId { get; set; }
         public RES2Model RES2Response { get; set; }
         public Dictionary<string, string> GoEfficientAttributes { get; set; }
     }

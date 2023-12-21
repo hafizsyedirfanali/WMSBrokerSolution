@@ -2,6 +2,7 @@
 {
     public class REQ5aModel
     {
+        public string RequestId { get; set; }
         public string InId { get; set; }
         public string PRO_ID_3 { get; set; }
         public string Username { get; set; }

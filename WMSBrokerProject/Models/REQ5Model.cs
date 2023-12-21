@@ -2,6 +2,7 @@
 {
     public class REQ5Model
     {
+        public string RequestId { get; set; }
         public string InId { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }

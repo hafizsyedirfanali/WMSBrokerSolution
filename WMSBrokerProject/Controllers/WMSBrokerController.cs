@@ -35,6 +35,8 @@ namespace WMSBrokerProject.Controllers
             }
 
             inId = model.inId;
+            Random rand = new Random();
+            var requestId = rand.Next(10000, 1000001).ToString();
 
             var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = inId }).ConfigureAwait(false);
             if (!response2TaskFetch.IsSuccess) { }//{ return StatusCode(StatusCodes.Status500InternalServerError, response2TaskFetch); }
@@ -45,6 +47,7 @@ namespace WMSBrokerProject.Controllers
             var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
             {
                 //InId = inId,
+                RequestId = requestId,
                 InId = taskFetchResponse.originatorId,
                 Huurder_UDF_Id = actionConfiguration!.Huurder_UDF_Id!
             }).ConfigureAwait(false);
@@ -72,6 +75,7 @@ namespace WMSBrokerProject.Controllers
                 //var houseNumberSuffix = "";
                 var res4Result = await goEfficientService.REQ4_GetProIDAsync(new Models.REQ4Model
                 {
+                    RequestId = requestId,
                     InId = inId,
                     PRO_ID = actionConfiguration.PRO_ID,
                     Indicator2 = actionConfiguration.Indicator2,
@@ -93,6 +97,7 @@ namespace WMSBrokerProject.Controllers
                 ///Here we have to pass the responseGoEfficientFileAttr
                 var res4aResult = await goEfficientService.REQ4a_GetTemplateFromGoEfficient(new Models.REQ4aModel
                 {
+                    RequestId = requestId,
                     InId = inId,
                     ProId = proId,
                     Username = "",
@@ -150,6 +155,7 @@ namespace WMSBrokerProject.Controllers
                 #region REQ5 RHS Save Record
                 var res5Result = await goEfficientService.REQ5_SaveRecordToGoEfficient(new Models.REQ5Model
                 {
+                    RequestId = requestId,
                     Username = "",
                     Password = "",
                     InId = inId,
@@ -185,6 +191,7 @@ namespace WMSBrokerProject.Controllers
 
                     var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
                     {
+                        RequestId = requestId,
                         ExtractedAddressValues = extractedAddressValues,
                         InId = inId,
                         PRO_ID_3 = proId,

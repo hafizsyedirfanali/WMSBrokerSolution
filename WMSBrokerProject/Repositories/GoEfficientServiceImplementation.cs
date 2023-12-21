@@ -350,7 +350,7 @@ namespace WMSBrokerProject.Repositories
 
 
                 xmlRequest4 = $@"<Request>
-                                     {GetXMLHeader(model.InId)}
+                                     {GetXMLHeader(model.RequestId)}
                                      <Body>
                                          <CreateOperation>
                                              <OperationName>PRO_CREATE_TREE_FROM_TEMPL</OperationName>
@@ -420,7 +420,7 @@ namespace WMSBrokerProject.Repositories
 
                 string xmlRequest4a = $@"<?xml version=""1.0"" encoding=""UTF-8""?>
                                         <Request>
-	                                        {GetXMLHeader(model.InId)}
+	                                        {GetXMLHeader(model.RequestId)}
 	                                        <Body>
 		                                        <ReadOperation>
 			                                        <Fields>
@@ -612,7 +612,7 @@ namespace WMSBrokerProject.Repositories
                 valueText += @"<Value FieldName=""Aanvraag ontvangen via?"">Aansluitingen.nl</Value>";
                 string xmlRequest5 = $@"<?xml version=""1.0"" encoding=""utf-8""?>
                                         <Request>
-	                                        {GetXMLHeader(model.InId)}
+	                                        {GetXMLHeader(model.RequestId)}
 	                                        <Body>
 		                                        <UpdateOperation>
 			                                        <OperationName>PRO_FIN_UPDATE</OperationName>
@@ -751,7 +751,7 @@ namespace WMSBrokerProject.Repositories
 
                 string xmlRequest5a = @$"<?xml version=""1.0"" encoding=""utf-8""?>
                             <Request>
-	                            {GetXMLHeader(model.InId)}
+	                            {GetXMLHeader(model.RequestId)}
 	                            <Body>
 		                            <UpdateOperation>
 			                            <OperationName>FIN_UPDATE_V1</OperationName>
@@ -867,7 +867,7 @@ namespace WMSBrokerProject.Repositories
                 string? requestUri = _configuration.GetSection("GoEfficient:EndPointUrl").Value;
 
                 string xmlRequest6 = @$"<Request>
-                                        {GetXMLHeader(model.InId)}
+                                        {GetXMLHeader(model.RequestId)}
                                         <Body>
                                             <ReadOperation>
                                                 <Fields>
