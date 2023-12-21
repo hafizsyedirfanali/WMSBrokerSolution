@@ -49,9 +49,9 @@ namespace WMSBrokerProject.Repositories
                 Random rand = new Random();
                 var correlationId = rand.Next(10000, 1000001).ToString();
                 //var taskId = "WMS002530553";
-
+              
                 using HttpClient httpClient = new HttpClient();
-                string? endPointUrl = "https://uat-gke.cif-operator.com/";
+                string? endPointUrl = " https://uat-gke.cif-operator.com/";
                 string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 httpClient.DefaultRequestHeaders.Add("X-WMS-Test", "false");
