@@ -436,6 +436,8 @@ namespace WMSBrokerProject.Repositories
 				                                        <Field>UDF.UDF_TYPEINFO</Field>
 				                                        <Field>UDF.UDF_LABEL</Field>
 				                                        <Field>PRO.PRO_ID</Field>
+                                                        <Field>PRO.PRO_DESCRIPTION</Field>
+                                                        <Field>PRO.PRO_TEMPLATE_ID</Field>
 			                                        </Fields>
 			                                        <Conditions>
 				                                        <Condition RightVariableType=""LiteralValue"" RightValue=""{model.ProId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""PRO.PRO_ID""/>
@@ -609,7 +611,7 @@ namespace WMSBrokerProject.Repositories
                 {
                     valueText += @$"<Value FieldName=""{templateField.Key}"">{templateField.Value}</Value>";
                 }
-                valueText += @"<Value FieldName=""Aanvraag ontvangen via?"">Aansluitingen.nl</Value>";
+                
                 string xmlRequest5 = $@"<?xml version=""1.0"" encoding=""utf-8""?>
                                         <Request>
 	                                        {GetXMLHeader(model.RequestId)}
