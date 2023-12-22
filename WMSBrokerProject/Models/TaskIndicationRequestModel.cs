@@ -1,8 +1,14 @@
-﻿namespace WMSBrokerProject.Models;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace WMSBrokerProject.Models;
 
 public class TaskIndicationRequestModel
 {
-    public Header header { get; set; }
+    public TaskIndicationRequestModel()
+    {
+        header= new Header();
+    }
+    public Header? header { get; set; }
     public string inId { get; set; }
     public class Header
     {

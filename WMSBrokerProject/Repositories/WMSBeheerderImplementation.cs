@@ -31,8 +31,8 @@ namespace WMSBrokerProject.Repositories
 		public WMSBeheerderImplementation(IConfiguration configuration, IWebHostEnvironment hostEnvironment,
 			IOptions<GoEfficientCredentials> goEfficientCredentials)
 		{
-			//this.token = configuration.GetSection("token").Value!;
-			this.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im5rbWIiLCJuYW1laWQiOiJhN2M4YTAzYS0xYWU5LTQxYWEtOTA5ZC03Y2QwMWNiZTZjYzUiLCJyb2xlIjoiQmVoZWVyZGVyIiwiUGFydGllcyI6Ilt7XCJJZFwiOlwiMjQwXCIsXCJOYW1lXCI6XCJDaXJjZXRcIixcIlN5c3RlbU5hbWVcIjpcIk5LTVwiLFwiVHlwZVwiOjF9XSIsIm5ldHdvcmtPd25lcnMiOlsiREZOIiwiQ2l0aXVzIl0sIm5iZiI6MTcwMjM2Njc1NCwiZXhwIjoxNzMzOTIzNjgwLCJpYXQiOjE3MDIzNjY3NTR9.r1rndWf_X8fEtbnFdF-m22JtoyP0MxbBXVprLpdcVgY";
+			this.token = configuration.GetSection("token").Value!;
+			//this.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im5rbWIiLCJuYW1laWQiOiJhN2M4YTAzYS0xYWU5LTQxYWEtOTA5ZC03Y2QwMWNiZTZjYzUiLCJyb2xlIjoiQmVoZWVyZGVyIiwiUGFydGllcyI6Ilt7XCJJZFwiOlwiMjQwXCIsXCJOYW1lXCI6XCJDaXJjZXRcIixcIlN5c3RlbU5hbWVcIjpcIk5LTVwiLFwiVHlwZVwiOjF9XSIsIm5ldHdvcmtPd25lcnMiOlsiREZOIiwiQ2l0aXVzIl0sIm5iZiI6MTcwMjM2Njc1NCwiZXhwIjoxNzMzOTIzNjgwLCJpYXQiOjE3MDIzNjY3NTR9.r1rndWf_X8fEtbnFdF-m22JtoyP0MxbBXVprLpdcVgY";
 			this.orgId = configuration.GetSection("orgId").Value!;
 			_configuration = configuration;
 			this.hostEnvironment = hostEnvironment;
@@ -50,7 +50,6 @@ namespace WMSBrokerProject.Repositories
                 Random rand = new Random();
                 var correlationId = rand.Next(10000, 1000001).ToString();
                 //var taskId = "WMS002530553";
-                //var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im5rbWIiLCJuYW1laWQiOiJhN2M4YTAzYS0xYWU5LTQxYWEtOTA5ZC03Y2QwMWNiZTZjYzUiLCJyb2xlIjoiQmVoZWVyZGVyIiwiUGFydGllcyI6Ilt7XCJJZFwiOlwiMjQwXCIsXCJOYW1lXCI6XCJDaXJjZXRcIixcIlN5c3RlbU5hbWVcIjpcIk5LTVwiLFwiVHlwZVwiOjF9XSIsIm5ldHdvcmtPd25lcnMiOlsiREZOIiwiQ2l0aXVzIl0sIm5iZiI6MTcwMjM2Njc1NCwiZXhwIjoxNzMzOTIzNjgwLCJpYXQiOjE3MDIzNjY3NTR9.r1rndWf_X8fEtbnFdF-m22JtoyP0MxbBXVprLpdcVgY";
                 using HttpClient httpClient = new HttpClient();
                 string? endPointUrl = " https://uat-gke.cif-operator.com/";
                 string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
