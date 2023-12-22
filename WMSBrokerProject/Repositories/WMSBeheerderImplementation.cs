@@ -50,61 +50,42 @@ namespace WMSBrokerProject.Repositories
                 Random rand = new Random();
                 var correlationId = rand.Next(10000, 1000001).ToString();
                 //var taskId = "WMS002530553";
-                using HttpClient httpClient = new HttpClient();
-                string? endPointUrl = " https://uat-gke.cif-operator.com/";
-                string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-                //httpClient.DefaultRequestHeaders.Add("X-WMS-Test", "false");
-                //httpClient.DefaultRequestHeaders.Add("X-Request-ID", model.InID);
-                //httpClient.DefaultRequestHeaders.Add("X-Correlation-ID", correlationId);
-                //httpClient.DefaultRequestHeaders.Add("Accept", "text/plain");
-                //httpClient.DefaultRequestHeaders.Add("Cookie", "INGRESSCOOKIE=1701205238.251.103.617994|12428f53f11a724d940598e930467e0d");
-                //// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
+                //using HttpClient httpClient = new HttpClient();
+                //string? endPointUrl = " https://uat-gke.cif-operator.com/";
+                //string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
+                //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
-                response.EnsureSuccessStatusCode();
-
-                if (response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType == "application/json")
-                {
-                    string jsonResponse = await response.Content.ReadAsStringAsync();
-                    var jsonObject = JObject.Parse(jsonResponse);
-
-                    TaskFetchResponse taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponse>(jsonResponse)!;
-                    responseModel.Result = new TaskFetchResponseModel
-                    {
-                        TaskFetchResponseObject = taskFetchResponse,
-                        JSONObject = jsonObject,
-                    };
-                    responseModel.IsSuccess = true;
-                }
-                else
-                {
-                    responseModel.ErrorCode = (int)response.StatusCode;
-                    responseModel.ErrorMessage = $"Task fetch call failure with status/code:{response.StatusCode}";
-                }
-
-                //string responseContent = File.ReadAllText("response2.json");
-                //TaskFetchResponse taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponse>(responseContent)!;
-                //var jsonObject = JObject.Parse(responseContent);
-                //responseModel.Result = new TaskFetchResponseModel
-                //{
-                //    TaskFetchResponseObject = taskFetchResponse,
-                //    JSONObject = jsonObject
-                //};
-                //responseModel.IsSuccess = true;
-
-                //var client = new HttpClient();
-                //var request = new HttpRequestMessage(HttpMethod.Get, "https://uat-gke.cif-operator.com/wms-beheerder-api/contractor/Circet/tasks/WMS002530553");
-                //request.Headers.Add("X-WMS-Test", "false");
-                //request.Headers.Add("X-Request-ID", model.InID);
-                //request.Headers.Add("X-Correlation-ID", correlationId);
-                //request.Headers.Add("Accept", "text/plain");
-                //request.Headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im5rbWIiLCJuYW1laWQiOiJhN2M4YTAzYS0xYWU5LTQxYWEtOTA5ZC03Y2QwMWNiZTZjYzUiLCJyb2xlIjoiQmVoZWVyZGVyIiwiUGFydGllcyI6Ilt7XCJJZFwiOlwiMjQwXCIsXCJOYW1lXCI6XCJDaXJjZXRcIixcIlN5c3RlbU5hbWVcIjpcIk5LTVwiLFwiVHlwZVwiOjF9XSIsIm5ldHdvcmtPd25lcnMiOlsiQ2l0aXVzIiwiREZOIl0sIm5iZiI6MTY5NTk1NDMwNiwiZXhwIjoxNzI3NTExMjMyLCJpYXQiOjE2OTU5NTQzMDZ9.djzPpKcbSWOIV2MFw4VXxvjoSPDGSMwNMwO9LP3nVhI");
-                //request.Headers.Add("Cookie", "INGRESSCOOKIE=1701205238.251.103.617994|12428f53f11a724d940598e930467e0d");
-                //var response = await client.SendAsync(request);
+                //HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
                 //response.EnsureSuccessStatusCode();
-                //var result = await response.Content.ReadAsStringAsync();
 
+                //if (response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType == "application/json")
+                //{
+                //    string jsonResponse = await response.Content.ReadAsStringAsync();
+                //    var jsonObject = JObject.Parse(jsonResponse);
+
+                //    TaskFetchResponse taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponse>(jsonResponse)!;
+                //    responseModel.Result = new TaskFetchResponseModel
+                //    {
+                //        TaskFetchResponseObject = taskFetchResponse,
+                //        JSONObject = jsonObject,
+                //    };
+                //    responseModel.IsSuccess = true;
+                //}
+                //else
+                //{
+                //    responseModel.ErrorCode = (int)response.StatusCode;
+                //    responseModel.ErrorMessage = $"Task fetch call failure with status/code:{response.StatusCode}";
+                //}
+
+                string responseContent = File.ReadAllText("response2.json");
+                TaskFetchResponse taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponse>(responseContent)!;
+                var jsonObject = JObject.Parse(responseContent);
+                responseModel.Result = new TaskFetchResponseModel
+                {
+                    TaskFetchResponseObject = taskFetchResponse,
+                    JSONObject = jsonObject
+                };
+                responseModel.IsSuccess = true;
             }
             catch (HttpRequestException ex)
             {

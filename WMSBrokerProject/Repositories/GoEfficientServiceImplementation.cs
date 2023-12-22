@@ -122,7 +122,8 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-        public async Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template, TaskFetchResponse2Model model)
+        public async Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template,
+            TaskFetchResponse2Model model)
         {
             var responseModel = new ResponseModel<RES4aTemplate>();
             try
@@ -147,29 +148,6 @@ namespace WMSBrokerProject.Repositories
                     if (valueTuple.Value is null || valueTuple.Value.ToString() == "") continue;
                     mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
                 }
-                //Arshad!! Test this mappedValues Dictionary and check if it is getting values as expected or not and inform me
-
-
-                //           var goEfficientMijnAansluitingMap = _configuration.GetSection("WMSBeheerderRES2Mapping").AsEnumerable();
-
-                //           Dictionary<string, object?> mappedValues = new();
-                //           foreach (var attribute in goEfficientMijnAansluitingMap)
-                //           {
-                //               if (attribute.Value != null)
-                //               {
-                //                   var key = attribute.Key;//Its key represents RHS
-                //                   var keyArray = key.Split(':');//in this array last but one will be key
-                //                   var sourceKey = attribute.Value;//value is source key
-                //                   var destinationKey = keyArray[keyArray.Length - 1];
-
-                //	var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-
-                //	mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
-
-                //}
-                //           }
-
-
                 template.GoEfficientTemplateValues = mappedValues;
                 responseModel.Result = template;
                 responseModel.IsSuccess = true;
@@ -1155,7 +1133,7 @@ namespace WMSBrokerProject.Repositories
             var responseModel = new ResponseModel<Dictionary<string, object>>();
             try
             {
-                Dictionary<string, object?> beheerderAttributes = new Dictionary<string, object>();
+                var beheerderAttributes = new Dictionary<string, object?>();
                 if (_configuration.GetSection("WMSBeheerderAttributes").GetChildren().Any(x => x.Key == model.action))
                 {
                     beheerderAttributes = _configuration.GetSection($"WMSBeheerderAttributes:{model.action}")
@@ -1163,7 +1141,7 @@ namespace WMSBrokerProject.Repositories
                         .ToDictionary(x => x.Key, x => (object?)x.Value);
                 }
 
-                responseModel.Result = beheerderAttributes;
+                responseModel.Result = beheerderAttributes!;
                 responseModel.IsSuccess = true;
             }
             catch (Exception ex)
@@ -1178,16 +1156,16 @@ namespace WMSBrokerProject.Repositories
             var responseModel = new ResponseModel<Dictionary<string, object>>();
             try
             {
-                Dictionary<string, object?> beheerderData = new Dictionary<string, object>();
+                Dictionary<string, object?> beheerderData = new Dictionary<string, object>()!;
                 foreach (var pair in sourcePathInBeheerderAttributesDictionary)
                 {
                     var key = pair.Key;
                     var valuePath = pair.Value;
-                    var value = GetPropertyValueOrField(obj: model, propertyPath: valuePath.ToString());
+                    var value = GetPropertyValueOrField(obj: model, propertyPath: valuePath.ToString()!);
                     beheerderData.Add(key, value);
                 }
 
-                responseModel.Result = beheerderData;
+                responseModel.Result = beheerderData!;
                 responseModel.IsSuccess = true;
             }
             catch (Exception ex)

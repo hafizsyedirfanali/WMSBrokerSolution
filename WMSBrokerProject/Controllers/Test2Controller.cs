@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Text.Json;
 using System.Text.Json.Nodes;
+using System.Text.RegularExpressions;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
@@ -43,13 +44,14 @@ namespace WMSBrokerProject.Controllers
                 Huurder_UDF_Id = actionConfiguration!.Huurder_UDF_Id!
             }).ConfigureAwait(false);
             if (!responseREQ6.IsSuccess) { }
-            if (!responseREQ6.Result!.IsRecordExist)
+            if(true)// (!responseREQ6.Result!.IsRecordExist)
             {
                 var taskFetchResponse2 = await goEfficientService
                     .FillSourcePathInBeheerderAttributesDictionary(taskFetchResponse).ConfigureAwait(false);
                 if (!taskFetchResponse2.IsSuccess) { }
                 //above service gives key and path
-                var taskFetchResponseData = await goEfficientService.FillDataInBeheerderAttributesDictionary(taskFetchResponse, taskFetchResponse2.Result!).ConfigureAwait(false);
+                var taskFetchResponseData = await goEfficientService
+                    .FillDataInBeheerderAttributesDictionary(taskFetchResponse, taskFetchResponse2.Result!).ConfigureAwait(false);
                 if (!taskFetchResponseData.IsSuccess) { }
 
 
@@ -121,6 +123,9 @@ namespace WMSBrokerProject.Controllers
                         responseFilledDataResult.ErrorCode
                     });
                 }
+
+
+
                 var responseFilledFCDataResult = await goEfficientService
                     .FillFCDataIn4aTemplate(res4aResult.Result, new TaskFetchResponse2Model
                     {
@@ -142,7 +147,27 @@ namespace WMSBrokerProject.Controllers
 
                 Dictionary<string, object?> goEfficientTemplateValues = responseFilledDataResult.Result!
                     .GoEfficientTemplateValues;
-
+                #region Names Logic
+                var namesArray = actionConfiguration.Naming!.Split('.');
+                var processedNames = new List<string>();
+                foreach (var item in namesArray)
+                {
+                    var match = Regex.Match(item, @"\[(.*?)\]");
+                    if (match.Success)
+                    {
+                        string key = match.Groups[1].Value;
+                        if (goEfficientTemplateValues.TryGetValue(key, out var value))
+                        {
+                            processedNames.Add(value?.ToString() ?? "");
+                        }
+                    }
+                    else
+                    {
+                        processedNames.Add(item);
+                    }
+                }
+                actionConfiguration.Naming = string.Join(".", processedNames);
+                #endregion
                 //var goEfficientAddressTemplateValues = responseFilledDataResult.Result.GoEfficientAddressTemplateValues;
 
                 #region REQ5 RHS Save Record
