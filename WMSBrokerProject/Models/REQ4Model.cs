@@ -3,6 +3,17 @@
     /// <summary>
     /// <CityName> <StreetName> <HouseNumber>[<HouseNumberSuffix>] <ZipCode> <AanvraagID>
     /// </summary>
+    public class REQ4_1Model
+    {
+        public string RequestId { get; set; }
+        public string Pro_Template_Id { get; set; }
+        public string Pro_Id_Desc { get; set; }
+    }
+    public class REQ4_2Model
+    {
+        public string RequestId { get; set; }
+        public string Pro_Id { get; set; }
+    }
     public class REQ4Model
     {
         public string Username { get; set; }

@@ -47,7 +47,9 @@ namespace WMSBrokerProject.Controllers
                                 ProId = taskId.ProIdDESC
                             }).ConfigureAwait(false);
                         if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
-
+                        //Row Ke under Data Frist Consider 
+                        //Check Value is null in Both or 1 and check Json file wmsStutas "WIP" then Continue to next task and Skip
+                        //
                         var res5Result = await orderProgressService.REQ05_UpdateInstantiatedAttachmentsRequest(new UIAREQ5Model
                         {
                             RequestId = requestId,

@@ -6,7 +6,10 @@
     "PATCH": {
       "PRO_ID": "9251826",
       "Indicator2": "6999459;6999459;6842031",
-      "Huurder_UDF_Id": "1462"
+      "Huurder_UDF_Id": "1462",
+      "Naming": "HAFC.[custCity].[popTechnicalPathLoc].[popTechnicalPathRow].[popTechnicalPathFrame].[popTechnicalPathTray].[popTechnicalPathPosition]",
+      "ExecutionTask_TemplateId": "9251828"
+
     },
     "DEPATCH": {
       "PRO_ID": "6744412",

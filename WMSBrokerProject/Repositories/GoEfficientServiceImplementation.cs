@@ -127,13 +127,24 @@ namespace WMSBrokerProject.Repositories
             var responseModel = new ResponseModel<RES4aTemplate>();
             try
             {
-                var section = _configuration.GetSection($"WMSBeheerderRES2Mapping:{model.ActionName}");
+                var section = _configuration.GetSection($"WMSBeheerderRES2Mapping:Generic");
                 var mappedValues = new Dictionary<string, object?>();
                 foreach (var config in section.GetChildren())
                 {
                     var sourceKey = config.Value;
                     var destinationKey = config.Key;
-                    var valueTuple = GetOneToOneValue(model, sourceKey ?? string.Empty, destinationKey);//blank string is entered if value is null. blank values can be ignored by using if
+                    var valueTuple = GetOneToOneValue(model, sourceKey!, destinationKey);
+                    if (valueTuple.Value is null || valueTuple.Value.ToString() == "") continue;
+                    mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
+                }
+
+                section = _configuration.GetSection($"WMSBeheerderRES2Mapping:{model.ActionName}");                
+                foreach (var config in section.GetChildren())
+                {
+                    var sourceKey = config.Value;
+                    var destinationKey = config.Key;
+                    var valueTuple = GetOneToOneValue(model, sourceKey!, destinationKey);
+                    if (valueTuple.Value is null || valueTuple.Value.ToString() == "") continue;
                     mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
                 }
                 //Arshad!! Test this mappedValues Dictionary and check if it is getting values as expected or not and inform me
@@ -393,6 +404,137 @@ namespace WMSBrokerProject.Repositories
                     responseModel.ErrorMessage = "PRO.PRO_ID_3 not found.";
                     responseModel.ErrorCode = 10003;
                 }
+            }
+            catch (HttpRequestException ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10004;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10005;
+            }
+            return responseModel;
+        }
+        public async Task<ResponseModel<RES4_1Model>> REQ4_1_ReadExistingExecutionTask(REQ4_1Model model)
+        {
+            var responseModel = new ResponseModel<RES4_1Model>();
+
+            try
+            {
+                using HttpClient client = new HttpClient();
+                
+                string? requestUri = _configuration.GetSection("GoEfficient:EndPointUrl").Value;
+
+                string xmlRequest4_1 = string.Empty;
+                
+                xmlRequest4_1 = $@"<Request>
+                                     {GetXMLHeader(model.RequestId)}
+                                     <Body>
+                                        <ReadOperation>
+                                            <Fields>
+                                                <Field>PRO.PRO_ID</Field>
+                                                <Field>PRO.PRO_OPENED</Field>
+                                                <Field>PRO.PRO_CLOSED</Field>
+                                                <Field>PRO.PRO_TEMPLATE_ID</Field>
+                                            </Fields>
+                                            <Conditions>
+                                                <Condition RightVariableType=""LiteralValue"" RightValue=""{model.Pro_Template_Id}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""PRO.PRO_TEMPLATE_ID""/>
+                                                <Condition RightVariableType=""LiteralValue"" RightValue=""{model.Pro_Id_Desc}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""PRO.PRO_ID_DESC""> //PRO_ID from req response04
+                                            </Conditions>
+                                            <OperationName>PRO_READ_M_V1</OperationName>
+                                        </ReadOperation>
+                                    </Body>
+                                 </Request>";
+
+                var content = new StringContent(xmlRequest4_1, Encoding.UTF8, "application/xml");
+                string xmlResponse;
+                if (!string.IsNullOrEmpty(requestUri))
+                {
+                    var response = await client.PostAsync(requestUri, content);
+                    response.EnsureSuccessStatusCode();
+                    xmlResponse = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    var xmlResponseFilePath = Path.Combine(templateFolder!, $"GoEfficient_InstanceTemplateResponse_RES04.xml");
+                    xmlResponse = File.ReadAllText(xmlResponseFilePath);
+                }
+
+                XDocument xdoc = XDocument.Parse(xmlResponse);
+
+                var proIdValue = xdoc.Descendants("Value")
+                                      .FirstOrDefault(e => (string)e.Attribute("FieldName") == "PRO.PRO_ID")?.Value;
+
+                if (proIdValue != null)
+                {
+                    responseModel.Result = new RES4_1Model { Pro_Id = proIdValue };
+                    responseModel.IsSuccess = true;
+                }
+                else
+                {
+                    responseModel.ErrorMessage = "PRO.PRO_ID not found.";
+                    responseModel.ErrorCode = 10003;
+                }
+            }
+            catch (HttpRequestException ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10004;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10005;
+            }
+            return responseModel;
+        }
+
+        public async Task<ResponseModel<RES4_2Model>> REQ4_2UpdateExeceutionTaskDes(REQ4_2Model model)
+        {
+            var responseModel = new ResponseModel<RES4_2Model>();
+
+            try
+            {
+                using HttpClient client = new HttpClient();
+
+                string? requestUri = _configuration.GetSection("GoEfficient:EndPointUrl").Value;
+
+                string xmlRequest4_2 = string.Empty;
+
+                xmlRequest4_2 = $@"<Request>
+                                         {GetXMLHeader(model.RequestId)}
+                                         <Body>
+                                           <UpdateOperation>
+                                               <OperationName>PRO_UPDATE_V1</OperationName>
+                                               <Values>
+                                                   <Value FieldName=""PRO.PRO_DESCRIPTION"">HAFC.DENHAAG.A.2.5.1</Value> 
+                                               </Values> 
+                                               <Conditions>
+                                                   <Condition FieldName=""PRO.PRO_ID"">{model.Pro_Id}</Condition> 
+                                               </Conditions>
+                                           </UpdateOperation>
+                                        </Body>
+                                    </Request>";
+
+                var content = new StringContent(xmlRequest4_2, Encoding.UTF8, "application/xml");
+                string xmlResponse;
+                if (!string.IsNullOrEmpty(requestUri))
+                {
+                    var response = await client.PostAsync(requestUri, content);
+                    response.EnsureSuccessStatusCode();
+                    xmlResponse = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    var xmlResponseFilePath = Path.Combine(templateFolder!, $"GoEfficient_InstanceTemplateResponse_RES04.xml");
+                    xmlResponse = File.ReadAllText(xmlResponseFilePath);
+                }
+                
+
+                responseModel.Result = new RES4_2Model { };
+                responseModel.IsSuccess = true;
             }
             catch (HttpRequestException ex)
             {

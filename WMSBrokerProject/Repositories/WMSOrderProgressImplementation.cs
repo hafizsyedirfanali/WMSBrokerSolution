@@ -311,6 +311,8 @@ namespace WMSBrokerProject.Repositories
 				                                        <Field>UDF.UDF_TYPEINFO</Field>
 				                                        <Field>UDF.UDF_LABEL</Field>
 				                                        <Field>PRO.PRO_ID</Field>
+                                                        <Field>PRO.PRO_START</Field>
+				                                        <Field>PRO.PRO_DEADLINE</Field>
 			                                        </Fields>
 			                                        <Conditions>
 				                                        <Condition RightVariableType=""LiteralValue"" RightValue=""{model.ProId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""PRO.PRO_ID""/>
