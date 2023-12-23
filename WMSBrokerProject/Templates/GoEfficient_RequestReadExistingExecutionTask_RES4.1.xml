@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Response>
+  <Header>
+    <RequestId>12345</RequestId>
+    <Timestamp>2022-06-08T10:24:14</Timestamp>
+  </Header>
+  <Body>
+    <Result>
+	<Rows Count="1">
+        <Row>
+		<Value FieldName="PRO.PRO_ID">9246345</Value>
+		<Value FieldName="PRO.PRO_OPENED">23-04-2023</Value>
+		<Value FieldName="PRO.PRO_CLOSED">23-04-2023</Value>
+		<Value FieldName="PRO.PRO_TEMPLATE_ID">9251828</Value>
+		</Row>
+	</Rows>
+	</Result>
+  </Body>
+</Response>

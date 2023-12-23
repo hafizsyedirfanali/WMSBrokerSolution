@@ -21,7 +21,7 @@
       "PRO_ID": "6842031",
       "Indicator2": "6999459;6999459;7007726",
       "Huurder_UDF_Id": "1462",
-      "Naming": "INC.PRIO.[custCity].[netwPriority].[inId]",
+      "Naming": "INC.PRIO.[city].[fiberNumber].[inId]",
       "ExecutionTask_TemplateId": ""
     },
     "CONNECTION_INCIDENT": {
@@ -42,8 +42,8 @@
       "PRO_ID": "6744412",
       "Indicator2": "6999459;6999459;9244608",
       "Huurder_UDF_Id": "1462",
-      "Naming": "HAFC.[city].[country].[postalCode].[streetName].[houseNumberExtension].[popTechnicalPathPosition]",
-      "ExecutionTask_TemplateId": "9251828"
+      "Naming": "",
+      "ExecutionTask_TemplateId": ""
     },
     "AFTER_CONNECT": {
       "PRO_ID": "6744412",

@@ -466,7 +466,7 @@ namespace WMSBrokerProject.Repositories
                 }
                 else
                 {
-                    var xmlResponseFilePath = Path.Combine(templateFolder!, $"GoEfficient_InstanceTemplateResponse_RES04.xml");
+                    var xmlResponseFilePath = Path.Combine(templateFolder!, $"GoEfficient_RequestReadExistingExecutionTask_RES4.1.xml");
                     xmlResponse = File.ReadAllText(xmlResponseFilePath);
                 }
 
