@@ -31,7 +31,9 @@
     "NEW_CONNECTION": {
       "PRO_ID": "6744412",
       "Indicator2": "6999459;6999459;9244608",
-      "Huurder_UDF_Id": "1462"
+      "Huurder_UDF_Id": "1462",
+      "Naming": "HAFC.[city].[country].[postalCode].[streetName].[houseNumberExtension].[popTechnicalPathPosition]",
+      "ExecutionTask_TemplateId": "9251828"
     },
     "AFTER_CONNECT": {
       "PRO_ID": "6744412",
