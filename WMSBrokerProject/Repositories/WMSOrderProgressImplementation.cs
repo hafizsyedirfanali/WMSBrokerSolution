@@ -105,7 +105,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 60001;
+                responseModel.ErrorCode = 30001;
             }
             return responseModel;
         }
@@ -178,12 +178,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 60002;
+                responseModel.ErrorCode = 30002;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 60003;
+                responseModel.ErrorCode = 30003;
             }
             return responseModel;
         }
@@ -276,12 +276,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 60004;
+                responseModel.ErrorCode = 30004;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 60005;
+                responseModel.ErrorCode = 30005;
             }
             return responseModel;
         }
@@ -391,12 +391,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 60004;
+                responseModel.ErrorCode = 30006;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 60005;
+                responseModel.ErrorCode = 30007;
             }
             return responseModel;
         }
@@ -449,12 +449,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 40006;
+                responseModel.ErrorCode = 30008;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 40007;
+                responseModel.ErrorCode = 30009;
             }
             return responseModel;
         }
@@ -492,12 +492,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 50008;
+                responseModel.ErrorCode = 30010;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 50009;
+                responseModel.ErrorCode = 30011;
             }
             return responseModel;
         }
@@ -548,18 +548,18 @@ namespace WMSBrokerProject.Repositories
                 else
                 {
                     responseModel.IsSuccess = false;
-                    responseModel.ErrorCode = 60010;
+                    responseModel.ErrorCode = 30012;
                 }
             }
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 60011;
+                responseModel.ErrorCode = 30013;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 60012;
+                responseModel.ErrorCode = 30014;
             }
             return responseModel;
         }
@@ -632,12 +632,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 40013;
+                responseModel.ErrorCode = 30015;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 40014;
+                responseModel.ErrorCode = 30016;
             }
             return responseModel;
         }
@@ -677,7 +677,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 40015;
+                responseModel.ErrorCode = 30017;
             }
             return responseModel;
         }
@@ -702,7 +702,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 40016;
+                responseModel.ErrorCode = 30018;
             }
             return responseModel;
         }
@@ -764,7 +764,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 40017;
+                responseModel.ErrorCode = 30019;
             }
             return responseModel;
         }
@@ -795,7 +795,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 40018;
+                responseModel.ErrorCode = 30020;
             }
             return responseModel;
         }

@@ -90,12 +90,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 50001;
+                responseModel.ErrorCode = 20001;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 50002;
+                responseModel.ErrorCode = 20002;
             }
             return responseModel;
         }
@@ -191,12 +191,12 @@ namespace WMSBrokerProject.Repositories
 			catch (HttpRequestException ex)
 			{
 				responseModel.ErrorMessage = ex.Message;
-				responseModel.ErrorCode = 50003;
+				responseModel.ErrorCode = 20003;
 			}
 			catch (Exception ex)
 			{
 				responseModel.ErrorMessage = ex.Message;
-				responseModel.ErrorCode = 50004;
+				responseModel.ErrorCode = 20004;
 			}
 			return responseModel;
 		}

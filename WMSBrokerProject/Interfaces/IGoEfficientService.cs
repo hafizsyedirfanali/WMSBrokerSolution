@@ -6,6 +6,8 @@ namespace WMSBrokerProject.Interfaces
     public interface IGoEfficientService
     {
         Task<ResponseModel<RES4Model>> REQ4_GetProIDAsync(REQ4Model model);                          //Request 04 for getting PROCID
+        Task<ResponseModel<RES4_1Model>> REQ4_1_ReadExistingExecutionTask(REQ4_1Model model);
+        Task<ResponseModel<RES4_2Model>> REQ4_2UpdateExeceutionTaskDes(REQ4_2Model model);
         Task<ResponseModel<RES4aModel>> REQ4a_GetTemplateFromGoEfficient(REQ4aModel model);           //Request 04a for getting Template
         Task<ResponseModel<RES5Model>> REQ5_SaveRecordToGoEfficient(REQ5Model model);                //Request 05 for saving the information
         Task<ResponseModel<RES5aModel>> REQ5a_SaveAddressToGoEfficient(REQ5aModel model);             //Request 05a for saving address

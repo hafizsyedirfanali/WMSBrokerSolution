@@ -13,6 +13,7 @@
     {
         public string RequestId { get; set; }
         public string Pro_Id { get; set; }
+        public string Naming { get; set; }
     }
     public class REQ4Model
     {

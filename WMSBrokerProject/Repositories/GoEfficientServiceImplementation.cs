@@ -91,7 +91,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10017;
+                responseModel.ErrorCode = 10001;
             }
             return responseModel;
 
@@ -121,7 +121,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10017;
+                responseModel.ErrorCode = 10002;
             }
             return responseModel;
         }
@@ -148,7 +148,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10017;
+                responseModel.ErrorCode = 10003;
             }
             return responseModel;
         }
@@ -185,7 +185,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10017;
+                responseModel.ErrorCode = 10004;
             }
             return responseModel;
         }
@@ -224,25 +224,25 @@ namespace WMSBrokerProject.Repositories
                                     else
                                     {
                                         responseModel.ErrorMessage = $"The key: {valueTuple.Value} is not present in GoEfficient";
-                                        responseModel.ErrorCode = 10021;
+                                        responseModel.ErrorCode = 10005;
                                     }
                                 }
                                 else
                                 {
                                     responseModel.ErrorMessage = $"The key: {valueTuple.Value} is not present in GoEfficient";
-                                    responseModel.ErrorCode = 10020;
+                                    responseModel.ErrorCode = 10006;
                                 }
                             }
                             else
                             {
                                 responseModel.ErrorMessage = $"Select List not present for FIN_NAME of FC in GoEfficient";
-                                responseModel.ErrorCode = 10022;
+                                responseModel.ErrorCode = 10007;
                             }
                         }
                         else
                         {
                             responseModel.ErrorMessage = $"FIN_NAME of FC not present in GoEfficient";
-                            responseModel.ErrorCode = 10023;
+                            responseModel.ErrorCode = 10008;
                         }
                     }
                 }
@@ -257,7 +257,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10017;
+                responseModel.ErrorCode = 10009;
             }
             return responseModel;
         }
@@ -288,7 +288,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10017;
+                responseModel.ErrorCode = 10010;
             }
             return responseModel;
         }
@@ -316,7 +316,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10016;
+                responseModel.ErrorCode = 10011;
             }
             return responseModel;
         }
@@ -344,7 +344,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10016;
+                responseModel.ErrorCode = 10012;
             }
             return responseModel;
         }
@@ -410,18 +410,18 @@ namespace WMSBrokerProject.Repositories
                 else
                 {
                     responseModel.ErrorMessage = "PRO.PRO_ID_3 not found.";
-                    responseModel.ErrorCode = 10003;
+                    responseModel.ErrorCode = 10013;
                 }
             }
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10004;
+                responseModel.ErrorCode = 10014;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10005;
+                responseModel.ErrorCode = 10015;
             }
             return responseModel;
         }
@@ -483,18 +483,18 @@ namespace WMSBrokerProject.Repositories
                 else
                 {
                     responseModel.ErrorMessage = "PRO.PRO_ID not found.";
-                    responseModel.ErrorCode = 10003;
+                    responseModel.ErrorCode = 10016;
                 }
             }
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10004;
+                responseModel.ErrorCode = 10017;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10005;
+                responseModel.ErrorCode = 10018;
             }
             return responseModel;
         }
@@ -547,12 +547,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10004;
+                responseModel.ErrorCode = 10019;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10005;
+                responseModel.ErrorCode = 10020;
             }
             return responseModel;
         }
@@ -736,12 +736,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10006;
+                responseModel.ErrorCode = 10021;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10007;
+                responseModel.ErrorCode = 10022;
             }
             return responseModel;
         }
@@ -800,12 +800,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10008;
+                responseModel.ErrorCode = 10023;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10009;
+                responseModel.ErrorCode = 10024;
             }
             return responseModel;
         }
@@ -864,7 +864,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10024;
+                responseModel.ErrorCode = 10026;
             }
             return responseModel;
         }
@@ -941,12 +941,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10010;
+                responseModel.ErrorCode = 10027;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10011;
+                responseModel.ErrorCode = 10028;
             }
             return responseModel;
         }
@@ -998,12 +998,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10008;
+                responseModel.ErrorCode = 10029;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10009;
+                responseModel.ErrorCode = 10030;
             }
             return responseModel;
         }
@@ -1063,12 +1063,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10014;
+                responseModel.ErrorCode = 10031;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10015;
+                responseModel.ErrorCode = 10032;
             }
             return responseModel;
         }
@@ -1122,12 +1122,12 @@ namespace WMSBrokerProject.Repositories
             catch (HttpRequestException ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 40006;
+                responseModel.ErrorCode = 10033;
             }
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 40007;
+                responseModel.ErrorCode = 10034;
             }
             return responseModel;
         }
@@ -1177,7 +1177,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10018;
+                responseModel.ErrorCode = 10035;
             }
             return responseModel;
         }
@@ -1201,7 +1201,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10019;
+                responseModel.ErrorCode = 10036;
             }
             return responseModel;
         }
@@ -1251,7 +1251,7 @@ namespace WMSBrokerProject.Repositories
             catch (Exception ex)
             {
                 responseModel.ErrorMessage = ex.Message;
-                responseModel.ErrorCode = 10017;
+                responseModel.ErrorCode = 10037;
             }
             return responseModel;
         }
