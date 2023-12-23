@@ -1,4 +1,5 @@
-﻿using WMSBrokerProject.Models;
+﻿using Newtonsoft.Json.Linq;
+using WMSBrokerProject.Models;
 
 namespace WMSBrokerProject.Interfaces
 {
@@ -15,6 +16,7 @@ namespace WMSBrokerProject.Interfaces
         Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template, TaskFetchResponse2Model model);
         Task<ResponseModel<RES4aTemplate>> FillFCDataIn4aTemplate(RES4aModel res4aModel, TaskFetchResponse2Model model);
         Task<ResponseModel<string>> GetKeyForValueInRES3aMapping(string value);
+        Task<ResponseModel<Dictionary<string, object?>>> GetAttributeValueDictionaryByAction(string action, JObject taskFetchJsonObject);
         Task<ResponseModel<string>> GetKeyForRES4Mapping();
         Task<ResponseModel<RES4aTemplate>> FillDataIn4aAddressTemplate(RES4aTemplate template, TaskFetchResponse2Model model);
         Task<ResponseModel<Dictionary<string, object>>> FillSourcePathInBeheerderAttributesDictionary(TaskFetchResponse model);

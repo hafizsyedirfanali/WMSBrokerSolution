@@ -1,7 +1,10 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Globalization;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -113,6 +116,33 @@ namespace WMSBrokerProject.Repositories
                         }
                     }
                 }
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10017;
+            }
+            return responseModel;
+        }
+        public async Task<ResponseModel<Dictionary<string, object?>>> GetAttributeValueDictionaryByAction(string action, JObject taskFetchJsonObject)
+        {
+            var responseModel = new ResponseModel<Dictionary<string, object?>>();
+            try
+            {
+                var section = _configuration.GetSection($"WMSBeheerderAttributes:{action}");
+                var mappedValues = new Dictionary<string, object?>();
+                foreach (var config in section.GetChildren())
+                {
+                    //"city": "taskInfo.hasInfo.connectionAddress.city",
+                    var path = config.Value;
+                    var extractedValue = taskFetchJsonObject.SelectToken(path ?? string.Empty);
+                    if (extractedValue != null)
+                    {
+                        mappedValues.Add(config.Key, extractedValue);
+                    }
+                }
+                responseModel.Result = mappedValues;
                 responseModel.IsSuccess = true;
             }
             catch (Exception ex)

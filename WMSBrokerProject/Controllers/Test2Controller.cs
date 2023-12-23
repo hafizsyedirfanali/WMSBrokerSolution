@@ -148,6 +148,10 @@ namespace WMSBrokerProject.Controllers
                 Dictionary<string, object?> goEfficientTemplateValues = responseFilledDataResult.Result!
                     .GoEfficientTemplateValues;
                 #region Names Logic
+                var attributeValueDictResult = await goEfficientService
+                    .GetAttributeValueDictionaryByAction(taskFetchResponse.action, taskFetchJsonObject).ConfigureAwait(false);
+                if (!attributeValueDictResult.IsSuccess) { }
+                var attributeValueDict = attributeValueDictResult.Result;
                 var namesArray = actionConfiguration.Naming!.Split('.');
                 var processedNames = new List<string>();
                 foreach (var item in namesArray)
@@ -156,7 +160,7 @@ namespace WMSBrokerProject.Controllers
                     if (match.Success)
                     {
                         string key = match.Groups[1].Value;
-                        if (goEfficientTemplateValues.TryGetValue(key, out var value))
+                        if (attributeValueDict != null &&  attributeValueDict.TryGetValue(key, out var value))
                         {
                             processedNames.Add(value?.ToString() ?? "");
                         }
