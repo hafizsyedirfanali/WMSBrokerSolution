@@ -9,27 +9,34 @@
       "Huurder_UDF_Id": "1462",
       "Naming": "HAFC.[custCity].[popTechnicalPathLoc].[popTechnicalPathRow].[popTechnicalPathFrame].[popTechnicalPathTray].[popTechnicalPathPosition]",
       "ExecutionTask_TemplateId": "9251828"
-
     },
     "DEPATCH": {
       "PRO_ID": "6744412",
       "Indicator2": "6999459;6999459;9244608",
-      "Huurder_UDF_Id": "1462"
+      "Huurder_UDF_Id": "1462",
+      "Naming": "HAFD.[custCity].[popTechnicalPathLoc].[popTechnicalPathRow].[popTechnicalPathFrame].[popTechnicalPathTray].[popTechnicalPathPosition]",
+      "ExecutionTask_TemplateId": "9251835"
     },
     "NETWORK_INCIDENT": {
       "PRO_ID": "6842031",
       "Indicator2": "6999459;6999459;7007726",
-      "Huurder_UDF_Id": "1462"
+      "Huurder_UDF_Id": "1462",
+      "Naming": "INC.PRIO.[custCity].[netwPriority].[inId]",
+      "ExecutionTask_TemplateId": ""
     },
     "CONNECTION_INCIDENT": {
       "PRO_ID": "6842031",
       "Indicator2": "6999459;6999459;9252105",
-      "Huurder_UDF_Id": "1462"
+      "Huurder_UDF_Id": "1462",
+      "Naming": "INC.[custCity].[technicalPath_popName].[Prev_activeEquipmentEndpoint_module].[Prev_activeEquipmentEndpoint_port].[activeEquipmentEndpoint_port]",
+      "ExecutionTask_TemplateId": ""
     },
     "FTU_REPLACEMENT": {
       "PRO_ID": "6744412",
       "Indicator2": "6999459;6999459;9244608",
-      "Huurder_UDF_Id": "1462"
+      "Huurder_UDF_Id": "1462",
+      "Naming": "",
+      "ExecutionTask_TemplateId": ""
     },
     "NEW_CONNECTION": {
       "PRO_ID": "6744412",
@@ -46,22 +53,30 @@
     "FTU_DISPLACEMENT": {
       "PRO_ID": "6744412",
       "Indicator2": "6999459;6999459;9244608",
-      "Huurder_UDF_Id": "1462"
+      "Huurder_UDF_Id": "1462",
+      "Naming": "",
+      "ExecutionTask_TemplateId": ""
     },
     "TELCO_MIGRATION": {
       "PRO_ID": "6744412",
       "Indicator2": "6999459;6999459;9244608",
-      "Huurder_UDF_Id": "1462"
+      "Huurder_UDF_Id": "1462",
+      "Naming": "",
+      "ExecutionTask_TemplateId": ""
     },
     "PORT_MIGRATION": {
       "PRO_ID": "6744412",
       "Indicator2": "6999459;6999459;9244608",
-      "Huurder_UDF_Id": "1462"
+      "Huurder_UDF_Id": "1462",
+      "Naming": "HAFM.[custCity].[popTechnicalPathLoc].[popPrevActiveEndPointModule].[popPrevActiveEndPointPort].[popActiveEquipmentEndPointPort]",
+      "ExecutionTask_TemplateId": "9251838"
     },
     "AFTERCARE": {
       "PRO_ID": "6744412",
       "Indicator2": "6999459;6999459;9244608",
-      "Huurder_UDF_Id": "1462"
+      "Huurder_UDF_Id": "1462",
+      "Naming": "",
+      "ExecutionTask_TemplateId": ""
     }
 
     // Add more action types as needed
