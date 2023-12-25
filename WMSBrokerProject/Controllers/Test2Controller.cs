@@ -53,8 +53,6 @@ namespace WMSBrokerProject.Controllers
                 var taskFetchResponseData = await goEfficientService
                     .FillDataInBeheerderAttributesDictionary(taskFetchResponse, taskFetchResponse2.Result!).ConfigureAwait(false);
                 if (!taskFetchResponseData.IsSuccess) { }
-
-
                 #region RES4 RHS for PRO.PRO_ID
                 var dataDictionary = taskFetchResponseData.Result;
 
@@ -90,7 +88,7 @@ namespace WMSBrokerProject.Controllers
                 {
                     RequestId = requestId,
                     Pro_Id_Desc = proId,
-                    Pro_Template_Id = actionConfiguration.ExecutionTask_TemplateId
+                    Pro_Template_Id = actionConfiguration.ExecutionTask_TemplateId!
                 });
                 if (res4_1Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "GetProId service returned null" });
                 if (res4_1Result.Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "GetProId service returned null" });

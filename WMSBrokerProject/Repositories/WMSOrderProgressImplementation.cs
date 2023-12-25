@@ -233,6 +233,8 @@ namespace WMSBrokerProject.Repositories
 				                                        <Field>UDF.UDF_TYPEINFO</Field>
 				                                        <Field>UDF.UDF_LABEL</Field>
 				                                        <Field>PRO.PRO_ID</Field>
+                                                        <Field>PRO.PRO_DESCRIPTION</Field>
+                                                        <Field>PRO.PRO_TEMPLATE_ID</Field>
 			                                        </Fields>
 			                                        <Conditions>
 				                                        <Condition RightVariableType=""LiteralValue"" RightValue=""{model.ProId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""PRO.PRO_ID""/>
@@ -266,7 +268,28 @@ namespace WMSBrokerProject.Repositories
                                     .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_RECORD_ID")?.Value)
                             .FirstOrDefault();
 
+                var firstRowFields = (from row in xdoc.Descendants("Row")
+                                                let description = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_DESCRIPTION")?.Value                                                
+                                                let templateId = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_TEMPLATE_ID")?.Value
+                                                select new Res4aRowFields
+                                                {
+                                                    Pro_Description = description,
+                                                    Pro_Template_Id = templateId
+                                                }).FirstOrDefault();
+                if(firstRowFields is not null &&
+                    !string.IsNullOrEmpty(firstRowFields.Pro_Description) &&
+                    !string.IsNullOrEmpty(firstRowFields.Pro_Template_Id) && 
+                    //is not wip)
+                {
 
+                }
+                //new two fields will come. take first().
+                //both fields must be non null then only continue ahead.
+                //if any or both are null then 
+                //check OrderProgressTemplates:Templates1:WMSStatus
+                //we start with a templateID on controller. use same Template ID for above
+                //WMSStatus == "WIP" and (both or one field are null then continue for next task ID and skip this process)
+                //ifWMSstatus is not wip then do processing.
                 responseModel.Result = new OPRES4aModel
                 {
                     InID = inId ?? string.Empty

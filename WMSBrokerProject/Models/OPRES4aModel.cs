@@ -3,6 +3,12 @@
     public class OPRES4aModel
     {
         public string InID { get; set; }
+        public Res4aRowFields Res4ARowFields { get; set; }
+    }
+    public class Res4aRowFields
+    {
+        public string Pro_Description { get; set; }
+        public string Pro_Template_Id { get; set; }
     }
     public class Res4aGetTemplateModel
     {
