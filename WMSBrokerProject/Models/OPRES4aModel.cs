@@ -3,7 +3,7 @@
     public class OPRES4aModel
     {
         public string InID { get; set; }
-        public Res4aRowFields Res4ARowFields { get; set; }
+        public Res4aRowFields? Res4ARowFields { get; set; }
     }
     public class Res4aRowFields
     {

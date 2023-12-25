@@ -13,7 +13,9 @@ namespace WMSBrokerProject.Controllers
     [ApiController]
     public class OrderProgressController : AppBaseController
     {
-        public OrderProgressController(IGoEfficientService goEfficientService, IConfiguration configuration, IOptions<GoEfficientCredentials> goEfficientCredentials, IOrderProgressService orderProgressService, ICorrelationServices correlationServices) : base(goEfficientService, configuration, goEfficientCredentials, orderProgressService, correlationServices)
+        public OrderProgressController(IGoEfficientService goEfficientService, 
+            IConfiguration configuration, IOptions<GoEfficientCredentials> goEfficientCredentials, 
+            IOrderProgressService orderProgressService, ICorrelationServices correlationServices) : base(goEfficientService, configuration, goEfficientCredentials, orderProgressService, correlationServices)
         {
         }
 
@@ -27,6 +29,8 @@ namespace WMSBrokerProject.Controllers
             if (!templateResponse.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, templateResponse);
             if (templateResponse.Result is null) return NotFound();
             var templates = templateResponse.Result?.Templates!;
+            bool skipTemplateId = false;
+
             foreach (var template in templates)
             {
                 var res7Result = await orderProgressService.REQ7GetTaskIDs(new REQ7Model
@@ -44,12 +48,17 @@ namespace WMSBrokerProject.Controllers
                             new OrderProcessingREQ4aModel
                             {
                                 RequestId = requestId,
-                                ProId = taskId.ProIdDESC
+                                ProId = taskId.ProIdDESC,
+                                Template = template,
                             }).ConfigureAwait(false);
                         if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
-                        //Row Ke under Data Frist Consider 
-                        //Check Value is null in Both or 1 and check Json file wmsStutas "WIP" then Continue to next task and Skip
-                        //
+                        
+                        if(res4aResult.Result!.Res4ARowFields == null) 
+                        {
+                            skipTemplateId = true;
+                            break;
+                        } // Continue to next Template ID
+                        
                         var res5Result = await orderProgressService.REQ05_UpdateInstantiatedAttachmentsRequest(new UIAREQ5Model
                         {
                             RequestId = requestId,
@@ -77,6 +86,11 @@ namespace WMSBrokerProject.Controllers
                        
 
 
+                    }
+                    if (skipTemplateId)
+                    {
+                        skipTemplateId = false;
+                        continue;
                     }
                 }
             }

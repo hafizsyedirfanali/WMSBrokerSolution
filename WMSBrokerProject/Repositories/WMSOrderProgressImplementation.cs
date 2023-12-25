@@ -276,23 +276,24 @@ namespace WMSBrokerProject.Repositories
                                                     Pro_Description = description,
                                                     Pro_Template_Id = templateId
                                                 }).FirstOrDefault();
-                if(firstRowFields is not null &&
-                    !string.IsNullOrEmpty(firstRowFields.Pro_Description) &&
-                    !string.IsNullOrEmpty(firstRowFields.Pro_Template_Id) && 
-                    //is not wip)
+                Res4aRowFields? res4ARowFields;
+                if (firstRowFields is null || 
+                    (firstRowFields is not null &&
+                    ((string.IsNullOrEmpty(firstRowFields.Pro_Description) ||
+                    string.IsNullOrEmpty(firstRowFields.Pro_Template_Id)) && 
+                    model.Template.WMSStatus.ToLower() == "wip")))
                 {
-
+                    res4ARowFields = null;
                 }
-                //new two fields will come. take first().
-                //both fields must be non null then only continue ahead.
-                //if any or both are null then 
-                //check OrderProgressTemplates:Templates1:WMSStatus
-                //we start with a templateID on controller. use same Template ID for above
-                //WMSStatus == "WIP" and (both or one field are null then continue for next task ID and skip this process)
-                //ifWMSstatus is not wip then do processing.
+                else
+                {
+                    res4ARowFields = firstRowFields;
+                }
+               
                 responseModel.Result = new OPRES4aModel
                 {
-                    InID = inId ?? string.Empty
+                    InID = inId ?? string.Empty,
+                    Res4ARowFields = res4ARowFields
                 };
                 responseModel.IsSuccess = true;
             }

@@ -4,5 +4,6 @@
     {
         public string RequestId { get; set; }
         public string ProId { get; set; }
+        public TemplateClass Template { get; set; }
     }
 }
