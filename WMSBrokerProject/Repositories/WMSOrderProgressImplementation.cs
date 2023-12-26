@@ -233,8 +233,8 @@ namespace WMSBrokerProject.Repositories
 				                                        <Field>UDF.UDF_TYPEINFO</Field>
 				                                        <Field>UDF.UDF_LABEL</Field>
 				                                        <Field>PRO.PRO_ID</Field>
-                                                        <Field>PRO.PRO_DESCRIPTION</Field>
-                                                        <Field>PRO.PRO_TEMPLATE_ID</Field>
+                                                        <Field>PRO.PRO_START</Field>
+				                                        <Field>PRO.PRO_DEADLINE</Field>
 			                                        </Fields>
 			                                        <Conditions>
 				                                        <Condition RightVariableType=""LiteralValue"" RightValue=""{model.ProId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""PRO.PRO_ID""/>
@@ -263,14 +263,14 @@ namespace WMSBrokerProject.Repositories
 
                 var inId = xdoc.Descendants("Row")
                             .Where(row => row.Elements("Value")
-                                    .Any(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NAME" && e.Value == "MA.nl-ObjectID"))
+                                    .Any(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NAME" && e.Value == "CIFWMS-OrderUid"))
                             .Select(row => row.Elements("Value")
                                     .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_RECORD_ID")?.Value)
                             .FirstOrDefault();
 
                 var firstRowFields = (from row in xdoc.Descendants("Row")
-                                                let description = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_DESCRIPTION")?.Value                                                
-                                                let templateId = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_TEMPLATE_ID")?.Value
+                                                let description = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_START")?.Value                                                
+                                                let templateId = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_DEADLINE")?.Value
                                                 select new Res4aRowFields
                                                 {
                                                     Pro_Description = description,
