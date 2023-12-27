@@ -128,7 +128,7 @@
       "reason": "status.reason",
       "clarification": "status.clarification",
 
-      "action": "action",
+      "Action": "action",
       "inId": "taskId",
       "taskGroupId": "taskgroup.groupId",
       "taskGroupMainStatus": "taskgroup.groupStatus.mainStatus",
@@ -203,7 +203,7 @@
       "connSolutionDomain": "taskInfo.connectionInfo.solutionDomain",
       "connRoom": "taskinfo.connectionInfo.connectionAddress.room",
       "connDHid": "taskInfo.connectionInfo.DHid",
-      "connFiberNumber": "taskInfo.connectionInfo.fiberNumber",
+      "fiberNumber": "taskInfo.connectionInfo.fiberNumber",
       "connDeliveryStatus": "taskInfo.connectionInfo.deliveryStatus",
       "connUpdateCode": "taskInfo.connectionInfo.update.code",
       "connUpdateClarification": "taskInfo.connectionInfo.update.clarification",
@@ -282,12 +282,12 @@
       //"inId": "taskId",
       //"DHid": "taskInfo.connectionInfo.DHid",
       //"fiberNumber": "taskInfo.connectionInfo.fiberNumber",
-     "houseNumber": "taskInfo.connectionInfo.connectionAddress.houseNumber",
-     "houseNumberExtension": "taskInfo.connectionInfo.connectionAddress.houseNumberExtension",
-     "streetName": "taskInfo.connectionInfo.connectionAddress.streetName",
-     "city": "taskInfo.connectionInfo.connectionAddress.city",
-     "country": "taskInfo.connectionInfo.connectionAddress.country",
-     "postalCode": "taskInfo.connectionInfo.connectionAddress.postalCode"
+      "houseNumber": "taskInfo.connectionInfo.connectionAddress.houseNumber",
+      "houseNumberExtension": "taskInfo.connectionInfo.connectionAddress.houseNumberExtension",
+      "streetName": "taskInfo.connectionInfo.connectionAddress.streetName",
+      "city": "taskInfo.connectionInfo.connectionAddress.city",
+      "country": "taskInfo.connectionInfo.connectionAddress.country",
+      "postalCode": "taskInfo.connectionInfo.connectionAddress.postalCode"
       //"subject": "taskInfo.connectionInfo.subject"
     },
     "FTU_REPLACEMENT": {

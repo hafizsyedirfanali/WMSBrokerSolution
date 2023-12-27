@@ -84,53 +84,53 @@ namespace WMSBrokerProject.Controllers
                 #endregion
                 var proId = res4Result.Result.ProId3;
                 if (proId is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "ProId is null" });
-                var res4_1Result = await goEfficientService.REQ4_1_ReadExistingExecutionTask(new Models.REQ4_1Model
-                {
-                    RequestId = requestId,
-                    Pro_Id_Desc = proId,
-                    Pro_Template_Id = actionConfiguration.ExecutionTask_TemplateId!
-                });
-                if (res4_1Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "GetProId service returned null" });
-                if (res4_1Result.Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "GetProId service returned null" });
-                if (!res4_1Result.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res4_1Result);
-                var proIdReq4_1 = res4_1Result.Result.Pro_Id;
-                if (proIdReq4_1 is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "ProId is null in Rquest 4.1" });
+                //var res4_1Result = await goEfficientService.REQ4_1_ReadExistingExecutionTask(new Models.REQ4_1Model
+                //{
+                //    RequestId = requestId,
+                //    Pro_Id_Desc = proId,
+                //    Pro_Template_Id = actionConfiguration.ExecutionTask_TemplateId!
+                //});
+                //if (res4_1Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "GetProId service returned null" });
+                //if (res4_1Result.Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "GetProId service returned null" });
+                //if (!res4_1Result.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res4_1Result);
+                //var proIdReq4_1 = res4_1Result.Result.Pro_Id;
+                //if (proIdReq4_1 is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "ProId is null in Rquest 4.1" });
 
-                #region Names Logic
-                var attributeValueDictResult = await goEfficientService
-                    .GetAttributeValueDictionaryByAction(taskFetchResponse.action, taskFetchJsonObject).ConfigureAwait(false);
-                if (!attributeValueDictResult.IsSuccess) { }
-                var attributeValueDict = attributeValueDictResult.Result;
-                var namesArray = actionConfiguration.Naming!.Split('.');
-                var processedNames = new List<string>();
-                foreach (var item in namesArray)
-                {
-                    var match = Regex.Match(item, @"\[(.*?)\]");
-                    if (match.Success)
-                    {
-                        string key = match.Groups[1].Value;
-                        if (attributeValueDict != null && attributeValueDict.TryGetValue(key, out var value))
-                        {
-                            processedNames.Add(value?.ToString() ?? "");
-                        }
-                    }
-                    else
-                    {
-                        processedNames.Add(item);
-                    }
-                }
-                actionConfiguration.Naming = string.Join(".", processedNames);
-                #endregion
+                //#region Names Logic
+                //var attributeValueDictResult = await goEfficientService
+                //    .GetAttributeValueDictionaryByAction(taskFetchResponse.action, taskFetchJsonObject).ConfigureAwait(false);
+                //if (!attributeValueDictResult.IsSuccess) { }
+                //var attributeValueDict = attributeValueDictResult.Result;
+                //var namesArray = actionConfiguration.Naming!.Split('.');
+                //var processedNames = new List<string>();
+                //foreach (var item in namesArray)
+                //{
+                //    var match = Regex.Match(item, @"\[(.*?)\]");
+                //    if (match.Success)
+                //    {
+                //        string key = match.Groups[1].Value;
+                //        if (attributeValueDict != null && attributeValueDict.TryGetValue(key, out var value))
+                //        {
+                //            processedNames.Add(value?.ToString() ?? "");
+                //        }
+                //    }
+                //    else
+                //    {
+                //        processedNames.Add(item);
+                //    }
+                //}
+                //actionConfiguration.Naming = string.Join(".", processedNames);
+                //#endregion
 
-                var res4_2Result = await goEfficientService.REQ4_2UpdateExeceutionTaskDes(new Models.REQ4_2Model
-                {
-                    RequestId = requestId,
-                    Pro_Id = proIdReq4_1,
-                    Naming = actionConfiguration.Naming
+                //var res4_2Result = await goEfficientService.REQ4_2UpdateExeceutionTaskDes(new Models.REQ4_2Model
+                //{
+                //    RequestId = requestId,
+                //    Pro_Id = proIdReq4_1,
+                //    Naming = actionConfiguration.Naming
 
-                }).ConfigureAwait(false);
-                if (res4_2Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Update Execeution Task Des Service Returned Null" });
-                if (!res4_2Result.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res4_2Result);
+                //}).ConfigureAwait(false);
+                //if (res4_2Result is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Update Execeution Task Des Service Returned Null" });
+                //if (!res4_2Result.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res4_2Result);
 
                 var responseGoEfficientAttr = await goEfficientService.GetGoEfficientAttributes();
                 var responseGoEfficientFileAttr = await goEfficientService.GetGoEfficientFileAttributes();

@@ -182,7 +182,7 @@
     "connFiberNumber": "fiberNumber",
     "CIFWMS-Aft-Status": "status",
     "CIFWMS-Aft-SubStatus": "subStatus",
-    "CIFWMS-Aft-Action": "action"
+    "CIFWMS-Aft-Action": "Action"
   },
   "WMSBeheerderRES2AddressMapping": {
     //Here key name must be same as the key name in GoEFficientAttributes.json

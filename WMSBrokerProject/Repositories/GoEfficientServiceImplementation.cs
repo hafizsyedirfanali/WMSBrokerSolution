@@ -61,6 +61,14 @@ namespace WMSBrokerProject.Repositories
             return (destinationKey, value);
         }
 
+        public (string DestinationKey, object? Value) GetOneToOneValue(JObject taskFetchJsonObject, string sourcePath, string destinationKey)
+        {
+            object? value;
+            var token = taskFetchJsonObject.SelectToken(sourcePath);
+            value = token != null ? token.ToString() : null;
+            return (destinationKey, value);
+        }
+
         public DateTime GetFridayFromDate(int weekNumber, int year)
         {
             DateTime jan1 = new DateTime(year, 1, 1);
@@ -219,13 +227,13 @@ namespace WMSBrokerProject.Repositories
                         var keyArray = key.Split(':');//in this array last but one will be key
                         var sourceKey = attribute.Value;//value is source key
                         var destinationKey = keyArray[keyArray.Length - 1];
-                        if (fcMapping.Where(s => s.FinName == destinationKey).Any())
+                        if (fcMapping.Where(s => s.FinName == sourceKey).Any())
                         {
-                            Dictionary<string, string>? finNameSelectList = fcMapping.Where(s => s.FinName == destinationKey).Select(s => s.SelectListItems).FirstOrDefault();
+                            Dictionary<string, string>? finNameSelectList = fcMapping.Where(s => s.FinName == sourceKey).Select(s => s.SelectListItems).FirstOrDefault();
                             if (finNameSelectList is not null)
                             {
                                 var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-                                if (finNameSelectList.Any(s => s.Key == valueTuple.Value.ToString()))
+                                if (valueTuple.Value != null && finNameSelectList.Any(s => s.Key == valueTuple.Value.ToString()))
                                 {
                                     string? fcValue = finNameSelectList.Where(s => s.Key == valueTuple.Value.ToString()).Select(s => s.Value).FirstOrDefault();
                                     if (!string.IsNullOrEmpty(fcValue))
@@ -618,7 +626,8 @@ namespace WMSBrokerProject.Repositories
                 }
                 else
                 {
-                    var xmlResponseFilePath = Path.Combine(templateFolder!, $"GoEfficient_InstantiatedAttacmentsResponse_RES04a.xml");
+                    //var xmlResponseFilePath = Path.Combine(templateFolder!, $"GoEfficient_InstantiatedAttacmentsResponse_RES04a.xml");
+                    var xmlResponseFilePath = Path.Combine(templateFolder!, $"GoEfficient_Response4a.xml");
                     xmlResponse = File.ReadAllText(xmlResponseFilePath);
                 }
 
