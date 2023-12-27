@@ -10,7 +10,7 @@ using WMSBrokerProject.Models;
 namespace WMSBrokerProject.Controllers
 {
     /// <summary>
-    /// Task Fetch
+    /// 
     /// </summary>
     /// <remarks>get full Active-Operator oriented task databased on InId from AO</remarks>
     /// <param name="orgId">registered code for sender of the message (AO or passive operator)</param>
@@ -48,7 +48,7 @@ namespace WMSBrokerProject.Controllers
         [HttpPost]
         //public async Task<IActionResult> BeginTaskIndicationProcess([FromBody] TaskIndicationRequestModel model)
         public async Task<IActionResult> BeginTaskIndicationProcess(
-            [FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId)
+            [FromQuery][Required][StringLength(36, MinimumLength = 1)] string inId)
         {
             ///Request 1 
             //if (model is null || string.IsNullOrEmpty(model.inId))
