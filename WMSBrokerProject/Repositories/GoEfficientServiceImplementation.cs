@@ -793,7 +793,7 @@ namespace WMSBrokerProject.Repositories
 			                                        </Values>
 			                                        <Conditions>
 				                                        <Condition FieldName=""PRO.PRO_ID"">{model.PRO_ID_3}</Condition>
-				                                        <Condition FieldName=""Indicator"">R</Condition>
+				                                        
 			                                        </Conditions>
 		                                        </UpdateOperation>
 	                                        </Body>

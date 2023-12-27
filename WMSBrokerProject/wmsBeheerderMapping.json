@@ -24,9 +24,9 @@
     "Generic": {
       "CIFWMS-OrderUid": "inId",
       "CIFWMS-UpdateCount": "updateCount",
-      "CIFWMS-Aft-Status": "status",
-      "CIFWMS-Aft-SubStatus": "subStatus",
-      "CIFWMS-Aft-Action": "action",
+      //"CIFWMS-Aft-Status": "status",
+      //"CIFWMS-Aft-SubStatus": "subStatus",
+      //"CIFWMS-Aft-Action": "action",
       "CIFWMS-reason": "reason",
       "CIFWMS-clarification": "clarification",
       "CIFWMS-AreaNetworkType": "areaNetworkType"
@@ -166,23 +166,24 @@
     "CONNECTION_INCIDENT": {
       "connDHid": "DHid",
       "Conn-Room": "connRoom",
-      "connFiberNumber": "connFiberNumber",
+      //"connFiberNumber": "connFiberNumber",
       "Conn-CategoryLevel1": "connClosureLvl1",
       "Conn-CategoryLevel2": "connClosureLvl2",
       "Conn-CategoryLevel3": "connClosureLvl3",
       "connSubject": "connSubject",
       "connProblemDescr": "connProblemDescr",
       "connAnalysis1": "connAnalysis1",
-      "connSolutionDomain": "connSolutionDomain"
+      "connSolutionDomain": "connSolutionDomain",
+      "connActiveEquipmentEndPointBlock": "connActiveEquipmentEndPointBlock"
     }
 
   },
   "WMSBeheerderRES2FCMapping": {
     //Destination : Source
     "connFiberNumber": "fiberNumber",
+    "CIFWMS-Aft-Status": "status",
+    "CIFWMS-Aft-SubStatus": "subStatus",
     "CIFWMS-Aft-Action": "Action"
-    //"CIFWMS-Aft-Status": "status",
-    //"CIFWMS-Aft-SubStatus": "subStatus",
   },
   "WMSBeheerderRES2AddressMapping": {
     //Here key name must be same as the key name in GoEFficientAttributes.json
