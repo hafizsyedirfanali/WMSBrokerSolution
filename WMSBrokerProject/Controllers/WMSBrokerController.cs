@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
@@ -8,6 +9,24 @@ using WMSBrokerProject.Models;
 
 namespace WMSBrokerProject.Controllers
 {
+    /// <summary>
+    /// Task Fetch
+    /// </summary>
+    /// <remarks>get full Active-Operator oriented task databased on InId from AO</remarks>
+    /// <param name="orgId">registered code for sender of the message (AO or passive operator)</param>
+    /// <param name="inId">ID in the source system of AO. used for doing updates</param>
+    /// <param name="xRequestID"> unique X-Request-Id header which is used to ensure idempotent message processing in case of a retry</param>
+    /// <param name="xCorrelationID">Correlates HTTP requests between a client and server. Should be same value in TaskIndication</param>
+    /// <param name="xWMSTest">when value is true, this message is part of a test. Process the message as normal, same business logic. in the end, don&#x27;t actually physically execute the order. This order is not supposed to have a material impact. No customer impacts is allowed to happen because of this task. This flag can trigger extra logging at all involved systems during processing.  When other messages are sent because of a message with the this test flag set, those other messages *must* also include a test flag. </param>
+    /// <param name="xWMSAPIVersion">request response in given API version</param>
+    /// <response code="200">Success</response>
+    /// <response code="400">Bad Request</response>
+    /// <response code="401">Missing required credentials</response>
+    /// <response code="403">Forbidden because these credentials do not give the needed access rights</response>
+    /// <response code="404">connection not found</response>
+    /// <response code="429">too many requests too fast</response>
+    /// <response code="500">Internal server error, dont try this request again</response>
+    /// <response code="503">Temporary failure in service , try again later</response>
     [Route("api/[controller]")]
     [ApiController]
     public class WMSBrokerController : ControllerBase
@@ -27,15 +46,17 @@ namespace WMSBrokerProject.Controllers
 
         [Route("TaskIndication")]
         [HttpPost]
-        public async Task<IActionResult> BeginTaskIndicationProcess([FromBody] TaskIndicationRequestModel model)
+        //public async Task<IActionResult> BeginTaskIndicationProcess([FromBody] TaskIndicationRequestModel model)
+        public async Task<IActionResult> BeginTaskIndicationProcess(
+            [FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId)
         {
             ///Request 1 
-            if (model is null || string.IsNullOrEmpty(model.inId))
-            {
-                return BadRequest("The 'inId' is required.");
-            }
+            //if (model is null || string.IsNullOrEmpty(model.inId))
+            //{
+            //    return BadRequest("The 'inId' is required.");
+            //}
 
-            inId = model.inId;
+            
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();
 
