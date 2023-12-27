@@ -21,15 +21,15 @@
       "PRO_ID": "6842031",
       "Indicator2": "6999459;6999459;7007726",
       "Huurder_UDF_Id": "1462",
-      "Naming": "INC.PRIO.[city].[fiberNumber].[inId]",
-      "ExecutionTask_TemplateId": ""
+      "Naming": "NI.[connActiveEquipmentEndPointLoc].[city].[streetName].[houseNumber].[houseNumberExt].[connRoom]",
+      "ExecutionTask_TemplateId": "9252114"
     },
     "CONNECTION_INCIDENT": {
       "PRO_ID": "6842031",
       "Indicator2": "6999459;6999459;9252105",
       "Huurder_UDF_Id": "1462",
-      "Naming": "INC.[custCity].[technicalPath_popName].[Prev_activeEquipmentEndpoint_module].[Prev_activeEquipmentEndpoint_port].[activeEquipmentEndpoint_port]",
-      "ExecutionTask_TemplateId": ""
+      "Naming": "CI.[connActiveEquipmentEndPointLoc].[city].[streetName].[houseNumber].[houseNumberExt].[connRoom]",
+      "ExecutionTask_TemplateId": "9252114"
     },
     "FTU_REPLACEMENT": {
       "PRO_ID": "6744412",

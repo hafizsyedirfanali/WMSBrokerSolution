@@ -134,12 +134,23 @@ namespace WMSBrokerProject.Repositories
                 var mappedValues = new Dictionary<string, object?>();
                 foreach (var config in section.GetChildren())
                 {
+                    try
+                    {
+                    
+
                     //"city": "taskInfo.hasInfo.connectionAddress.city",
                     var path = config.Value;
                     var extractedValue = taskFetchJsonObject.SelectToken(path ?? string.Empty);
                     if (extractedValue != null)
                     {
                         mappedValues.Add(config.Key, extractedValue);
+                    }
+                    }
+                    catch (Exception ex)
+                    {
+                        //TODO: Introduce logging
+                        responseModel.ErrorMessage = ex.Message;
+                        responseModel.ErrorCode = 10003;
                     }
                 }
                 responseModel.Result = mappedValues;
@@ -449,7 +460,7 @@ namespace WMSBrokerProject.Repositories
                                             </Fields>
                                             <Conditions>
                                                 <Condition RightVariableType=""LiteralValue"" RightValue=""{model.Pro_Template_Id}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""PRO.PRO_TEMPLATE_ID""/>
-                                                <Condition RightVariableType=""LiteralValue"" RightValue=""{model.Pro_Id_Desc}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""PRO.PRO_ID_DESC""> //PRO_ID from req response04
+                                                <Condition RightVariableType=""LiteralValue"" RightValue=""{model.Pro_Id_Desc}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""PRO.PRO_PRO_ID_DESC""/> 
                                             </Conditions>
                                             <OperationName>PRO_READ_M_V1</OperationName>
                                         </ReadOperation>
@@ -517,7 +528,7 @@ namespace WMSBrokerProject.Repositories
                                            <UpdateOperation>
                                                <OperationName>PRO_UPDATE_V1</OperationName>
                                                <Values>
-                                                   <Value FieldName=""PRO.PRO_DESCRIPTION"">HAFC.DENHAAG.A.2.5.1</Value> 
+                                                   <Value FieldName=""PRO.PRO_DESCRIPTION"">{model.Naming}</Value> 
                                                </Values> 
                                                <Conditions>
                                                    <Condition FieldName=""PRO.PRO_ID"">{model.Pro_Id}</Condition> 

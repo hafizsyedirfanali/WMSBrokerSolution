@@ -164,20 +164,25 @@
       "Netw-Priority": "netwPriority"
     },
     "CONNECTION_INCIDENT": {
-      "Conn-DHid": "DHid",
+      "connDHid": "DHid",
       "Conn-Room": "connRoom",
-      "Conn-FiberNumber": "connFiberNumber",
+      "connFiberNumber": "connFiberNumber",
       "Conn-CategoryLevel1": "connClosureLvl1",
       "Conn-CategoryLevel2": "connClosureLvl2",
       "Conn-CategoryLevel3": "connClosureLvl3",
-      "Conn-Subject": "connSubject"
+      "connSubject": "connSubject",
+      "connProblemDescr": "connProblemDescr",
+      "connAnalysis1": "connAnalysis1",
+      "connSolutionDomain": "connSolutionDomain"
     }
 
   },
   "WMSBeheerderRES2FCMapping": {
     //Destination : Source
-
-    "Betreft het een Hoog Laag of een Duplex woning?": "buildingType"
+    "connFiberNumber": "fiberNumber",
+    "CIFWMS-Aft-Status": "status",
+    "CIFWMS-Aft-SubStatus": "subStatus",
+    "CIFWMS-Aft-Action": "action"
   },
   "WMSBeheerderRES2AddressMapping": {
     //Here key name must be same as the key name in GoEFficientAttributes.json
