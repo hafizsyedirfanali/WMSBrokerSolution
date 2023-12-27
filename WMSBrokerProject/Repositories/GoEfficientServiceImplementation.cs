@@ -227,7 +227,7 @@ namespace WMSBrokerProject.Repositories
                         var keyArray = key.Split(':');//in this array last but one will be key
                         var sourceKey = attribute.Value;//value is source key
                         var destinationKey = keyArray[keyArray.Length - 1];
-                        if (fcMapping.Where(s => s.FinName == sourceKey).Any())
+                        if (fcMapping.Where(s => s.FinName.ToLower() == sourceKey.ToLower()).Any())
                         {
                             Dictionary<string, string>? finNameSelectList = fcMapping.Where(s => s.FinName == sourceKey).Select(s => s.SelectListItems).FirstOrDefault();
                             if (finNameSelectList is not null)
