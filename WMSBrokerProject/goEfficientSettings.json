@@ -1,7 +1,7 @@
 {
   "GoEfficient": {
-    "EndPointUrl": "http://10.10.1.50/GoEfficientWebService/XMLInterface.aspx"
-    //"EndPointUrl": ""
+    //"EndPointUrl": "http://10.10.1.50/GoEfficientWebService/XMLInterface.aspx"
+    "EndPointUrl": ""
   },
   //Don't use colon : in keys
   //Destination : Mapping Name

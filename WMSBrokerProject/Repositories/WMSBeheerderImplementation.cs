@@ -50,42 +50,42 @@ namespace WMSBrokerProject.Repositories
                 Random rand = new Random();
                 var correlationId = rand.Next(10000, 1000001).ToString();
                 //var taskId = "WMS002530553";
-                using HttpClient httpClient = new HttpClient();
-                string? endPointUrl = " https://uat-gke.cif-operator.com/";
-                string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                //using HttpClient httpClient = new HttpClient();
+                //string? endPointUrl = " https://uat-gke.cif-operator.com/";
+                //string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
+                //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-                HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
-                response.EnsureSuccessStatusCode();
+                //HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
+                //response.EnsureSuccessStatusCode();
 
-                if (response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType == "application/json")
-                {
-                    string jsonResponse = await response.Content.ReadAsStringAsync();
-                    var jsonObject = JObject.Parse(jsonResponse);
-
-                    TaskFetchResponse taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponse>(jsonResponse)!;
-                    responseModel.Result = new TaskFetchResponseModel
-                    {
-                        TaskFetchResponseObject = taskFetchResponse,
-                        JSONObject = jsonObject,
-                    };
-                    responseModel.IsSuccess = true;
-                }
-                else
-                {
-                    responseModel.ErrorCode = (int)response.StatusCode;
-                    responseModel.ErrorMessage = $"Task fetch call failure with status/code:{response.StatusCode}";
-                }
-
-                //string responseContent = File.ReadAllText("CONNECTION_INCIDENT.json");
-                //TaskFetchResponse taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponse>(responseContent)!;
-                //var jsonObject = JObject.Parse(responseContent);
-                //responseModel.Result = new TaskFetchResponseModel
+                //if (response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType == "application/json")
                 //{
-                //    TaskFetchResponseObject = taskFetchResponse,
-                //    JSONObject = jsonObject
-                //};
-                //responseModel.IsSuccess = true;
+                //    string jsonResponse = await response.Content.ReadAsStringAsync();
+                //    var jsonObject = JObject.Parse(jsonResponse);
+
+                //    TaskFetchResponse taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponse>(jsonResponse)!;
+                //    responseModel.Result = new TaskFetchResponseModel
+                //    {
+                //        TaskFetchResponseObject = taskFetchResponse,
+                //        JSONObject = jsonObject,
+                //    };
+                //    responseModel.IsSuccess = true;
+                //}
+                //else
+                //{
+                //    responseModel.ErrorCode = (int)response.StatusCode;
+                //    responseModel.ErrorMessage = $"Task fetch call failure with status/code:{response.StatusCode}";
+                //}
+
+                string responseContent = File.ReadAllText("CONNECTION_INCIDENT.json");
+                TaskFetchResponse taskFetchResponse = JsonConvert.DeserializeObject<TaskFetchResponse>(responseContent)!;
+                var jsonObject = JObject.Parse(responseContent);
+                responseModel.Result = new TaskFetchResponseModel
+                {
+                    TaskFetchResponseObject = taskFetchResponse,
+                    JSONObject = jsonObject
+                };
+                responseModel.IsSuccess = true;
             }
             catch (HttpRequestException ex)
             {
