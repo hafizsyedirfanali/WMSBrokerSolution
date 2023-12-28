@@ -168,14 +168,28 @@ namespace WMSBrokerProject.Repositories
 			try
 			{
 				using HttpClient httpClient = new HttpClient();
-				httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
+                string? endPointUrl = "https://uat-gke.cif-operator.com/";
+                string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/Circet/tasks/{model.taskId}");
+
+                //httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+                var dataJson = JsonConvert.SerializeObject(model);
+                var content = new StringContent(dataJson, Encoding.UTF8, "application/json");
+                // httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
+
+                HttpResponseMessage response = await httpClient.PostAsync(requestUrl, content);
+
+
+
+
+                //httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
 				// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
-				var dataJson = JsonConvert.SerializeObject(model);
-				var content = new StringContent(dataJson, Encoding.UTF8, "application/json");
+				//var dataJson = JsonConvert.SerializeObject(model);
+				
 
 				//model.taskId = "9245949";//this line to be removed
-				HttpResponseMessage response =
-					await httpClient.PutAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.taskId}", content);
+				//HttpResponseMessage response =
+				//	await httpClient.PostAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.taskId}", content);
 				if (response.IsSuccessStatusCode)
 				{
 					//string responseContent = await response.Content.ReadAsStringAsync();
