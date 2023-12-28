@@ -69,12 +69,12 @@ namespace WMSBrokerProject.Repositories
             return (destinationKey, value);
         }
 
-		public (string sourcePath, object? Value) GetPathValue(JObject jsonObject, string sourcePath)
+		public object? GetPathValue(JObject jsonObject, string sourcePath)
 		{
 			object? value;
 			var token = jsonObject.SelectToken(sourcePath);
 			value = token != null ? token.ToString() : null;
-			return (sourcePath, value);
+			return value;
 		}
 
 		public DateTime GetFridayFromDate(int weekNumber, int year)
