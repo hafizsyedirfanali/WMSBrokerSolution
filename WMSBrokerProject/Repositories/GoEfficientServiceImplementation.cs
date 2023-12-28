@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Globalization;
 using System.IO;
@@ -310,6 +311,55 @@ namespace WMSBrokerProject.Repositories
                 }
                 template.GoEfficientAddressTemplateValues = mappedValues;
                 responseModel.Result = template;
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10010;
+            }
+            return responseModel;
+        }
+        public async Task<ResponseModel<Dictionary<string, object?>>> GetAddressMappingDictionary(JObject jsonObject,Dictionary<string,string>? pathDictionary)
+        {
+            var responseModel = new ResponseModel<Dictionary<string, object?>>();
+            try
+            {
+                var goEfficientMijnAansluitingMap = _configuration.GetSection("WMSBeheerderRES2AddressMapping").AsEnumerable();
+
+                Dictionary<string, object?> mappedValues = new();
+                foreach (var attribute in goEfficientMijnAansluitingMap)
+                {
+                    if (attribute.Value != null)
+                    {
+                        var key = attribute.Key;//Its key represents RHS
+                        var keyArray = key.Split(':');//in this array last but one will be key
+                        var sourceKey = attribute.Value;//value is source key
+                        var destinationKey = keyArray[keyArray.Length - 1];
+                        if (pathDictionary.ContainsKey(sourceKey))
+                        {
+                            var isSucess = pathDictionary.TryGetValue(sourceKey, out var path);
+                            if(isSucess)
+                            {
+                                var token = jsonObject.SelectToken(path);
+                                if (token != null)
+                                {
+                                    mappedValues.Add(destinationKey, token.ToString());
+
+                                }
+                                else
+                                {
+                                    // Handle the case where the path does not exist in the JSON
+                                }
+                            }
+                        }
+                        
+                        //var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
+                        
+                    }
+                }
+               
+                responseModel.Result = mappedValues;
                 responseModel.IsSuccess = true;
             }
             catch (Exception ex)
@@ -906,10 +956,10 @@ namespace WMSBrokerProject.Repositories
                 string? requestUri = _configuration.GetSection("GoEfficient:EndPointUrl").Value;
 
                 string valueText = string.Empty;
-                foreach (var templateField in model.Template.GoEfficientAddressTemplateValues)
-                {
-                    valueText += @$"<Value FieldName=""{templateField.Key}"">{templateField.Value}</Value>";
-                }
+                //foreach (var templateField in model.Template.GoEfficientAddressTemplateValues)
+                //{
+                //    valueText += @$"<Value FieldName=""{templateField.Key}"">{templateField.Value}</Value>";
+                //}
 
                 //Address Values from Dictionary
                 foreach (var addressValue in model.ExtractedAddressValues)
@@ -1068,7 +1118,7 @@ namespace WMSBrokerProject.Repositories
                 var content = new StringContent(xmlRequest6, Encoding.UTF8, "application/xml");
 
                 string xmlResponse;
-                if (!string.IsNullOrEmpty(requestUri))
+                if(false)// (!string.IsNullOrEmpty(requestUri))
                 {
                     var response = await client.PostAsync(requestUri, content);
                     response.EnsureSuccessStatusCode();

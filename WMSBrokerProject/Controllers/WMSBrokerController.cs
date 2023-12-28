@@ -247,25 +247,28 @@ namespace WMSBrokerProject.Controllers
                     if (addressKeyName is null || !addressKeyName.IsSuccess) { continue; }
                     var addressDictionary = await goEfficientService.GetKeyValuesFromWMSBeheerderAddresses(addressKeyName.Result!);
                     if (addressDictionary is null || !addressDictionary.IsSuccess) { continue; }
-                    var extractedAddressValues = new Dictionary<string, string>();
-                    foreach (var kvp in addressDictionary.Result!)
-                    {
-                        var path = kvp.Value;
-                        var token = taskFetchJsonObject.SelectToken(path);
-                        if (token != null)
-                        {
-                            extractedAddressValues[kvp.Key] = token.ToString();
-                        }
-                        else
-                        {
-                            // Handle the case where the path does not exist in the JSON
-                        }
-                    }
+                
+                    var addressMappingDataResult = await goEfficientService.GetAddressMappingDictionary(taskFetchJsonObject, addressDictionary.Result);
+
+                    //call method addressDictionary.Result, taskFetchJsonObject
+                    //foreach (var kvp in addressDictionary.Result!)
+                    //{
+                    //    var path = kvp.Value;
+                    //    var token = taskFetchJsonObject.SelectToken(path);
+                    //    if (token != null)
+                    //    {
+                    //        extractedAddressValues[kvp.Key] = token.ToString();
+                    //    }
+                    //    else
+                    //    {
+                    //        // Handle the case where the path does not exist in the JSON
+                    //    }
+                    //}
 
                     var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
                     {
                         RequestId = requestId,
-                        ExtractedAddressValues = extractedAddressValues,
+                        ExtractedAddressValues = addressMappingDataResult.Result,
                         InId = inId,
                         PRO_ID_3 = proId,
                         Username = "",
