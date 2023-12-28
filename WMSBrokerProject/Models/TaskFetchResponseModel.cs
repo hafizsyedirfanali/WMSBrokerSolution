@@ -58,8 +58,12 @@ namespace WMSBrokerProject.Models
 			public string DHid { get; set; }
 			public string fiberNumber { get; set; }
 			public string subject { get; set; }
+			public string problemDescription { get; set; }
+			public string solutionDomain { get; set; }
 			public ConnectionAddress connectionAddress { get; set; }
             public ContactPerson contactPerson { get; set; }
+            public Closure closure { get; set; }
+            public ActiveEquipmentEndpoint activeEquipmentEndpoint { get; set; }
         }
 
 		public class NetworkInfo
@@ -67,7 +71,7 @@ namespace WMSBrokerProject.Models
 			public string subject { get; set; }
 			public ReportedBy reportedBy { get; set; }
 		}
-
+		
 
 		public class ContactPerson
         {
@@ -132,6 +136,15 @@ namespace WMSBrokerProject.Models
 			public string connector { get; set; }
 			public string row { get; set; }
 			public string odfTray { get; set; }
+		}
+
+		public class Closure
+		{
+			public string level1 { get; set; }
+			public string level2 { get; set; }
+			public string level3 { get; set; }
+			public string clarification { get; set; }
+
 		}
 
 		public class Header

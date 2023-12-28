@@ -69,10 +69,10 @@ namespace WMSBrokerProject.Repositories
             return (destinationKey, value);
         }
 
-		public (string sourcePath, object? Value) GetPathValue(JObject taskFetchJsonObject, string sourcePath)
+		public (string sourcePath, object? Value) GetPathValue(JObject jsonObject, string sourcePath)
 		{
 			object? value;
-			var token = taskFetchJsonObject.SelectToken(sourcePath);
+			var token = jsonObject.SelectToken(sourcePath);
 			value = token != null ? token.ToString() : null;
 			return (sourcePath, value);
 		}
