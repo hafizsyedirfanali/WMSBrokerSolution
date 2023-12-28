@@ -173,7 +173,7 @@ namespace WMSBrokerProject.Repositories
 				var dataJson = JsonConvert.SerializeObject(model);
 				var content = new StringContent(dataJson, Encoding.UTF8, "application/json");
 
-				model.taskId = "9245949";//this line to be removed
+				//model.taskId = "9245949";//this line to be removed
 				HttpResponseMessage response =
 					await httpClient.PutAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.taskId}", content);
 				if (response.IsSuccessStatusCode)
