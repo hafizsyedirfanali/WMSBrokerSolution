@@ -44,7 +44,7 @@ namespace WMSBrokerProject.Controllers
         }
 
 
-        [Route("TaskIndication")]
+        [Route("orgId/tasks/taskid")]
         [HttpPost]
         //public async Task<IActionResult> BeginTaskIndicationProcess([FromBody] TaskIndicationRequestModel model)
         public async Task<IActionResult> BeginTaskIndicationProcess(
