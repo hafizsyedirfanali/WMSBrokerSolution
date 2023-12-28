@@ -968,14 +968,13 @@ namespace WMSBrokerProject.Repositories
                 }
 
 
-
-
-                var dict = model.Template.GoEfficientAddressTemplateValues;
+                var dict = model.ExtractedAddressValues;
                 dict.TryGetValue("ADRESS.ADRESS_STREET", out object? straat);
                 dict.TryGetValue("ADRESS.ADRESS_HOUSNR", out object? huisnummer);
                 dict.TryGetValue("ADRESS.ADRESS_HOUSNR_SFX", out object? huisnummerToevoeging);
                 dict.TryGetValue("ADRESS.ADRESS_ZIPCODE", out object? postcode);
                 dict.TryGetValue("ADRESS.ADRESS_TOWN", out object? plaats);
+                dict.TryGetValue("ADRESSADRESS.ADRESS_COUNTRY", out object? country);
                 valueText += @"<Value FieldName=""ADRESS.ADRESS_CNTR_ISO3166A3"">NLD</Value>";
                 valueText += @$"<Value FieldName=""FIN.FIN_PATH"">{straat} {huisnummer} {huisnummerToevoeging} {postcode} {plaats}</Value>";
 
