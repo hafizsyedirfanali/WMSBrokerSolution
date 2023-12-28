@@ -69,7 +69,15 @@ namespace WMSBrokerProject.Repositories
             return (destinationKey, value);
         }
 
-        public DateTime GetFridayFromDate(int weekNumber, int year)
+		public (string sourcePath, object? Value) GetPathValue(JObject taskFetchJsonObject, string sourcePath)
+		{
+			object? value;
+			var token = taskFetchJsonObject.SelectToken(sourcePath);
+			value = token != null ? token.ToString() : null;
+			return (sourcePath, value);
+		}
+
+		public DateTime GetFridayFromDate(int weekNumber, int year)
         {
             DateTime jan1 = new DateTime(year, 1, 1);
             DateTime firstMonday = jan1.AddDays((int)DayOfWeek.Monday - (int)jan1.DayOfWeek + (jan1.DayOfWeek <= DayOfWeek.Monday ? 0 : 7));

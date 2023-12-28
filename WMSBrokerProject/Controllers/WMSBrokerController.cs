@@ -48,7 +48,8 @@ namespace WMSBrokerProject.Controllers
         [HttpPost]
         //public async Task<IActionResult> BeginTaskIndicationProcess([FromBody] TaskIndicationRequestModel model)
         public async Task<IActionResult> BeginTaskIndicationProcess(
-            [FromQuery][Required][StringLength(36, MinimumLength = 1)] string inId)
+			[FromQuery][Required][StringLength(15, MinimumLength = 3)] string orgId,
+            [FromQuery][Required][StringLength(36, MinimumLength = 1)] string taskId)
         {
             ///Request 1 
             //if (model is null || string.IsNullOrEmpty(model.inId))
@@ -60,7 +61,7 @@ namespace WMSBrokerProject.Controllers
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();
 
-            var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = inId }).ConfigureAwait(false);
+            var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = taskId }).ConfigureAwait(false);
             if (!response2TaskFetch.IsSuccess) { }//{ return StatusCode(StatusCodes.Status500InternalServerError, response2TaskFetch); }
             JObject taskFetchJsonObject = response2TaskFetch.Result!.JSONObject;
            
