@@ -14,7 +14,6 @@ using System.Xml.Linq;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
-using static WMSBrokerProject.Models.RES4aXMLResponseModel;
 
 namespace WMSBrokerProject.Repositories
 {
@@ -71,14 +70,66 @@ namespace WMSBrokerProject.Repositories
             value = token != null ? token.ToString() : null;
             return (destinationKey, value);
         }
+        //      private object? GetPathValue(string sourcePath, JObject jsonObject)
+        //      {
+        //	object? value;
+        //	var token = jsonObject.SelectToken(sourcePath);
+        //	value = token != null ? token.ToString() : null;
+        //          return value;
+        //}
         private object? GetPathValue(string sourcePath, JObject jsonObject)
         {
-			object? value;
-			var token = jsonObject.SelectToken(sourcePath);
-			value = token != null ? token.ToString() : null;
+            object? value = null;
+
+            var pathSegments = sourcePath.Split('.');
+            var currentToken = jsonObject;
+
+            foreach (var segment in pathSegments)
+            {
+                if (segment.Contains("["))
+                {
+                    // Handle array segment
+                    var arrayIndex = int.Parse(segment.Substring(segment.IndexOf("[") + 1, segment.IndexOf("]") - segment.IndexOf("[") - 1));
+                    var arrayName = segment.Substring(0, segment.IndexOf("["));
+                    var array = currentToken[arrayName] as JArray;
+
+                    if (array != null && array.Count > arrayIndex)
+                    {
+                        currentToken = array[arrayIndex] as JObject;
+                    }
+                    else
+                    {
+                        // Handle array index out of bounds or non-existing array
+                        value = null;
+                        break;
+                    }
+                }
+                else
+                {
+                    // Handle regular property segment
+                    var token = currentToken.SelectToken(segment);
+                    if (token != null)
+                    {
+                        currentToken = token as JObject;
+                    }
+                    else
+                    {
+                        // Handle the case where the property does not exist in the JSON
+                        value = null;
+                        break;
+                    }
+                }
+            }
+
+            if (currentToken != null)
+            {
+                value = currentToken.ToString();
+            }
+
             return value;
-		}
-		public async Task<ResponseModel<object?>> GetPathValue(JObject jsonObject, string sourcePath)
+        }
+
+        public async Task<ResponseModel<object?>> GetPathValue(JObject jsonObject, string sourcePath)
 		{
             var responseModel = new ResponseModel<object?>();
             try
