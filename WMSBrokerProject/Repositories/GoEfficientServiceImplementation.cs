@@ -107,8 +107,15 @@ namespace WMSBrokerProject.Repositories
                     var token = currentToken.SelectToken(segment);
                     if (token != null)
                     {
-                        //currentToken = token as JObject;
-                        currentToken = token.ToObject<JObject>();
+                        if (token is JObject tokenObject)
+                        {
+                            currentToken = tokenObject;
+                        }
+                        else
+                        {
+                            value = token.ToString();
+                            break;
+                        }
                     }
                     else
                     {
