@@ -28,9 +28,11 @@ namespace WMSBrokerProject.Repositories
 		private readonly IConfiguration _configuration;
 		private readonly IWebHostEnvironment hostEnvironment;
 		private readonly GoEfficientCredentials goEfficientCredentials;
+        private readonly string baseAddress;
 		public WMSBeheerderImplementation(IConfiguration configuration, IWebHostEnvironment hostEnvironment,
 			IOptions<GoEfficientCredentials> goEfficientCredentials)
 		{
+            this.baseAddress = configuration.GetSection("BaseAddress").Value ?? throw new Exception("Base Address of WMS Not found");
 			this.token = configuration.GetSection("token").Value!;
 			//this.token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im5rbWIiLCJuYW1laWQiOiJhN2M4YTAzYS0xYWU5LTQxYWEtOTA5ZC03Y2QwMWNiZTZjYzUiLCJyb2xlIjoiQmVoZWVyZGVyIiwiUGFydGllcyI6Ilt7XCJJZFwiOlwiMjQwXCIsXCJOYW1lXCI6XCJDaXJjZXRcIixcIlN5c3RlbU5hbWVcIjpcIk5LTVwiLFwiVHlwZVwiOjF9XSIsIm5ldHdvcmtPd25lcnMiOlsiREZOIiwiQ2l0aXVzIl0sIm5iZiI6MTcwMjM2Njc1NCwiZXhwIjoxNzMzOTIzNjgwLCJpYXQiOjE3MDIzNjY3NTR9.r1rndWf_X8fEtbnFdF-m22JtoyP0MxbBXVprLpdcVgY";
 			this.orgId = configuration.GetSection("orgId").Value!;
@@ -51,8 +53,8 @@ namespace WMSBrokerProject.Repositories
                 var correlationId = rand.Next(10000, 1000001).ToString();
                 //var taskId = "WMS002530553";
                 //using HttpClient httpClient = new HttpClient();
-                //string? endPointUrl = " https://uat-gke.cif-operator.com/";
-                //string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
+                //httpClient.BaseAddress = new Uri(baseAddress);
+                //string? requestUrl = $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}";
                 //httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 //HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
@@ -168,28 +170,14 @@ namespace WMSBrokerProject.Repositories
 			try
 			{
 				using HttpClient httpClient = new HttpClient();
-                string? endPointUrl = "https://uat-gke.cif-operator.com/";
-                string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/Circet/tasks/{model.taskId}");
-
-                //httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
-                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+				httpClient.BaseAddress = new Uri(baseAddress);
+                string? requestUrl = $"wms-beheerder-api/contractor/Circet/tasks/{model.taskId}";
+				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var dataJson = JsonConvert.SerializeObject(model);
                 var content = new StringContent(dataJson, Encoding.UTF8, "application/json");
-                // httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
 
                 HttpResponseMessage response = await httpClient.PostAsync(requestUrl, content);
-
-
-
-
-                //httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
-				// httpClient.DefaultRequestHeaders.Add("headerName", "headerValue");
-				//var dataJson = JsonConvert.SerializeObject(model);
-				
-
-				//model.taskId = "9245949";//this line to be removed
-				//HttpResponseMessage response =
-				//	await httpClient.PostAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.taskId}", content);
+                response.EnsureSuccessStatusCode();
 				if (response.IsSuccessStatusCode)
 				{
 					//string responseContent = await response.Content.ReadAsStringAsync();

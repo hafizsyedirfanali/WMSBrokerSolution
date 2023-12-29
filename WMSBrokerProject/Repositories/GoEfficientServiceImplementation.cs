@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
+using System.Data;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -13,6 +14,7 @@ using System.Xml.Linq;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
+using static WMSBrokerProject.Models.RES4aXMLResponseModel;
 
 namespace WMSBrokerProject.Repositories
 {
@@ -69,13 +71,27 @@ namespace WMSBrokerProject.Repositories
             value = token != null ? token.ToString() : null;
             return (destinationKey, value);
         }
-
-		public object? GetPathValue(JObject jsonObject, string sourcePath)
-		{
+        private object? GetPathValue(string sourcePath, JObject jsonObject)
+        {
 			object? value;
 			var token = jsonObject.SelectToken(sourcePath);
 			value = token != null ? token.ToString() : null;
-			return value;
+            return value;
+		}
+		public async Task<ResponseModel<object?>> GetPathValue(JObject jsonObject, string sourcePath)
+		{
+            var responseModel = new ResponseModel<object?>();
+            try
+            {
+                responseModel.Result = GetPathValue(sourcePath,jsonObject);
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+				responseModel.ErrorMessage = ex.Message;
+				responseModel.ErrorCode = 10038;
+			}
+			return responseModel;
 		}
 
 		public DateTime GetFridayFromDate(int weekNumber, int year)
@@ -693,34 +709,45 @@ namespace WMSBrokerProject.Repositories
                 List<GoEfficientTemplateAttributesClass> templateAttributeList = new();
                 XDocument xdoc = XDocument.Parse(xmlResponse);
 
-                foreach (var property in model.GoEfficientAttributes)
+				var responseObject = DeserializeXml<RES4aXMLResponseModel.Response>(xmlResponse);
+				if (responseObject != null && responseObject.Body != null && responseObject.Body.Result != null && responseObject.Body.Result.Rows != null)
                 {
-                    //if we want to get all attributes without address we can do it here
-                    XElement? rowElement = xdoc.Descendants("Row")
-                                .FirstOrDefault(row =>
-                                    row.Elements("Value")
-                                    .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME" &&
-                                    e.Value.ToLower() == property.Value.ToLower()));
-                    if (rowElement is not null)
+					List<Row> rows = responseObject.Body.Result.Rows.RowList;
+                    foreach (var property in rows)
                     {
-                        string finId = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "FIN.FIN_ID")?.Value!;
-                        string finName = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value!;
-                        string proId = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "PRO.PRO_ID")?.Value!;
-                        string udfType = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value!;
-                        string udfTypeInfo = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value!;
-
                         templateAttributeList.Add(new GoEfficientTemplateAttributesClass
                         {
-                            GoEfficientAttributeName = property.Key,
-                            MappingName = property.Value,
-                            FinId = finId,
-                            FinName = finName,
-                            ProId = proId,
-                            UdfType = udfType,
-                            UdfTypeInfo = udfTypeInfo
-                        });
+                            //GoEfficientAttributeName = property.Key,
+                            //MappingName = property.Value,
+                            FinId = property.FIN_ID,
+                            FinName = property.FIN_NAME,
+                            ProId = property.PRO_ID,
+                            UdfType = property.UDF_TYPE,
+                            UdfTypeInfo = property.UDF_TYPEINFO
+                        }); 
                     }
-                }
+				}
+
+
+				//foreach (var property in model.GoEfficientAttributes)
+    //            {
+    //                //if we want to get all attributes without address we can do it here
+    //                XElement? rowElement = xdoc.Descendants("Row")
+    //                            .FirstOrDefault(row =>
+    //                                row.Elements("Value")
+    //                                .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME"));
+    //                                //&& e.Value.ToLower() == property.Value.ToLower()));
+    //                if (rowElement is not null)
+    //                {
+    //                    string finId = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "FIN.FIN_ID")?.Value!;
+    //                    string finName = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value!;
+    //                    string proId = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "PRO.PRO_ID")?.Value!;
+    //                    string udfType = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value!;
+    //                    string udfTypeInfo = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value!;
+
+                        
+    //                }
+    //            }
                 template.GoEfficientTemplateAttributeList = templateAttributeList;
 
 
@@ -823,8 +850,16 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
+        private T DeserializeXml<T>(string xml)
+		{
+			var serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
 
-        public async Task<ResponseModel<RES5Model>> REQ5_SaveRecordToGoEfficient(REQ5Model model)
+			using (var reader = new System.IO.StringReader(xml))
+			{
+				return (T)serializer.Deserialize(reader);
+			}
+		}
+		public async Task<ResponseModel<RES5Model>> REQ5_SaveRecordToGoEfficient(REQ5Model model)
         {
             var responseModel = new ResponseModel<RES5Model>();
 
@@ -1235,15 +1270,16 @@ namespace WMSBrokerProject.Repositories
             return $"{date.Year}-{week:00}";
         }
 
-        public async Task<ResponseModel<Dictionary<string, object>>> FillSourcePathInBeheerderAttributesDictionary(TaskFetchResponse model)
-        {
+        public async Task<ResponseModel<Dictionary<string, object>>> 
+            FillSourcePathInBeheerderAttributesDictionary(string action)
+		{
             var responseModel = new ResponseModel<Dictionary<string, object>>();
             try
             {
                 var beheerderAttributes = new Dictionary<string, object?>();
-                if (_configuration.GetSection("WMSBeheerderAttributes").GetChildren().Any(x => x.Key == model.action))
+                if (_configuration.GetSection("WMSBeheerderAttributes").GetChildren().Any(x => x.Key == action))
                 {
-                    beheerderAttributes = _configuration.GetSection($"WMSBeheerderAttributes:{model.action}")
+                    beheerderAttributes = _configuration.GetSection($"WMSBeheerderAttributes:{action}")
                         .GetChildren()
                         .ToDictionary(x => x.Key, x => (object?)x.Value);
                 }
@@ -1258,7 +1294,8 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-        public async Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponse model, Dictionary<string, object> sourcePathInBeheerderAttributesDictionary)
+        public async Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary
+            (JObject jsonObject, Dictionary<string, object> sourcePathInBeheerderAttributesDictionary)
         {
             var responseModel = new ResponseModel<Dictionary<string, object>>();
             try
@@ -1268,8 +1305,13 @@ namespace WMSBrokerProject.Repositories
                 {
                     var key = pair.Key;
                     var valuePath = pair.Value;
-                    var value = GetPropertyValueOrField(obj: model, propertyPath: valuePath.ToString()!);
-                    beheerderData.Add(key, value);
+                    string? path = valuePath!=null? valuePath.ToString() : "";
+                    if(valuePath is not null)
+                    {
+                        path = valuePath.ToString() ?? string.Empty;
+                    }
+                    var value = GetPathValue(path??"", jsonObject);
+                    if(value is not null) beheerderData.Add(key, value);
                 }
 
                 responseModel.Result = beheerderData!;

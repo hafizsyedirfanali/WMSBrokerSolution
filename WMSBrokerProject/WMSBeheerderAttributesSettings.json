@@ -1,4 +1,9 @@
 {
+  "TaskAsyncRES2Attributes": {
+    "action": "action",
+    "originatorId": "originatorId"
+
+  },
   "WMSBeheerderAddresses": {
     "connectionAddress": {
       "postalCode": "taskInfo.connectionInfo.connectionAddress.postalCode",
@@ -117,6 +122,7 @@
       "orgId ": "header.from.orgId",
       "systemId": "header.from.systemId",
       "updateCount": "header.updateCount",
+      "created": "header.created",
 
       "wishStart": "wishDate.wishStart",
       "wishFinish": "wishDate.wishFinish",

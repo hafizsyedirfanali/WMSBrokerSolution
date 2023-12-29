@@ -16,6 +16,7 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\TaskFetchController.cs" />
+    <Compile Remove="Controllers\Test2Controller.cs" />
     <Compile Remove="Controllers\WMSReferenceController.cs" />
   </ItemGroup>
 

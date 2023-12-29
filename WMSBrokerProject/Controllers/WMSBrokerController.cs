@@ -34,14 +34,17 @@ namespace WMSBrokerProject.Controllers
         private string inId;
         private readonly IGoEfficientService goEfficientService;
         private readonly IWMSBeheerderService wMSBeheerderService;
-        private readonly IOptions<Dictionary<string, ActionConfiguration>> actionOptions;
+		private readonly IConfiguration configuration;
+		private readonly IOptions<Dictionary<string, ActionConfiguration>> actionOptions;
 
-        public WMSBrokerController(IGoEfficientService goEfficientService, IOptions<Dictionary<string, ActionConfiguration>> actionOptions, IWMSBeheerderService wMSBeheerderService)
+		public WMSBrokerController(IGoEfficientService goEfficientService, IOptions<Dictionary<string, ActionConfiguration>> actionOptions,
+			IWMSBeheerderService wMSBeheerderService, IConfiguration configuration)
         {
             this.goEfficientService = goEfficientService;
             this.actionOptions = actionOptions;
             this.wMSBeheerderService = wMSBeheerderService;
-        }
+			this.configuration = configuration;
+		}
 
 
         [Route("orgId/tasks/taskid")]
@@ -64,29 +67,37 @@ namespace WMSBrokerProject.Controllers
             var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = taskId }).ConfigureAwait(false);
             if (!response2TaskFetch.IsSuccess) { }//{ return StatusCode(StatusCodes.Status500InternalServerError, response2TaskFetch); }
             JObject taskFetchJsonObject = response2TaskFetch.Result!.JSONObject;
-           
-            TaskFetchResponse taskFetchResponse = response2TaskFetch.Result!.TaskFetchResponseObject!;
-            actionOptions.Value.TryGetValue(taskFetchResponse.action, out var actionConfiguration);
-            var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
+
+            //TaskFetchResponse taskFetchResponse = response2TaskFetch.Result!.TaskFetchResponseObject!;
+            var responseGetAction = await goEfficientService.GetPathValue(taskFetchJsonObject,configuration.GetSection("TaskAsyncRES2Attributes:action").Value!).ConfigureAwait(false);
+            if (!responseGetAction.IsSuccess) { }
+            var action = responseGetAction.Result!.ToString()!;
+            var responseOriginatorId = await goEfficientService.GetPathValue(taskFetchJsonObject, configuration.GetSection("TaskAsyncRES2Attributes:originatorId").Value!).ConfigureAwait(false);
+			if (!responseGetAction.IsSuccess) { }
+			var originatorId = responseOriginatorId.Result!.ToString()!;
+
+			actionOptions.Value.TryGetValue(action, out var actionConfiguration);
+
+			var taskFetchResponse2 = await goEfficientService
+					.FillSourcePathInBeheerderAttributesDictionary(action).ConfigureAwait(false);
+			if (!taskFetchResponse2.IsSuccess) { }
+			//above service gives key and path
+			var taskFetchResponseData = await goEfficientService.FillDataInBeheerderAttributesDictionary(taskFetchJsonObject, taskFetchResponse2.Result!).ConfigureAwait(false);
+			if (!taskFetchResponseData.IsSuccess) { }
+			var dataDictionary = taskFetchResponseData.Result;
+
+			var responseREQ6 = await goEfficientService.REQ6_IsRecordExist(new REQ6Model
             {
                 //InId = inId,
                 RequestId = requestId,
-                InId = taskFetchResponse.originatorId,
+                InId = originatorId,
                 Huurder_UDF_Id = actionConfiguration!.Huurder_UDF_Id!
             }).ConfigureAwait(false);
             if (!responseREQ6.IsSuccess) { }
             if (!responseREQ6.Result!.IsRecordExist)
             {
-                var taskFetchResponse2 = await goEfficientService
-                    .FillSourcePathInBeheerderAttributesDictionary(taskFetchResponse).ConfigureAwait(false);
-                if (!taskFetchResponse2.IsSuccess) { }
-                //above service gives key and path
-                var taskFetchResponseData = await goEfficientService.FillDataInBeheerderAttributesDictionary(taskFetchResponse, taskFetchResponse2.Result!).ConfigureAwait(false);
-                if (!taskFetchResponseData.IsSuccess) { }
-
-
+                
                 #region RES4 RHS for PRO.PRO_ID
-                var dataDictionary = taskFetchResponseData.Result;
 
                 var taskFetchForReq4 = await goEfficientService.FillDataForRequest4(dataDictionary!);
                 if (!taskFetchForReq4.IsSuccess) { }
@@ -128,7 +139,7 @@ namespace WMSBrokerProject.Controllers
 
                 #region Names Logic
                 var attributeValueDictResult = await goEfficientService
-                    .GetAttributeValueDictionaryByAction(taskFetchResponse.action, taskFetchJsonObject).ConfigureAwait(false);
+                    .GetAttributeValueDictionaryByAction(action, taskFetchJsonObject).ConfigureAwait(false);
                 if (!attributeValueDictResult.IsSuccess) { }
                 var attributeValueDict = attributeValueDictResult.Result;
                 var namesArray = actionConfiguration.Naming!.Split('.');
@@ -191,7 +202,7 @@ namespace WMSBrokerProject.Controllers
                     .FillDataIn4aTemplate(res4aResult.Result.Template, new TaskFetchResponse2Model
                     {
                         WMSBeheerderAttributes = dataDictionary!,
-                        ActionName = taskFetchResponse.action
+                        ActionName = action
                     });
                 if (!responseFilledDataResult.IsSuccess)
                 {
@@ -249,21 +260,9 @@ namespace WMSBrokerProject.Controllers
                     if (addressDictionary is null || !addressDictionary.IsSuccess) { continue; }
                 
                     var addressMappingDataResult = await goEfficientService.GetAddressMappingDictionary(taskFetchJsonObject, addressDictionary.Result);
-
-                    //call method addressDictionary.Result, taskFetchJsonObject
-                    //foreach (var kvp in addressDictionary.Result!)
-                    //{
-                    //    var path = kvp.Value;
-                    //    var token = taskFetchJsonObject.SelectToken(path);
-                    //    if (token != null)
-                    //    {
-                    //        extractedAddressValues[kvp.Key] = token.ToString();
-                    //    }
-                    //    else
-                    //    {
-                    //        // Handle the case where the path does not exist in the JSON
-                    //    }
-                    //}
+                    if(addressMappingDataResult is null ||
+						addressMappingDataResult.Result is null || !addressMappingDataResult.IsSuccess ||
+                        !addressMappingDataResult.Result.Any()) { continue; }
 
                     var res5aResult = await goEfficientService.REQ5a_SaveAddressToGoEfficient(new Models.REQ5aModel
                     {
@@ -312,28 +311,43 @@ namespace WMSBrokerProject.Controllers
 
             }
 
-            var taskSyncResponse = await wMSBeheerderService.RequestTaskSync(new TaskSyncRequestModel
+            if(dataDictionary is not null)
             {
-                taskId = taskFetchResponse.inId,
-                header = new TaskSyncRequestModel.Header
-                {
-                    from = new TaskSyncRequestModel.From
-                    {
-                        orgId = taskFetchResponse.header.from.orgId,
-                        systemId = taskFetchResponse.header.from.systemId
-                    },
-                    updateCount = taskFetchResponse.header.updateCount,
-                    created = taskFetchResponse.header.created
-                },
-                status = new TaskSyncRequestModel.Status
-                {
-                    mainStatus = "NEW",
-                    reason = taskFetchResponse.status.reason,
-                    subStatus = taskFetchResponse.status.subStatus,
-                    clarification = taskFetchResponse.status.clarification
-                }
-            }).ConfigureAwait(false);
-            if (!taskSyncResponse.IsSuccess) { }
+				dataDictionary.TryGetValue("inId", out object? inId);
+				dataDictionary.TryGetValue("orgId", out object? orgID);
+				dataDictionary.TryGetValue("systemId", out object? systemId);
+				dataDictionary.TryGetValue("updateCount", out object? updateCount);
+				dataDictionary.TryGetValue("created", out object? created);
+				dataDictionary.TryGetValue("reason", out object? reason);
+				dataDictionary.TryGetValue("subStatus", out object? subStatus);
+				dataDictionary.TryGetValue("clarification", out object? clarification);
+
+				var taskSyncResponse = await wMSBeheerderService.RequestTaskSync(new TaskSyncRequestModel
+				{
+					//configuration.GetSection("TaskAsyncRES2Attributes:originatorId").Value!
+					taskId = inId.ToString(),
+					header = new TaskSyncRequestModel.Header
+					{
+						from = new TaskSyncRequestModel.From
+						{
+							orgId = orgID.ToString(),
+							systemId = systemId.ToString()
+						},
+						updateCount = (int)updateCount,
+						created = (DateTime)created
+					},
+					status = new TaskSyncRequestModel.Status
+					{
+						mainStatus = "NEW",
+						reason = reason.ToString(),
+						subStatus = subStatus.ToString(),
+						clarification = clarification.ToString()
+					}
+				}).ConfigureAwait(false);
+				if (!taskSyncResponse.IsSuccess) { }
+			}
+            
+			
 
 
             return Ok("Process completed successfully");

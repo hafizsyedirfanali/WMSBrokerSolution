@@ -18,12 +18,13 @@ namespace WMSBrokerProject.Interfaces
         Task<ResponseModel<RES4aTemplate>> FillDataIn4aTemplate(RES4aTemplate template, TaskFetchResponse2Model model);
         Task<ResponseModel<RES4aTemplate>> FillFCDataIn4aTemplate(RES4aModel res4aModel, TaskFetchResponse2Model model);
         Task<ResponseModel<string>> GetKeyForValueInRES3aMapping(string value);
-        Task<ResponseModel<Dictionary<string, object?>>> GetAttributeValueDictionaryByAction(string action, JObject taskFetchJsonObject);
+        Task<ResponseModel<object?>> GetPathValue(JObject jsonObject, string sourcePath);
+		Task<ResponseModel<Dictionary<string, object?>>> GetAttributeValueDictionaryByAction(string action, JObject taskFetchJsonObject);
         Task<ResponseModel<string>> GetKeyForRES4Mapping();
         Task<ResponseModel<Dictionary<string, object?>>> GetAddressMappingDictionary(JObject jsonObject, Dictionary<string, string>? pathDictionary);
         Task<ResponseModel<RES4aTemplate>> FillDataIn4aAddressTemplate(RES4aTemplate template, TaskFetchResponse2Model model);
-        Task<ResponseModel<Dictionary<string, object>>> FillSourcePathInBeheerderAttributesDictionary(TaskFetchResponse model);
-        Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(TaskFetchResponse model, Dictionary<string, object> sourcePathInBeheerderAttributesDictionary);
+        Task<ResponseModel<Dictionary<string, object>>> FillSourcePathInBeheerderAttributesDictionary(string action);
+        Task<ResponseModel<Dictionary<string, object>>> FillDataInBeheerderAttributesDictionary(JObject jsonObject, Dictionary<string, object> sourcePathInBeheerderAttributesDictionary);
         Task<ResponseModel<REQ4Model>> FillDataForRequest4(Dictionary<string, object> dataDictionary);
         Task<ResponseModel<string?>> GetWMSBeheerderRES4AddressMappingValue(string addressKeyName);
         Task<ResponseModel<Dictionary<string, string>>> GetKeyValuesFromWMSBeheerderAddresses(string addressKeyName);

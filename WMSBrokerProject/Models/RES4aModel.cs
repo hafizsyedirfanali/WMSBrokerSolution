@@ -1,5 +1,44 @@
 ﻿namespace WMSBrokerProject.Models
 {
+    public class RES4aXMLResponseModel
+    {
+        public class Response
+        {
+			public Header Header { get; set; }
+			public Body Body { get; set; }
+		}
+		public class Header
+		{
+			public string RequestId { get; set; }
+			public DateTime Timestamp { get; set; }
+		}
+
+		public class Body
+		{
+			public Result Result { get; set; }
+		}
+
+		public class Result
+		{
+			public Rows Rows { get; set; }
+		}
+
+		public class Rows
+		{
+			public List<Row> RowList { get; set; }
+		}
+
+		public class Row
+		{
+			public string FIN_ID { get; set; }
+			public string FIN_NAME { get; set; }
+			public string PRO_ID { get; set; }
+			public string UDF_TYPE { get; set; }
+			public string UDF_TYPEINFO { get; set; }
+		}
+	}
+
+
     public class RES4aModel
     {
 
