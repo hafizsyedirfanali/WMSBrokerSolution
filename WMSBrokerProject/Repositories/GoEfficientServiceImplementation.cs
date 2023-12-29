@@ -86,6 +86,10 @@ namespace WMSBrokerProject.Repositories
 
             foreach (var segment in pathSegments)
             {
+                if (sourcePath.Contains("taskInfo.connectionInfo.activeEquipmentEndPoint.pop"))
+                {
+
+                }
                 if (segment.Contains("["))
                 {
                     var arrayIndex = int.Parse(segment.Substring(segment.IndexOf("[") + 1, segment.IndexOf("]") - segment.IndexOf("[") - 1));
@@ -99,7 +103,8 @@ namespace WMSBrokerProject.Repositories
                     else
                     {
                         value = null;
-                        break;
+						currentToken = null;
+						break;
                     }
                 }
                 else
@@ -121,7 +126,8 @@ namespace WMSBrokerProject.Repositories
                     else
                     {
                         value = null;
-                        break;
+						currentToken = null;
+						break;
                     }
                 }
             }

@@ -144,7 +144,7 @@
       "taskGroupAction": "taskgroup.groupAction",
 
       "contractingParty": "contractant",
-      "activeOperator": "ActiveOperator",
+      "activeOperator": "activeOperator",
       "internetServiceProvider": "ISP",
       "orignatorId": "originatorId",
       "relatedTask": "relatedTask",
