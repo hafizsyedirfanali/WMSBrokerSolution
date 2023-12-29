@@ -334,7 +334,7 @@ namespace WMSBrokerProject.Controllers
 							systemId = systemId.ToString()
 						},
 						updateCount = (int)updateCount,
-						created = (DateTime)created
+						created = (DateTime)created //Convert Date in ISO formate
 					},
 					status = new TaskSyncRequestModel.Status
 					{
