@@ -114,6 +114,7 @@ namespace WMSBrokerProject.Repositories
                         else
                         {
                             value = token.ToString();
+                            currentToken = null;
                             break;
                         }
                     }
