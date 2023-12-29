@@ -763,7 +763,7 @@ namespace WMSBrokerProject.Repositories
 				var responseObject = DeserializeXml<RES4aXMLResponseModel.Response>(xmlResponse);
 				if (responseObject != null && responseObject.Body != null && responseObject.Body.Result != null && responseObject.Body.Result.Rows != null)
                 {
-					List<Row> rows = responseObject.Body.Result.Rows.RowList;
+					var rows = responseObject.Body.Result.Rows.RowList;
                     foreach (var property in rows)
                     {
                         templateAttributeList.Add(new GoEfficientTemplateAttributesClass
