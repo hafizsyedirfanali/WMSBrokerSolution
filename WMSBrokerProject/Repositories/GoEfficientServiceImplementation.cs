@@ -55,8 +55,8 @@ namespace WMSBrokerProject.Repositories
             model.WMSBeheerderAttributes.TryGetValue(sourceKey, out value);
             return value;
         }
-
-        public (string DestinationKey, object? Value) GetOneToOneValue(TaskFetchResponse2Model model, string sourceKey, string destinationKey)
+		
+		public (string DestinationKey, object? Value) GetOneToOneValue(TaskFetchResponse2Model model, string sourceKey, string destinationKey)
         {
             object? value;
             model.WMSBeheerderAttributes.TryGetValue(sourceKey, out value);

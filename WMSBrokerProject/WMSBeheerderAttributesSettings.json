@@ -119,7 +119,7 @@
       //connectionInfo note available in yaml file
     },
     "CONNECTION_INCIDENT": {
-      "orgId ": "header.from.orgId",
+      "orgId": "header.from.orgId",
       "systemId": "header.from.systemId",
       "updateCount": "header.updateCount",
       "created": "header.created",
