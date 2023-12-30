@@ -884,17 +884,16 @@ namespace WMSBrokerProject.Repositories
                 }
 
                 //1.create TemplateAttributes for all addresses "AddressTemplateAttribute"
-                Dictionary<string, string> addressTemplateAttribute = new Dictionary<string, string>();
-                foreach (var property in model.GoEfficientAttributes)
-                {
-                    var isAvailableInRes4a = addresses.Where(s => s.FIN_Name == property.Value).Any();
-                    if (isAvailableInRes4a)
-                    {
-                        addressTemplateAttribute.Add(property.Key, property.Value);
-                    }
-                }
-                template.GoEfficientAddressTemplateAttributes = addressTemplateAttribute;
-
+                //Dictionary<string, string> addressTemplateAttribute = new Dictionary<string, string>();
+                //foreach (var property in model.GoEfficientAttributes)
+                //{
+                //    var isAvailableInRes4a = addresses.Where(s => s.FIN_Name == property.Value).Any();
+                //    if (isAvailableInRes4a)
+                //    {
+                //        addressTemplateAttribute.Add(property.Key, property.Value);
+                //    }
+                //}
+                //template.GoEfficientAddressTemplateAttributes = addressTemplateAttribute;
 
 
                 responseModel.Result = new RES4aModel
