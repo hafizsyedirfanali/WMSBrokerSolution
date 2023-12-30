@@ -273,15 +273,15 @@ namespace WMSBrokerProject.Controllers
                         ExtractedAddressValues = addressMappingDataResult.Result,
                         InId = inId,
                         PRO_ID_3 = proId,
-                        Username = "",
-                        Password = "",
                         Address_FIN_ID = fin_Id,
-                        City = taskFetchForReq4.Result!.CityName,
-                        HouseNo = taskFetchForReq4.Result!.HouseNumber,
-                        HouseNoSuffix = taskFetchForReq4.Result!.HouseNumberExtension,
-                        PostalCode = taskFetchForReq4.Result!.PostalCode,
-                        Street = taskFetchForReq4.Result!.StreetName,
                         Template = responseFilledAddressDataResult.Result
+                        //Username = "",
+                        //Password = "",
+                        //City = taskFetchForReq4.Result!.CityName,
+                        //HouseNo = taskFetchForReq4.Result!.HouseNumber,
+                        //HouseNoSuffix = taskFetchForReq4.Result!.HouseNumberExtension,
+                        //PostalCode = taskFetchForReq4.Result!.PostalCode,
+                        //Street = taskFetchForReq4.Result!.StreetName,
                     }).ConfigureAwait(false);
                     if (res5aResult is null) return StatusCode(StatusCodes.Status500InternalServerError, new { ErrorMessage = "Save Address service returned null" });
                     if (!res5aResult.IsSuccess) return StatusCode(StatusCodes.Status500InternalServerError, res5aResult);

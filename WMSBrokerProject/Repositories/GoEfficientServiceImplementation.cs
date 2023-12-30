@@ -768,6 +768,10 @@ namespace WMSBrokerProject.Repositories
                             //GoEfficientAttributeName = property.Key,
                             //MappingName = property.Value,
                             FinId = row.Values.Where(s => s.FieldName == "FIN.FIN_ID").Select(s => s.FieldValue).FirstOrDefault() ?? "",
+							FinName = row.Values.Where(s => s.FieldName == "FIN.FIN_NAME").Select(s => s.FieldValue).FirstOrDefault() ?? "",
+							ProId = row.Values.Where(s => s.FieldName == "PRO.PRO_ID").Select(s => s.FieldValue).FirstOrDefault() ?? "",
+							UdfType = row.Values.Where(s => s.FieldName == "UDF.UDF_TYPE").Select(s => s.FieldValue).FirstOrDefault() ?? "",
+							UdfTypeInfo = row.Values.Where(s => s.FieldName == "UDF.UDF_TYPEINFO").Select(s => s.FieldValue).FirstOrDefault() ?? "",
                             //FinName = property.FIN_NAME,
                             //ProId = property.PRO_ID,
                             //UdfType = property.UDF_TYPE,
@@ -829,38 +833,54 @@ namespace WMSBrokerProject.Repositories
                 List<FinNameFC> finNameFCList = new();
                 foreach (var fc in fixedContentList)
                 {
-                    Dictionary<string, string> selectOptions = new();
-                    var decodedUDFTypeInfo = System.Net.WebUtility.HtmlDecode(fc.UdfTypeInfo);
-                    //SEL:
-                    //<A>=Aansluitingen.nl;
-                    //<ISP>=ISP;
-                    //<CAIW>=Caiway;
-                    //<WEB>=Web CIF;
-                    //<M>=Mail;
-                    //<LIP>=LIP aanvraagnummer;
-                    //<COMB>=Combi projectnummer;
-                    if (decodedUDFTypeInfo.StartsWith("SEL:", StringComparison.OrdinalIgnoreCase))
+                    try
                     {
-                        decodedUDFTypeInfo = decodedUDFTypeInfo.Substring("SEL:".Length);
+						Dictionary<string, string> selectOptions = new();
+						var decodedUDFTypeInfo = System.Net.WebUtility.HtmlDecode(fc.UdfTypeInfo);
+						//SEL:
+						//<A>=Aansluitingen.nl;
+						//<ISP>=ISP;
+						//<CAIW>=Caiway;
+						//<WEB>=Web CIF;
+						//<M>=Mail;
+						//<LIP>=LIP aanvraagnummer;
+						//<COMB>=Combi projectnummer;
+						if (decodedUDFTypeInfo.StartsWith("SEL:", StringComparison.OrdinalIgnoreCase))
+						{
+							decodedUDFTypeInfo = decodedUDFTypeInfo.Substring("SEL:".Length);
+						}
+						var keyValuePairs = decodedUDFTypeInfo.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+							.Select(s => s.Split('=')).ToList();
+						Dictionary<string, string> selectListItems = new();
+						foreach (var keyValuePair in keyValuePairs)
+						{
+							if (keyValuePair.Length == 2)
+							{
+								var value = keyValuePair[0].Trim();
+								value = value.Replace("<", "").Replace(">", "").Trim();
+								var text = keyValuePair[1].Trim();
+                                if (selectListItems.Keys.Contains(text) && selectListItems.Values.Contains(value))
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+								selectListItems.Add(key: text, value: value);
+                                }
+							}
+						}
+						finNameFCList.Add(new FinNameFC
+						{
+							FinName = fc.FinName,
+							SelectListItems = selectListItems
+						});
+					}
+                    catch (Exception ex)
+                    {
+
+                        throw;
                     }
-                    var keyValuePairs = decodedUDFTypeInfo.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(s => s.Split('=')).ToList();
-                    Dictionary<string, string> selectListItems = new();
-                    foreach (var keyValuePair in keyValuePairs)
-                    {
-                        if (keyValuePair.Length == 2)
-                        {
-                            var value = keyValuePair[0].Trim();
-                            value = value.Replace("<", "").Replace(">", "").Trim();
-                            var text = keyValuePair[1].Trim();
-                            selectListItems.Add(key: text, value: value);
-                        }
-                    }
-                    finNameFCList.Add(new FinNameFC
-                    {
-                        FinName = fc.FinName,
-                        SelectListItems = selectListItems
-                    });
+                   
                 }
 
                 //1.create TemplateAttributes for all addresses "AddressTemplateAttribute"
