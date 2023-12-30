@@ -1,40 +1,78 @@
-﻿namespace WMSBrokerProject.Models
+﻿using System.Xml.Serialization;
+
+namespace WMSBrokerProject.Models
 {
     public class RES4aXMLResponseModel
     {
-        public class Response
-        {
-			public Header Header { get; set; }
-			public Body Body { get; set; }
-		}
+		[XmlRoot(ElementName = "Header")]
 		public class Header
 		{
-			public string RequestId { get; set; }
+
+			[XmlElement(ElementName = "RequestId")]
+			public int RequestId { get; set; }
+
+			[XmlElement(ElementName = "Timestamp")]
 			public DateTime Timestamp { get; set; }
 		}
 
-		public class Body
+		[XmlRoot(ElementName = "Value")]
+		public class Value
 		{
-			public Result Result { get; set; }
+
+			[XmlAttribute(AttributeName = "FieldName")]
+			public string FieldName { get; set; }
+
+			[XmlText]
+			public int Text { get; set; }
 		}
 
+		[XmlRoot(ElementName = "Row")]
+		public class Row
+		{
+
+			[XmlElement(ElementName = "Value")]
+			public List<Value> Value { get; set; }
+		}
+
+		[XmlRoot(ElementName = "Rows")]
+		public class Rows
+		{
+
+			[XmlElement(ElementName = "Row")]
+			public List<Row> Row { get; set; }
+
+			[XmlAttribute(AttributeName = "Count")]
+			public int Count { get; set; }
+
+			[XmlText]
+			public string Text { get; set; }
+		}
+
+		[XmlRoot(ElementName = "Result")]
 		public class Result
 		{
+
+			[XmlElement(ElementName = "Rows")]
 			public Rows Rows { get; set; }
 		}
 
-		public class Rows
+		[XmlRoot(ElementName = "Body")]
+		public class Body
 		{
-			public List<Row> RowList { get; set; }
+
+			[XmlElement(ElementName = "Result")]
+			public Result Result { get; set; }
 		}
 
-		public class Row
+		[XmlRoot(ElementName = "Response")]
+		public class Response
 		{
-			public string FIN_ID { get; set; }
-			public string FIN_NAME { get; set; }
-			public string PRO_ID { get; set; }
-			public string UDF_TYPE { get; set; }
-			public string UDF_TYPEINFO { get; set; }
+
+			[XmlElement(ElementName = "Header")]
+			public Header Header { get; set; }
+
+			[XmlElement(ElementName = "Body")]
+			public Body Body { get; set; }
 		}
 	}
 
