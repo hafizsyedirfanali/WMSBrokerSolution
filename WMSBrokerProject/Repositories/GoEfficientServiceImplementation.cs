@@ -755,30 +755,25 @@ namespace WMSBrokerProject.Repositories
 
                 RES4aTemplate template = new RES4aTemplate();
                 List<GoEfficientTemplateAttributesClass> templateAttributeList = new();
-                XDocument xdoc = XDocument.Parse(xmlResponse);
-                XmlSerializer serializer = new XmlSerializer(typeof(RES4aXMLResponseModel.Response));
-                using (StringReader reader = new StringReader(xmlResponse))
-                {
-                    var test = (RES4aXMLResponseModel.Response)serializer.Deserialize(reader);
-                }
+                XDocument xdoc = XDocument.Parse(xmlResponse);                
                 var responseObject = DeserializeXml<RES4aXMLResponseModel.Response>(xmlResponse);
                 if (responseObject != null && responseObject.Body != null && responseObject.Body.Result != null && responseObject.Body.Result.Rows != null)
                 {
                     //var rows = responseObject.Body.Result.Rows.RowList;
-                    var rows = responseObject.Body.Result.Rows.Row;
-                    //foreach (var property in rows)
-                    //{
-                    //    templateAttributeList.Add(new GoEfficientTemplateAttributesClass
-                    //    {
-                    //        //GoEfficientAttributeName = property.Key,
-                    //        //MappingName = property.Value,
-                    //        FinId = property.Value.f,
-                    //        FinName = property.FIN_NAME,
-                    //        ProId = property.PRO_ID,
-                    //        UdfType = property.UDF_TYPE,
-                    //        UdfTypeInfo = property.UDF_TYPEINFO
-                    //    });
-                    //}
+                    var rows = responseObject.Body.Result.Rows.RowList;
+                    foreach (var row in rows)
+                    {
+                        templateAttributeList.Add(new GoEfficientTemplateAttributesClass
+                        {
+                            //GoEfficientAttributeName = property.Key,
+                            //MappingName = property.Value,
+                            FinId = row.Values.Where(s => s.FieldName == "FIN.FIN_ID").Select(s => s.FieldValue).FirstOrDefault() ?? "",
+                            //FinName = property.FIN_NAME,
+                            //ProId = property.PRO_ID,
+                            //UdfType = property.UDF_TYPE,
+                            //UdfTypeInfo = property.UDF_TYPEINFO
+                        });
+                    }
                 }
 
 

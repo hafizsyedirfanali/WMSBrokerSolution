@@ -4,77 +4,128 @@ namespace WMSBrokerProject.Models
 {
     public class RES4aXMLResponseModel
     {
-		[XmlRoot(ElementName = "Header")]
-		public class Header
-		{
+        [XmlRoot("Response")]
+        public class Response
+        {
+            public Header Header { get; set; }
+            public Body Body { get; set; }
+        }
 
-			[XmlElement(ElementName = "RequestId")]
-			public int RequestId { get; set; }
+        public class Header
+        {
+            public string RequestId { get; set; }
+            public DateTime Timestamp { get; set; }
+        }
 
-			[XmlElement(ElementName = "Timestamp")]
-			public DateTime Timestamp { get; set; }
-		}
+        public class Body
+        {
+            public Result Result { get; set; }
+        }
 
-		[XmlRoot(ElementName = "Value")]
-		public class Value
-		{
+        public class Result
+        {
+            public Rows Rows { get; set; }
+        }
 
-			[XmlAttribute(AttributeName = "FieldName")]
-			public string FieldName { get; set; }
+        public class Rows
+        {
+            [XmlAttribute("Count")]
+            public int Count { get; set; }
 
-			[XmlText]
-			public int Text { get; set; }
-		}
+            [XmlElement("Row")]
+            public List<Row> RowList { get; set; }
+        }
 
-		[XmlRoot(ElementName = "Row")]
-		public class Row
-		{
+        public class Row
+        {
+            [XmlElement("Value")]
+            public List<Value> Values { get; set; }
+        }
 
-			[XmlElement(ElementName = "Value")]
-			public List<Value> Value { get; set; }
-		}
+        public class Value
+        {
+            [XmlAttribute("FieldName")]
+            public string FieldName { get; set; }
 
-		[XmlRoot(ElementName = "Rows")]
-		public class Rows
-		{
+            [XmlText]
+            public string FieldValue { get; set; }
+        }
 
-			[XmlElement(ElementName = "Row")]
-			public List<Row> Row { get; set; }
 
-			[XmlAttribute(AttributeName = "Count")]
-			public int Count { get; set; }
 
-			[XmlText]
-			public string Text { get; set; }
-		}
 
-		[XmlRoot(ElementName = "Result")]
-		public class Result
-		{
 
-			[XmlElement(ElementName = "Rows")]
-			public Rows Rows { get; set; }
-		}
+        //[XmlRoot(ElementName = "Header")]
+        //public class Header
+        //{
 
-		[XmlRoot(ElementName = "Body")]
-		public class Body
-		{
+        //	[XmlElement(ElementName = "RequestId")]
+        //	public int RequestId { get; set; }
 
-			[XmlElement(ElementName = "Result")]
-			public Result Result { get; set; }
-		}
+        //	[XmlElement(ElementName = "Timestamp")]
+        //	public DateTime Timestamp { get; set; }
+        //}
 
-		[XmlRoot(ElementName = "Response")]
-		public class Response
-		{
+        //[XmlRoot(ElementName = "Value")]
+        //public class Value
+        //{
 
-			[XmlElement(ElementName = "Header")]
-			public Header Header { get; set; }
+        //	[XmlAttribute(AttributeName = "FieldName")]
+        //	public string FieldName { get; set; }
 
-			[XmlElement(ElementName = "Body")]
-			public Body Body { get; set; }
-		}
-	}
+        //	[XmlText]
+        //	public int Text { get; set; }
+        //}
+
+        //[XmlRoot(ElementName = "Row")]
+        //public class Row
+        //{
+
+        //	[XmlElement(ElementName = "Value")]
+        //	public List<Value> Value { get; set; }
+        //}
+
+        //[XmlRoot(ElementName = "Rows")]
+        //public class Rows
+        //{
+
+        //	[XmlElement(ElementName = "Row")]
+        //	public List<Row> Row { get; set; }
+
+        //	[XmlAttribute(AttributeName = "Count")]
+        //	public int Count { get; set; }
+
+        //	[XmlText]
+        //	public string Text { get; set; }
+        //}
+
+        //[XmlRoot(ElementName = "Result")]
+        //public class Result
+        //{
+
+        //	[XmlElement(ElementName = "Rows")]
+        //	public Rows Rows { get; set; }
+        //}
+
+        //[XmlRoot(ElementName = "Body")]
+        //public class Body
+        //{
+
+        //	[XmlElement(ElementName = "Result")]
+        //	public Result Result { get; set; }
+        //}
+
+        //[XmlRoot(ElementName = "Response")]
+        //public class Response
+        //{
+
+        //	[XmlElement(ElementName = "Header")]
+        //	public Header Header { get; set; }
+
+        //	[XmlElement(ElementName = "Body")]
+        //	public Body Body { get; set; }
+        //}
+    }
 
 
     public class RES4aModel
