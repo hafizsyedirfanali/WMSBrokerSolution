@@ -1,12 +1,8 @@
-﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Collections;
 using System.Data;
 using System.Globalization;
-using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml;
@@ -83,13 +79,9 @@ namespace WMSBrokerProject.Repositories
 
             var pathSegments = sourcePath.Split('.');
             var currentToken = jsonObject;
-
+            
             foreach (var segment in pathSegments)
             {
-                if (sourcePath.Contains("taskInfo.connectionInfo.activeEquipmentEndPoint.pop"))
-                {
-
-                }
                 if (segment.Contains("["))
                 {
                     var arrayIndex = int.Parse(segment.Substring(segment.IndexOf("[") + 1, segment.IndexOf("]") - segment.IndexOf("[") - 1));
@@ -103,32 +95,53 @@ namespace WMSBrokerProject.Repositories
                     else
                     {
                         value = null;
-						currentToken = null;
-						break;
+                        currentToken = null;
+                        break;
                     }
                 }
                 else
                 {
-                    var token = currentToken.SelectToken(segment);
-                    if (token != null)
+                    var propertyName = currentToken
+                                        .Children<JProperty>()
+                                        .FirstOrDefault(p => string.Equals(p.Name, segment, StringComparison.OrdinalIgnoreCase));
+                    if (propertyName == null)
                     {
-                        if (token is JObject tokenObject)
-                        {
-                            currentToken = tokenObject;
-                        }
-                        else
-                        {
-                            value = token.ToString();
-                            currentToken = null;
-                            break;
-                        }
+                        currentToken = null;
+                        value = null;
+                        break;
+                    }
+                    if (propertyName.Value is JObject tokenObject)
+                    {
+                        //currentToken = tokenObject;
+                        currentToken = (JObject)propertyName.Value;
                     }
                     else
                     {
-                        value = null;
-						currentToken = null;
-						break;
+                        value = propertyName.Value.ToString();
+                        currentToken = null;
+                        break;
                     }
+                    
+                    //              var token = currentToken.SelectToken(segment);
+                    //              if (token != null)
+                    //              {
+                    //                  if (token is JObject tokenObject)
+                    //                  {
+                    //                      currentToken = tokenObject;
+                    //                  }
+                    //                  else
+                    //                  {
+                    //                      value = token.ToString();
+                    //                      currentToken = null;
+                    //                      break;
+                    //                  }
+                    //              }
+                    //              else
+                    //              {
+                    //                  value = null;
+                    //currentToken = null;
+                    //break;
+                    //              }
                 }
             }
 
@@ -141,22 +154,22 @@ namespace WMSBrokerProject.Repositories
         }
 
         public async Task<ResponseModel<object?>> GetPathValue(JObject jsonObject, string sourcePath)
-		{
+        {
             var responseModel = new ResponseModel<object?>();
             try
             {
-                responseModel.Result = GetPathValue(sourcePath,jsonObject);
+                responseModel.Result = GetPathValue(sourcePath, jsonObject);
                 responseModel.IsSuccess = true;
             }
             catch (Exception ex)
             {
-				responseModel.ErrorMessage = ex.Message;
-				responseModel.ErrorCode = 10038;
-			}
-			return responseModel;
-		}
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10038;
+            }
+            return responseModel;
+        }
 
-		public DateTime GetFridayFromDate(int weekNumber, int year)
+        public DateTime GetFridayFromDate(int weekNumber, int year)
         {
             DateTime jan1 = new DateTime(year, 1, 1);
             DateTime firstMonday = jan1.AddDays((int)DayOfWeek.Monday - (int)jan1.DayOfWeek + (jan1.DayOfWeek <= DayOfWeek.Monday ? 0 : 7));
@@ -231,15 +244,15 @@ namespace WMSBrokerProject.Repositories
                 {
                     try
                     {
-                    
 
-                    //"city": "taskInfo.hasInfo.connectionAddress.city",
-                    var path = config.Value;
-                    var extractedValue = taskFetchJsonObject.SelectToken(path ?? string.Empty);
-                    if (extractedValue != null)
-                    {
-                        mappedValues.Add(config.Key, extractedValue);
-                    }
+
+                        //"city": "taskInfo.hasInfo.connectionAddress.city",
+                        var path = config.Value;
+                        var extractedValue = taskFetchJsonObject.SelectToken(path ?? string.Empty);
+                        if (extractedValue != null)
+                        {
+                            mappedValues.Add(config.Key, extractedValue);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -275,7 +288,7 @@ namespace WMSBrokerProject.Repositories
                     mappedValues.Add(valueTuple.DestinationKey, valueTuple.Value);
                 }
 
-                section = _configuration.GetSection($"WMSBeheerderRES2Mapping:{model.ActionName}");                
+                section = _configuration.GetSection($"WMSBeheerderRES2Mapping:{model.ActionName}");
                 foreach (var config in section.GetChildren())
                 {
                     var sourceKey = config.Value;
@@ -398,7 +411,7 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-        public async Task<ResponseModel<Dictionary<string, object?>>> GetAddressMappingDictionary(JObject jsonObject,Dictionary<string,string>? pathDictionary)
+        public async Task<ResponseModel<Dictionary<string, object?>>> GetAddressMappingDictionary(JObject jsonObject, Dictionary<string, string>? pathDictionary)
         {
             var responseModel = new ResponseModel<Dictionary<string, object?>>();
             try
@@ -417,7 +430,7 @@ namespace WMSBrokerProject.Repositories
                         if (pathDictionary.ContainsKey(sourceKey))
                         {
                             var isSucess = pathDictionary.TryGetValue(sourceKey, out var path);
-                            if(isSucess)
+                            if (isSucess)
                             {
                                 var token = jsonObject.SelectToken(path);
                                 if (token != null)
@@ -431,12 +444,12 @@ namespace WMSBrokerProject.Repositories
                                 }
                             }
                         }
-                        
+
                         //var valueTuple = GetOneToOneValue(model, sourceKey, destinationKey);
-                        
+
                     }
                 }
-               
+
                 responseModel.Result = mappedValues;
                 responseModel.IsSuccess = true;
             }
@@ -587,11 +600,11 @@ namespace WMSBrokerProject.Repositories
             try
             {
                 using HttpClient client = new HttpClient();
-                
+
                 string? requestUri = _configuration.GetSection("GoEfficient:EndPointUrl").Value;
 
                 string xmlRequest4_1 = string.Empty;
-                
+
                 xmlRequest4_1 = $@"<Request>
                                      {GetXMLHeader(model.RequestId)}
                                      <Body>
@@ -694,7 +707,7 @@ namespace WMSBrokerProject.Repositories
                     var xmlResponseFilePath = Path.Combine(templateFolder!, $"GoEfficient_InstanceTemplateResponse_RES04.xml");
                     xmlResponse = File.ReadAllText(xmlResponseFilePath);
                 }
-                
+
 
                 responseModel.Result = new RES4_2Model { };
                 responseModel.IsSuccess = true;
@@ -771,10 +784,10 @@ namespace WMSBrokerProject.Repositories
                 List<GoEfficientTemplateAttributesClass> templateAttributeList = new();
                 XDocument xdoc = XDocument.Parse(xmlResponse);
 
-				var responseObject = DeserializeXml<RES4aXMLResponseModel.Response>(xmlResponse);
-				if (responseObject != null && responseObject.Body != null && responseObject.Body.Result != null && responseObject.Body.Result.Rows != null)
+                var responseObject = DeserializeXml<RES4aXMLResponseModel.Response>(xmlResponse);
+                if (responseObject != null && responseObject.Body != null && responseObject.Body.Result != null && responseObject.Body.Result.Rows != null)
                 {
-					var rows = responseObject.Body.Result.Rows.RowList;
+                    var rows = responseObject.Body.Result.Rows.RowList;
                     foreach (var property in rows)
                     {
                         templateAttributeList.Add(new GoEfficientTemplateAttributesClass
@@ -786,30 +799,30 @@ namespace WMSBrokerProject.Repositories
                             ProId = property.PRO_ID,
                             UdfType = property.UDF_TYPE,
                             UdfTypeInfo = property.UDF_TYPEINFO
-                        }); 
+                        });
                     }
-				}
+                }
 
 
-				//foreach (var property in model.GoEfficientAttributes)
-    //            {
-    //                //if we want to get all attributes without address we can do it here
-    //                XElement? rowElement = xdoc.Descendants("Row")
-    //                            .FirstOrDefault(row =>
-    //                                row.Elements("Value")
-    //                                .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME"));
-    //                                //&& e.Value.ToLower() == property.Value.ToLower()));
-    //                if (rowElement is not null)
-    //                {
-    //                    string finId = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "FIN.FIN_ID")?.Value!;
-    //                    string finName = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value!;
-    //                    string proId = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "PRO.PRO_ID")?.Value!;
-    //                    string udfType = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value!;
-    //                    string udfTypeInfo = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value!;
+                //foreach (var property in model.GoEfficientAttributes)
+                //            {
+                //                //if we want to get all attributes without address we can do it here
+                //                XElement? rowElement = xdoc.Descendants("Row")
+                //                            .FirstOrDefault(row =>
+                //                                row.Elements("Value")
+                //                                .Any(e => (string)e.Attribute("FieldName")! == "FIN.FIN_NAME"));
+                //                                //&& e.Value.ToLower() == property.Value.ToLower()));
+                //                if (rowElement is not null)
+                //                {
+                //                    string finId = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "FIN.FIN_ID")?.Value!;
+                //                    string finName = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value!;
+                //                    string proId = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "PRO.PRO_ID")?.Value!;
+                //                    string udfType = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value!;
+                //                    string udfTypeInfo = rowElement.Elements("Value").FirstOrDefault(x => x.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value!;
 
-                        
-    //                }
-    //            }
+
+                //                }
+                //            }
                 template.GoEfficientTemplateAttributeList = templateAttributeList;
 
 
@@ -913,15 +926,15 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
         private T DeserializeXml<T>(string xml)
-		{
-			var serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
+        {
+            var serializer = new System.Xml.Serialization.XmlSerializer(typeof(T));
 
-			using (var reader = new System.IO.StringReader(xml))
-			{
-				return (T)serializer.Deserialize(reader);
-			}
-		}
-		public async Task<ResponseModel<RES5Model>> REQ5_SaveRecordToGoEfficient(REQ5Model model)
+            using (var reader = new System.IO.StringReader(xml))
+            {
+                return (T)serializer.Deserialize(reader);
+            }
+        }
+        public async Task<ResponseModel<RES5Model>> REQ5_SaveRecordToGoEfficient(REQ5Model model)
         {
             var responseModel = new ResponseModel<RES5Model>();
 
@@ -936,7 +949,7 @@ namespace WMSBrokerProject.Repositories
                 {
                     valueText += @$"<Value FieldName=""{templateField.Key}"">{templateField.Value}</Value>";
                 }
-                
+
                 string xmlRequest5 = $@"<?xml version=""1.0"" encoding=""utf-8""?>
                                         <Request>
 	                                        {GetXMLHeader(model.RequestId)}
@@ -996,7 +1009,7 @@ namespace WMSBrokerProject.Repositories
                 {
                     foreach (var child in section.GetChildren())
                     {
-                        addressDict.Add(child.Key,child.Value??string.Empty);//Here blank is inserted if value not found for the key.
+                        addressDict.Add(child.Key, child.Value ?? string.Empty);//Here blank is inserted if value not found for the key.
                     }
                 }
                 responseModel.Result = addressDict;
@@ -1214,7 +1227,7 @@ namespace WMSBrokerProject.Repositories
                 var content = new StringContent(xmlRequest6, Encoding.UTF8, "application/xml");
 
                 string xmlResponse;
-                if(false)// (!string.IsNullOrEmpty(requestUri))
+                if (false)// (!string.IsNullOrEmpty(requestUri))
                 {
                     var response = await client.PostAsync(requestUri, content);
                     response.EnsureSuccessStatusCode();
@@ -1332,9 +1345,9 @@ namespace WMSBrokerProject.Repositories
             return $"{date.Year}-{week:00}";
         }
 
-        public async Task<ResponseModel<Dictionary<string, object>>> 
+        public async Task<ResponseModel<Dictionary<string, object>>>
             FillSourcePathInBeheerderAttributesDictionary(string action)
-		{
+        {
             var responseModel = new ResponseModel<Dictionary<string, object>>();
             try
             {
@@ -1367,13 +1380,13 @@ namespace WMSBrokerProject.Repositories
                 {
                     var key = pair.Key;
                     var valuePath = pair.Value;
-                    string? path = valuePath!=null? valuePath.ToString() : "";
-                    if(valuePath is not null)
+                    string? path = valuePath != null ? valuePath.ToString() : "";
+                    if (valuePath is not null)
                     {
                         path = valuePath.ToString() ?? string.Empty;
                     }
-                    var value = GetPathValue(path??"", jsonObject);
-                    if(value is not null) beheerderData.Add(key, value);
+                    var value = GetPathValue(path ?? "", jsonObject);
+                    if (value is not null) beheerderData.Add(key, value);
                 }
 
                 responseModel.Result = beheerderData!;

@@ -283,8 +283,10 @@
       "netwProblemDescr": "taskInfo.networkInfo.problemDescription",
       "netwInvolvedPoPs": "taskInfo.networkInfo.involvedPoPs[0]",
 
-      "commentsAuthor": "taskInfo.comments[0].author.lastName",
-      "comments": "taskInfo.comments[0].note",
+      "commentsAuthor": "comments[0].author.lastName",
+      "comments": "comments[0].note",
+      //"commentsAuthor": "taskInfo.comments[0].author.lastName",
+      //"comments": "taskInfo.comments[0].note",
       //"inId": "taskId",
       //"DHid": "taskInfo.connectionInfo.DHid",
       //"fiberNumber": "taskInfo.connectionInfo.fiberNumber",
