@@ -66,13 +66,6 @@ namespace WMSBrokerProject.Repositories
             value = token != null ? token.ToString() : null;
             return (destinationKey, value);
         }
-        //      private object? GetPathValue(string sourcePath, JObject jsonObject)
-        //      {
-        //	object? value;
-        //	var token = jsonObject.SelectToken(sourcePath);
-        //	value = token != null ? token.ToString() : null;
-        //          return value;
-        //}
         private object? GetPathValue(string sourcePath, JObject jsonObject)
         {
             object? value = null;
@@ -120,28 +113,7 @@ namespace WMSBrokerProject.Repositories
                         value = propertyName.Value.ToString();
                         currentToken = null;
                         break;
-                    }
-                    
-                    //              var token = currentToken.SelectToken(segment);
-                    //              if (token != null)
-                    //              {
-                    //                  if (token is JObject tokenObject)
-                    //                  {
-                    //                      currentToken = tokenObject;
-                    //                  }
-                    //                  else
-                    //                  {
-                    //                      value = token.ToString();
-                    //                      currentToken = null;
-                    //                      break;
-                    //                  }
-                    //              }
-                    //              else
-                    //              {
-                    //                  value = null;
-                    //currentToken = null;
-                    //break;
-                    //              }
+                    }                    
                 }
             }
 
