@@ -1,16 +1,184 @@
 {
-    "OrderProgressTemplates": {
-      "Templates1": {
-        "ActionType": "new connection",
-        "TemplateID": "98789",
-        "WMSStatus": "Confirm", //taskfetch ke reponse
-        "GoEfficientStatus": "Confirmed"
-      },
-      "Templates2": {
-        "ActionType": "new connection",
-        "TemplateID": "98790",
-        "WMSStatus": "In Process",
-        "GoEfficientStatus": "In Process"
-      }
+  "OrderProgressTemplates": {
+    "Templates1": {
+      "ActionType": "PATCH",
+      "TemplateID": "9252310", // Template task for PATCH - WIP melding
+      "WMSStatus": "WIP", //taskfetch ke reponse
+      "GoEfficientStatus": "WIP" // Fixed Code
+    },
+    "Templates2": {
+      "ActionType": "PATCH",
+      "TemplateID": "9252311",
+      "WMSStatus": "DELIVERED",
+      "GoEfficientStatus": "DELIVERED"
+    },
+    "Templates3": {
+      "ActionType": "PATCH",
+      "TemplateID": "9252309",
+      "WMSStatus": "PREPARED",
+      "GoEfficientStatus": "PREPARED"
+    },
+    "Templates4": {
+      "ActionType": "DEPATCH",
+      "TemplateID": "9252310",
+      "WMSStatus": "WIP",
+      "GoEfficientStatus": "WIP"
+    },
+    "Templates5": {
+      "ActionType": "DEPATCH",
+      "TemplateID": "9252311",
+      "WMSStatus": "DELIVERED",
+      "GoEfficientStatus": "DELIVERED"
+    },
+    "Templates6": {
+      "ActionType": "DEPATCH",
+      "TemplateID": "9252309",
+      "WMSStatus": "PREPARED",
+      "GoEfficientStatus": "PREPARED"
+    },
+    "Templates7": {
+      "ActionType": "AFTERCARE",
+      "TemplateID": "9252310",
+      "WMSStatus": "WIP",
+      "GoEfficientStatus": "WIP"
+    },
+    "Templates8": {
+      "ActionType": "AFTERCARE",
+      "TemplateID": "9252311",
+      "WMSStatus": "DELIVERED",
+      "GoEfficientStatus": "DELIVERED"
+    },
+    "Templates9": {
+      "ActionType": "AFTERCARE",
+      "TemplateID": "9252309",
+      "WMSStatus": "PREPARED",
+      "GoEfficientStatus": "PREPARED"
+    },
+    "Templates10": {
+      "ActionType": "NETWORK_INCIDENT",
+      "TemplateID": "9252310",
+      "WMSStatus": "WIP",
+      "GoEfficientStatus": "WIP"
+    },
+    "Templates11": {
+      "ActionType": "NETWORK_INCIDENT",
+      "TemplateID": "9252311",
+      "WMSStatus": "DELIVERED",
+      "GoEfficientStatus": "DELIVERED"
+    },
+    "Templates12": {
+      "ActionType": "NETWORK_INCIDENT",
+      "TemplateID": "9252309",
+      "WMSStatus": "PREPARED",
+      "GoEfficientStatus": "PREPARED"
+    },
+    "Templates13": {
+      "ActionType": "CONNECTION_INCIDENT",
+      "TemplateID": "9252310",
+      "WMSStatus": "WIP",
+      "GoEfficientStatus": "WIP"
+    },
+    "Templates14": {
+      "ActionType": "CONNECTION_INCIDENT",
+      "TemplateID": "9252311",
+      "WMSStatus": "DELIVERED",
+      "GoEfficientStatus": "DELIVERED"
+    },
+    "Templates15": {
+      "ActionType": "CONNECTION_INCIDENT",
+      "TemplateID": "9252309",
+      "WMSStatus": "PREPARED",
+      "GoEfficientStatus": "PREPARED"
+    },
+    "Templates16": {
+      "ActionType": "NEW_CONNECTION",
+      "TemplateID": "9252310",
+      "WMSStatus": "WIP",
+      "GoEfficientStatus": "WIP"
+    },
+    "Templates17": {
+      "ActionType": "NEW_CONNECTION",
+      "TemplateID": "9252311",
+      "WMSStatus": "DELIVERED",
+      "GoEfficientStatus": "DELIVERED"
+    },
+    "Templates18": {
+      "ActionType": "NEW_CONNECTION",
+      "TemplateID": "9252309",
+      "WMSStatus": "PREPARED",
+      "GoEfficientStatus": "PREPARED"
+    },
+    "Templates19": {
+      "ActionType": "AFTER_CONNECT",
+      "TemplateID": "9252310",
+      "WMSStatus": "WIP",
+      "GoEfficientStatus": "WIP"
+    },
+    "Templates20": {
+      "ActionType": "AFTER_CONNECT",
+      "TemplateID": "9252311",
+      "WMSStatus": "DELIVERED",
+      "GoEfficientStatus": "DELIVERED"
+    },
+    "Templates21": {
+      "ActionType": "AFTER_CONNECT",
+      "TemplateID": "9252309",
+      "WMSStatus": "PREPARED",
+      "GoEfficientStatus": "PREPARED"
+    },
+    "Templates22": {
+      "ActionType": "FTU_REPLACEMENT",
+      "TemplateID": "9252310",
+      "WMSStatus": "WIP",
+      "GoEfficientStatus": "WIP"
+    },
+    "Templates23": {
+      "ActionType": "FTU_REPLACEMENT",
+      "TemplateID": "9252311",
+      "WMSStatus": "DELIVERED",
+      "GoEfficientStatus": "DELIVERED"
+    },
+    "Templates24": {
+      "ActionType": "FTU_REPLACEMENT",
+      "TemplateID": "9252309",
+      "WMSStatus": "PREPARED",
+      "GoEfficientStatus": "PREPARED"
+    },
+    "Templates25": {
+      "ActionType": "FTU_DISPLACEMENT",
+      "TemplateID": "9252310",
+      "WMSStatus": "WIP",
+      "GoEfficientStatus": "WIP"
+    },
+    "Templates26": {
+      "ActionType": "FTU_DISPLACEMENT",
+      "TemplateID": "9252311",
+      "WMSStatus": "DELIVERED",
+      "GoEfficientStatus": "DELIVERED"
+    },
+    "Templates27": {
+      "ActionType": "FTU_DISPLACEMENT",
+      "TemplateID": "9252309",
+      "WMSStatus": "PREPARED",
+      "GoEfficientStatus": "PREPARED"
+    },
+    "Templates28": {
+      "ActionType": "PORT_MIGRATION",
+      "TemplateID": "9252310",
+      "WMSStatus": "WIP",
+      "GoEfficientStatus": "WIP"
+    },
+    "Templates29": {
+      "ActionType": "PORT_MIGRATION",
+      "TemplateID": "9252310",
+      "WMSStatus": "DELIVERED",
+      "GoEfficientStatus": "DELIVERED"
+    },
+    "Templates30": {
+      "ActionType": "PORT_MIGRATION",
+      "TemplateID": "9252309",
+      "WMSStatus": "PREPARED",
+      "GoEfficientStatus": "PREPARED"
     }
+  }
 }
