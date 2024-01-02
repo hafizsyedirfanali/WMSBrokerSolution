@@ -491,16 +491,18 @@ namespace WMSBrokerProject.Repositories
                 Random rand = new Random();
                 var correlationID = rand.Next(10000, 1000001).ToString();
 
-                correlationServices.inId = model.inId;
+                correlationServices.inId = model.taskId;
                 correlationServices.CorrelationID = correlationID;
+                //correlationServices.Pro_Id = model.; Pro_Id Resp 7 se milenga 
+                
 
                 using HttpClient httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
+                httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/"); //Url form wmssetteing
                 httpClient.DefaultRequestHeaders.Add("CorrelationID", correlationID);
                 var dataJson = JsonConvert.SerializeObject(model);
                 var content = new StringContent(dataJson, Encoding.UTF8, "application/json");
-                HttpResponseMessage response =
-                    await httpClient.PostAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.inId}", content);
+                HttpResponseMessage response = await httpClient.PostAsync($"wms-beheerder-api/contractor/Circet/tasks", content); //OrgId form setting
+                //HttpResponseMessage response = await httpClient.PostAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.taskId}", content);
                 if (response.IsSuccessStatusCode)
                 {
                     //string responseContent = await response.Content.ReadAsStringAsync();

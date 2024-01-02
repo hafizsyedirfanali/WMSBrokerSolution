@@ -62,7 +62,7 @@ namespace WMSBrokerProject.Controllers
                         var res5Result = await orderProgressService.REQ05_UpdateInstantiatedAttachmentsRequest(new UIAREQ5Model
                         {
                             RequestId = requestId,
-                            Status = template.WMSStatus
+                            Status = template.GoEfficientStatus
                         }).ConfigureAwait(false);
                         if (!res5Result.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res5Result); }
 
@@ -73,13 +73,13 @@ namespace WMSBrokerProject.Controllers
                                 from = new TaskIndicationRequestModel.From
                                 {
                                     orgId = "Circet",
-                                    systemId = "NKM-GO"
+                                    systemId = "NKM-GO" //Json
                                 },
-                                updateCount = 1,
+                                updateCount = 1, //Comming form 4a CIFWMS-UpdateCount Finmane
                                 created = DateTime.Now,
                                 priority = "BASIC"
                             },
-                            inId = ""
+                            taskId = "" //CIFWMS-OrderUid 4a
                         }).ConfigureAwait(false);
                         if (!taskSyncResponse.IsSuccess) { }
 
