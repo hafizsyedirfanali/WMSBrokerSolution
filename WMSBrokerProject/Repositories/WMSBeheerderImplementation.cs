@@ -54,7 +54,7 @@ namespace WMSBrokerProject.Repositories
                 //var taskId = "WMS002530553";
                 using HttpClient httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri(baseAddress);
-                string? requestUrl = $"/contractor/{orgId}/tasks/{model.InID}";
+                string? requestUrl = $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}";
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
