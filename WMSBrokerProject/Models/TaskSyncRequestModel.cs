@@ -26,17 +26,17 @@ namespace WMSBrokerProject.Models
 
 		public class Status
 		{
-            [JsonConverter(typeof(NullValueRemoverConverter))]
+			[JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
             public object? mainStatus { get; set; }
 
-            [JsonConverter(typeof(NullValueRemoverConverter))]
-			public object? subStatus { get; set; }
-            
-			[JsonConverter(typeof(NullValueRemoverConverter))]
-			public object? reason { get; set; }
-            
-			[JsonConverter(typeof(NullValueRemoverConverter))]
-			public object? clarification { get; set; }
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public object? subStatus { get; set; }
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public object? reason { get; set; }
+
+            [JsonProperty(NullValueHandling = NullValueHandling.Ignore)]
+            public object? clarification { get; set; }
 		}
 
 
