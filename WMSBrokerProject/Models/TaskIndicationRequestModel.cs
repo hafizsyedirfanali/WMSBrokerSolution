@@ -9,7 +9,7 @@ public class TaskIndicationRequestModel
         header= new Header();
     }
     public Header? header { get; set; }
-    public string inId { get; set; }
+    public string taskId { get; set; }
     public class Header
     {
         public From from { get; set; }

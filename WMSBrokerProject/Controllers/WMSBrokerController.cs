@@ -71,7 +71,7 @@ namespace WMSBrokerProject.Controllers
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();
 
-            var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = model.inId }).ConfigureAwait(false);
+            var response2TaskFetch = await wMSBeheerderService.Request2TaskFetch(new REQ2Model { InID = model.taskId }).ConfigureAwait(false);
             if (!response2TaskFetch.IsSuccess) { }//{ return StatusCode(StatusCodes.Status500InternalServerError, response2TaskFetch); }
             JObject taskFetchJsonObject = response2TaskFetch.Result!.JSONObject;
 

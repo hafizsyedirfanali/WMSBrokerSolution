@@ -6,24 +6,24 @@
   //Don't use colon : in keys
   //Destination : Mapping Name
   "GoEfficientAttributes": {
-    "cifwms-huurderid": "inId",
-    "cifwms-dhid": "DHid",
-    "connFiberNumber": "fiberNumber",
-    "cifwms-updatecount": "updateCount",
-    "CIFWMS-Aft-Status": "status",
-    "CIFWMS-Aft-SubStatus": "subStatus",
-    "CIFWMS-Aft-Action": "action",
-    "cifwms-reason": "reason",
-    "cifwms-clarification": "clarification",
-    "cifwms-areanetworktype": "areanetworkType",
-    "Omschrijving opdracht": "subject",
-    "Naam-aanvrager": "lastName",
-    "mobiel aanvrager": "phoneNumber",
-    "ADRESS.ADRESS_TOWN": "Plaats",
-    "ADRESS.ADRESS_ZIPCODE": "Postcode",
-    "ADRESS.ADRESS_HOUSNR": "Huisnummer",
-    "ADRESS.ADRESS_HOUSNR_SFX": "HuisnummerToevoeging",
-    "ADRESS.ADRESS_STREET": "Straat"
+    //"cifwms-huurderid": "inId",
+    //"cifwms-dhid": "DHid",
+    //"connFiberNumber": "fiberNumber",
+    //"cifwms-updatecount": "updateCount",
+    //"CIFWMS-Aft-Status": "status",
+    //"CIFWMS-Aft-SubStatus": "subStatus",
+    //"CIFWMS-Aft-Action": "action",
+    //"cifwms-reason": "reason",
+    //"cifwms-clarification": "clarification",
+    //"cifwms-areanetworktype": "areanetworkType",
+    //"Omschrijving opdracht": "subject",
+    //"Naam-aanvrager": "lastName",
+    //"mobiel aanvrager": "phoneNumber",
+    //"ADRESS.ADRESS_TOWN": "Plaats",
+    //"ADRESS.ADRESS_ZIPCODE": "Postcode",
+    //"ADRESS.ADRESS_HOUSNR": "Huisnummer",
+    //"ADRESS.ADRESS_HOUSNR_SFX": "HuisnummerToevoeging",
+    //"ADRESS.ADRESS_STREET": "Straat"
     //"Betreft het een Hoog Laag of een Duplex woning?": "Betreft het een Hoog Laag of een Duplex woning?"
   },
   "GoEfficientCredentials": {
