@@ -341,18 +341,20 @@ namespace WMSBrokerProject.Controllers
 						{
 							from = new TaskSyncRequestModel.From
 							{
-								orgId = orgID?.ToString() ?? "",
-								systemId = systemId?.ToString() ?? ""
+								orgId =  "Circet",
+								systemId = "NKM"
+								//orgId = orgID?.ToString() ?? "",
+								//systemId = systemId?.ToString() ?? ""
 							},
 							updateCount = (int)count,
 							created = createdDateISO //Convert Date in ISO formate
 						},
 						status = new TaskSyncRequestModel.Status
 						{
-							mainStatus = status?.ToString() ?? "",
-							reason = reason?.ToString() ?? "",
-							subStatus = subStatus?.ToString() ?? "",
-							clarification = clarification?.ToString() ?? ""
+							mainStatus = status?.ToString() ?? ""
+							//reason = reason?.ToString() ?? "",
+							//subStatus = subStatus?.ToString() ?? "",
+							//clarification = clarification?.ToString() ?? ""
 						}
 					}).ConfigureAwait(false);
 					if (!taskSyncResponse.IsSuccess) { }
@@ -379,6 +381,9 @@ namespace WMSBrokerProject.Controllers
 
 			return Ok("Process completed successfully");
         }
+
+
+
 
     }
 }

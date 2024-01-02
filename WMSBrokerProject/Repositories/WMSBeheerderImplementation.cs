@@ -54,7 +54,7 @@ namespace WMSBrokerProject.Repositories
                 //var taskId = "WMS002530553";
                 using HttpClient httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri(baseAddress);
-                string? requestUrl = $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}";
+                string? requestUrl = $"/contractor/{orgId}/tasks/{model.InID}";
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
                 HttpResponseMessage response = await httpClient.GetAsync(requestUrl);
@@ -114,7 +114,7 @@ namespace WMSBrokerProject.Repositories
                 model.InID = "9245949";//this line to be removed
                 using HttpClient httpClient = new HttpClient();
                 string? endPointUrl = "https://uat-gke.cif-operator.com/";
-                string? requestUrl = Path.Combine(endPointUrl!, $"wms-beheerder-api/contractor/{orgId}/tasks/{model.InID}");
+                string? requestUrl = Path.Combine(endPointUrl!, $"contractor/{orgId}/tasks/{model.InID}");
 
                 //httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/");
                 httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -171,12 +171,12 @@ namespace WMSBrokerProject.Repositories
 			{
 				using HttpClient httpClient = new HttpClient();
 				httpClient.BaseAddress = new Uri(baseAddress);
-                string? requestUrl = $"wms-beheerder-api/contractor/Circet/tasks/{model.taskId}";
+                string? requestUrl = $"contractor/Circet/tasks/{model.taskId}";
 				httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var dataJson = JsonConvert.SerializeObject(model);
                 var content = new StringContent(dataJson, Encoding.UTF8, "application/json");
 
-                HttpResponseMessage response = await httpClient.PostAsync(requestUrl, content);
+                HttpResponseMessage response = await httpClient.PutAsync(requestUrl, content);
                 response.EnsureSuccessStatusCode();
 				if (response.IsSuccessStatusCode)
 				{

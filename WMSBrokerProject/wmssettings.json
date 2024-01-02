@@ -1,7 +1,7 @@
 {
   "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1bmlxdWVfbmFtZSI6Im5rbWIiLCJuYW1laWQiOiJhN2M4YTAzYS0xYWU5LTQxYWEtOTA5ZC03Y2QwMWNiZTZjYzUiLCJyb2xlIjoiQmVoZWVyZGVyIiwiUGFydGllcyI6Ilt7XCJJZFwiOlwiMjQwXCIsXCJOYW1lXCI6XCJDaXJjZXRcIixcIlN5c3RlbU5hbWVcIjpcIk5LTVwiLFwiVHlwZVwiOjF9XSIsIm5ldHdvcmtPd25lcnMiOlsiREZOIiwiQ2l0aXVzIl0sIm5iZiI6MTcwMjM2Njc1NCwiZXhwIjoxNzMzOTIzNjgwLCJpYXQiOjE3MDIzNjY3NTR9.r1rndWf_X8fEtbnFdF-m22JtoyP0MxbBXVprLpdcVgY",
   "orgId": "Circet",
-  "BaseAddress": "https://uat-gke.cif-operator.com",
+  "BaseAddress": "https://uat-gke.cif-operator.com/wms-beheerder-api",
 
   "Actions": {
     "PATCH": {
@@ -23,14 +23,14 @@
       "Indicator2": "6999459;6999459;7007726",
       "Huurder_UDF_Id": "1462",
       "Naming": "NI.[connActiveEquipmentEndPointLoc].[city].[streetName].[houseNumber].[houseNumberExt].[connRoom]",
-      "ExecutionTask_TemplateId": "9252114"
+      "ExecutionTask_TemplateId": "9252116"
     },
     "CONNECTION_INCIDENT": {
       "PRO_ID": "6842031",
       "Indicator2": "6999459;6999459;9252114",
       "Huurder_UDF_Id": "1462",
       "Naming": "CI.[connActiveEquipmentEndPointLoc].[city].[streetName].[houseNumber].[houseNumberExt].[connRoom]",
-      "ExecutionTask_TemplateId": "9252114"
+      "ExecutionTask_TemplateId": "9252116"
     },
     "FTU_REPLACEMENT": {
       "PRO_ID": "6744412",
