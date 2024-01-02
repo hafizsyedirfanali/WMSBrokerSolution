@@ -23,10 +23,10 @@
 
 		public class Status
 		{
-			public string mainStatus { get; set; }
-			public string subStatus { get; set; }
-			public string reason { get; set; }
-			public string clarification { get; set; }
+			public object? mainStatus { get; set; }
+			public object? subStatus { get; set; }
+			public object? reason { get; set; }
+			public object? clarification { get; set; }
 		}
 
 

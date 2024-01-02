@@ -332,7 +332,10 @@ namespace WMSBrokerProject.Controllers
 					DateTime createdDate = Convert.ToDateTime(created);
 					var createdDateISO = createdDate.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
 					var count = Convert.ToInt64(updateCount);
-					
+					if(reason is null || subStatus is null || clarification is null)
+                    {
+
+                    }
 					var taskSyncResponse = await wMSBeheerderService.RequestTaskSync(new TaskSyncRequestModel
 					{
 						//configuration.GetSection("TaskAsyncRES2Attributes:originatorId").Value!
@@ -351,11 +354,11 @@ namespace WMSBrokerProject.Controllers
 						},
 						status = new TaskSyncRequestModel.Status
 						{
-							mainStatus = status?.ToString() ?? ""
-							//reason = reason?.ToString() ?? "",
-							//subStatus = subStatus?.ToString() ?? "",
-							//clarification = clarification?.ToString() ?? ""
-						}
+							mainStatus = status,
+                            reason = reason,
+                            subStatus = subStatus,
+                            clarification = clarification
+                        }
 					}).ConfigureAwait(false);
 					if (!taskSyncResponse.IsSuccess) { }
 				}
