@@ -34,7 +34,9 @@ namespace WMSBrokerProject.Controllers
     public class WMSBrokerController : ControllerBase
     {
         private string inId;
-        private readonly IGoEfficientService goEfficientService;
+		private readonly string orgId;
+		private readonly string systemId;
+		private readonly IGoEfficientService goEfficientService;
         private readonly IWMSBeheerderService wMSBeheerderService;
 		private readonly IConfiguration configuration;
 		private readonly IOptions<Dictionary<string, ActionConfiguration>> actionOptions;
@@ -46,6 +48,8 @@ namespace WMSBrokerProject.Controllers
             this.actionOptions = actionOptions;
             this.wMSBeheerderService = wMSBeheerderService;
 			this.configuration = configuration;
+			this.orgId = configuration.GetSection("orgId").Value!;
+			this.systemId = configuration.GetSection("systemId").Value!;
 		}
 
 
@@ -319,8 +323,6 @@ namespace WMSBrokerProject.Controllers
 				try
 				{
 					dataDictionary.TryGetValue("inId", out object? inId);
-					dataDictionary.TryGetValue("orgId", out object? orgID);
-					dataDictionary.TryGetValue("systemId", out object? systemId);
 					dataDictionary.TryGetValue("updateCount", out object? updateCount);
 					dataDictionary.TryGetValue("created", out object? created);
 					dataDictionary.TryGetValue("reason", out object? reason);
@@ -330,9 +332,7 @@ namespace WMSBrokerProject.Controllers
 					DateTime createdDate = Convert.ToDateTime(created);
 					var createdDateISO = createdDate.ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
 					var count = Convert.ToInt64(updateCount);
-					//var clarifi = clarification != null ? clarification.ToString() : null;
-					//var subStatusvalue = subStatus != null ? subStatus.ToString() : null;
-					//var reasonvale = reason != null ? reason.ToString() : null;
+					
 					var taskSyncResponse = await wMSBeheerderService.RequestTaskSync(new TaskSyncRequestModel
 					{
 						//configuration.GetSection("TaskAsyncRES2Attributes:originatorId").Value!
@@ -341,8 +341,8 @@ namespace WMSBrokerProject.Controllers
 						{
 							from = new TaskSyncRequestModel.From
 							{
-								orgId =  "Circet",
-								systemId = "NKM"
+								orgId = orgId,
+								systemId = systemId
 								//orgId = orgID?.ToString() ?? "",
 								//systemId = systemId?.ToString() ?? ""
 							},
