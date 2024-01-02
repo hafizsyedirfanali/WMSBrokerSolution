@@ -364,24 +364,9 @@ namespace WMSBrokerProject.Controllers
 				}
 				catch (Exception ex)
 				{
-
 					throw;
 				}
-				
 			}
-
-			//DateTime dt2 = DateTime.ParseExact(dt, "yyyy-MM-dd HH:mm tt", null);
-
-			//DateTime UpdatedTime = created;
-			//var dt = Convert.ToString(created);
-			//DateTime d2 = DateTime.Parse(dt, null, DateTimeStyles.RoundtripKind);
-
-			//created.ToUniversalTime().ToString("u").Replace(" ", "T");
-
-			//dt.ToString("yyyy-MM-ddTHH\\:mm\\:ss.fffffffzzz", CultureInfo.InvariantCulture);
-			//var date = ((DateTime)created).ToString("o", CultureInfo.InvariantCulture);
-
-
 			return Ok("Process completed successfully");
         }
 

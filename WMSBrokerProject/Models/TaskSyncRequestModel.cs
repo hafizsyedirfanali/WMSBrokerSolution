@@ -1,4 +1,7 @@
-﻿namespace WMSBrokerProject.Models
+﻿using Newtonsoft.Json;
+using WMSBrokerProject.Utilities;
+
+namespace WMSBrokerProject.Models
 {
 	public class TaskSyncRequestModel
 	{
@@ -23,9 +26,16 @@
 
 		public class Status
 		{
-			public object? mainStatus { get; set; }
+            [JsonConverter(typeof(NullValueRemoverConverter))]
+            public object? mainStatus { get; set; }
+
+            [JsonConverter(typeof(NullValueRemoverConverter))]
 			public object? subStatus { get; set; }
+            
+			[JsonConverter(typeof(NullValueRemoverConverter))]
 			public object? reason { get; set; }
+            
+			[JsonConverter(typeof(NullValueRemoverConverter))]
 			public object? clarification { get; set; }
 		}
 
