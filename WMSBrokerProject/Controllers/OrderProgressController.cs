@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -13,10 +14,15 @@ namespace WMSBrokerProject.Controllers
     [ApiController]
     public class OrderProgressController : AppBaseController
     {
+        private readonly string orgId;
+        private readonly string systemId;
+
         public OrderProgressController(IGoEfficientService goEfficientService, 
             IConfiguration configuration, IOptions<GoEfficientCredentials> goEfficientCredentials, 
             IOrderProgressService orderProgressService, ICorrelationServices correlationServices) : base(goEfficientService, configuration, goEfficientCredentials, orderProgressService, correlationServices)
         {
+            this.orgId = configuration.GetSection("orgId").Value!;
+            this.systemId = configuration.GetSection("systemId").Value!;
         }
 
         [HttpGet]
@@ -52,8 +58,9 @@ namespace WMSBrokerProject.Controllers
                                 Template = template,
                             }).ConfigureAwait(false);
                         if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
-                        
-                        if(res4aResult.Result!.Res4ARowFields == null) 
+                        var dataDictionary = res4aResult.Result;
+
+                        if (res4aResult.Result!.Res4ARowFields == null) 
                         {
                             skipTemplateId = true;
                             break;
@@ -66,26 +73,28 @@ namespace WMSBrokerProject.Controllers
                         }).ConfigureAwait(false);
                         if (!res5Result.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res5Result); }
 
-                        var taskSyncResponse = await orderProgressService.RequestTaskIndication(new TaskIndicationRequestModel
+                        if (dataDictionary is not null)
                         {
-                            header = new TaskIndicationRequestModel.Header
+                            dataDictionary.SelectListItems.TryGetValue("inId", out object? inId);
+                            dataDictionary.SelectListItems.TryGetValue("updateCount", out object? updateCount);
+                            var count = Convert.ToInt64(updateCount);
+                            var taskSyncResponse = await orderProgressService.RequestTaskIndication(new TaskIndicationRequestModel
                             {
-                                from = new TaskIndicationRequestModel.From
+                                header = new TaskIndicationRequestModel.Header
                                 {
-                                    orgId = "Circet",
-                                    systemId = "NKM-GO" //Json
+                                    from = new TaskIndicationRequestModel.From
+                                    {
+                                        orgId = orgId,
+                                        systemId = systemId //Json
+                                    },
+                                    updateCount = (int)count, //Comming form 4a CIFWMS-UpdateCount Finmane
+                                    created = DateTime.Now,
+                                    priority = "BASIC"
                                 },
-                                updateCount = 1, //Comming form 4a CIFWMS-UpdateCount Finmane
-                                created = DateTime.Now,
-                                priority = "BASIC"
-                            },
-                            taskId = "" //CIFWMS-OrderUid 4a
-                        }).ConfigureAwait(false);
-                        if (!taskSyncResponse.IsSuccess) { }
-
-                       
-
-
+                                taskId = inId?.ToString() ?? ""
+                            }).ConfigureAwait(false);
+                            if (!taskSyncResponse.IsSuccess) { }
+                        }
                     }
                     if (skipTemplateId)
                     {

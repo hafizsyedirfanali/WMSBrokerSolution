@@ -3,17 +3,23 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
+using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
+using static System.Net.Mime.MediaTypeNames;
+using static WMSBrokerProject.Models.RES4aXMLResponseModel;
 
 namespace WMSBrokerProject.Repositories
 {
     public class WMSOrderProgressImplementation : IOrderProgressService
     {
+        private readonly string orgId;
+        private readonly string token;
+        private readonly string baseAddress;
         private readonly string? templateFolder;
         private readonly string symbolForConcatenation;
         private readonly string symbolForPriority;
@@ -65,6 +71,9 @@ namespace WMSBrokerProject.Repositories
             this.clientId = configuration.GetSection("TrackTrace:YOUR_CLIENT_ID").Value!;
             this.clientSecret = configuration.GetSection("TrackTrace:YOUR_CLIENT_SECRET").Value!;
             this.endpointUrl = configuration.GetSection("TrackTrace:EndPointUrl").Value!;
+            this.orgId = configuration.GetSection("orgId").Value!;
+            this.token = configuration.GetSection("token").Value!;
+            this.baseAddress = configuration.GetSection("BaseAddress").Value ?? throw new Exception("Base Address of WMS Not found");
         }
 
         public async Task<ResponseModel<OrderProcessingTemplateResponse>> GetTemplateIds()
@@ -260,13 +269,21 @@ namespace WMSBrokerProject.Repositories
 
                 RES4aTemplate template = new RES4aTemplate();
                 XDocument xdoc = XDocument.Parse(xmlResponse);
-
+                Dictionary<string, object?> selectListItems = new();
                 var inId = xdoc.Descendants("Row")
                             .Where(row => row.Elements("Value")
                                     .Any(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NAME" && e.Value == "CIFWMS-OrderUid"))
                             .Select(row => row.Elements("Value")
                                     .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_RECORD_ID")?.Value)
                             .FirstOrDefault();
+                var updateCount = xdoc.Descendants("Row")
+                            .Where(row => row.Elements("Value")
+                                    .Any(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NAME" && e.Value == "CIFWMS-UpdateCount"))
+                            .Select(row => row.Elements("Value")
+                                    .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_RECORD_ID")?.Value)
+                            .FirstOrDefault();
+                selectListItems.Add(key: "inId", value: inId);
+                selectListItems.Add(key: "updateCount", value: updateCount);
 
                 var firstRowFields = (from row in xdoc.Descendants("Row")
                                                 let description = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_START")?.Value                                                
@@ -293,7 +310,8 @@ namespace WMSBrokerProject.Repositories
                 responseModel.Result = new OPRES4aModel
                 {
                     InID = inId ?? string.Empty,
-                    Res4ARowFields = res4ARowFields
+                    Res4ARowFields = res4ARowFields,
+                    SelectListItems = selectListItems
                 };
                 responseModel.IsSuccess = true;
             }
@@ -497,11 +515,12 @@ namespace WMSBrokerProject.Repositories
                 
 
                 using HttpClient httpClient = new HttpClient();
-                httpClient.BaseAddress = new Uri("https://uat-gke.cif-operator.com/"); //Url form wmssetteing
+                httpClient.BaseAddress = new Uri(baseAddress); //Url form wmssetteing
                 httpClient.DefaultRequestHeaders.Add("CorrelationID", correlationID);
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
                 var dataJson = JsonConvert.SerializeObject(model);
                 var content = new StringContent(dataJson, Encoding.UTF8, "application/json");
-                HttpResponseMessage response = await httpClient.PostAsync($"wms-beheerder-api/contractor/Circet/tasks", content); //OrgId form setting
+                HttpResponseMessage response = await httpClient.PostAsync($"wms-beheerder-api/contractor/{orgId}/tasks", content); //OrgId form setting
                 //HttpResponseMessage response = await httpClient.PostAsync($"wms-beheerder-api/contractor/Circet/tasks/{model.taskId}", content);
                 if (response.IsSuccessStatusCode)
                 {
