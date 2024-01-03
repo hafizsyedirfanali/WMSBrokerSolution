@@ -237,6 +237,7 @@ namespace WMSBrokerProject.Repositories
 				                                        <Field>FIN.FIN_PATH</Field>
 				                                        <Field>FIN.FIN_DATE</Field>
 				                                        <Field>FIN.FIN_NUMBER</Field>
+				                                        <Field>FIN.FIN_ADRESS_ID</Field>
 				                                        <Field>FIN.FIN_MEMO</Field>
 				                                        <Field>FIN.FIN_FILE_EXT</Field>
 				                                        <Field>UDF.UDF_TYPEINFO</Field>
@@ -274,13 +275,13 @@ namespace WMSBrokerProject.Repositories
                             .Where(row => row.Elements("Value")
                                     .Any(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NAME" && e.Value == "CIFWMS-OrderUid"))
                             .Select(row => row.Elements("Value")
-                                    .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_RECORD_ID")?.Value)
+                                    .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_PATH")?.Value)
                             .FirstOrDefault();
                 var updateCount = xdoc.Descendants("Row")
                             .Where(row => row.Elements("Value")
-                                    .Any(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NAME" && e.Value == "CIFWMS-UpdateCount"))
+                                    .Any(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NAME" && e.Value == "CIFWMS-updateCount"))
                             .Select(row => row.Elements("Value")
-                                    .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_RECORD_ID")?.Value)
+                                    .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NUMBER")?.Value)
                             .FirstOrDefault();
                 selectListItems.Add(key: "inId", value: inId);
                 selectListItems.Add(key: "updateCount", value: updateCount);
@@ -462,7 +463,7 @@ namespace WMSBrokerProject.Repositories
                                                         <Value FieldName=""CIFWMS-AFT"">{model.Status}</Value>
                                                     </Values>
                                                     <Conditions>
-                                                        <Condition FieldName=""PRO.PRO_ID""></Condition>
+                                                        <Condition FieldName=""PRO.PRO_ID"">9440957</Condition>
                                                     </Conditions>
                                                 </UpdateOperation>
 	                                        </Body>
