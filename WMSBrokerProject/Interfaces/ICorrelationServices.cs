@@ -1,8 +1,14 @@
-﻿namespace WMSBrokerProject.Interfaces
+﻿using WMSBrokerProject.Repositories;
+
+namespace WMSBrokerProject.Interfaces
 {
     public interface ICorrelationServices
     {
-        string inId { get; set; }
-        string CorrelationID { get; set; }
+        public List<CorrelationItem> CorrelationItems { get; set; }
+        void SaveCorrelationItem(CorrelationItem correlationItem);
+        void RemoveCorrelationItem(string taskId);
+        List<CorrelationItem> GetCorrelationItems();
+        CorrelationItem? GetCorrelationItemByTaskId(string taskId);
+        CorrelationItem? GetCorrelationItemByCorrelationId(string correlationId);
     }
 }

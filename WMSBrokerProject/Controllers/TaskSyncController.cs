@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
@@ -26,8 +27,10 @@ namespace WMSBrokerProject.Controllers
         //[FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
 
         {
+            var correlationItem = correlationServices.GetCorrelationItemByCorrelationId(xCorrelationID);
+            if (correlationItem is null) return NotFound($"CorrelationID = {xCorrelationID} not found");
 
-            if (xCorrelationID.ToLower() == correlationServices.CorrelationID.ToLower())
+            if (model.taskId == correlationItem.TaskId)
             {
                 if (string.IsNullOrEmpty(model.status.reason))
                 {

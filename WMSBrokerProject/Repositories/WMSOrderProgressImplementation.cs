@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
@@ -119,7 +120,7 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
 
-        public async Task<ResponseModel<RES7Model>> REQ7GetTaskIDs(REQ7Model model)
+        public async Task<ResponseModel<RES7Model>> REQ7GetPro_IDs(REQ7Model model)
         {
             var responseModel = new ResponseModel<RES7Model>();
             try
@@ -165,22 +166,22 @@ namespace WMSBrokerProject.Repositories
                 XDocument doc = XDocument.Parse(xmlResponse);
                 XNamespace ns = doc.Root.GetDefaultNamespace();
 
-                List<RES7ProIDClass> taskIds = new();
+                List<RES7ProIDClass> pro_Ids = new();
                 foreach (var row in doc.Descendants(ns + "Row"))
                 {
                     var data = new RES7ProIDClass
                     {
-                        TaskId = row.Elements(ns + "Value").FirstOrDefault(e => e.Attribute("FieldName").Value == "PRO.PRO_ID")?.Value,
+                        Pro_Id = row.Elements(ns + "Value").FirstOrDefault(e => e.Attribute("FieldName").Value == "PRO.PRO_ID")?.Value,
                         ProIdDESC = row.Elements(ns + "Value").FirstOrDefault(e => e.Attribute("FieldName").Value == "PRO.PRO_PRO_ID_DESC")?.Value,
                         Opened = row.Elements(ns + "Value").FirstOrDefault(e => e.Attribute("FieldName").Value == "PRO.PRO_OPENED")?.Value,
                         Closed = row.Elements(ns + "Value").FirstOrDefault(e => e.Attribute("FieldName").Value == "PRO.PRO_CLOSED")?.Value
                     };
-                    taskIds.Add(data);
+                    pro_Ids.Add(data);
                 }
 
                 responseModel.Result = new RES7Model
                 {
-                    TaskIdList = taskIds
+                    Pro_IdList = pro_Ids
                 };
                 responseModel.IsSuccess = true;
             }
@@ -271,7 +272,7 @@ namespace WMSBrokerProject.Repositories
                 RES4aTemplate template = new RES4aTemplate();
                 XDocument xdoc = XDocument.Parse(xmlResponse);
                 Dictionary<string, object?> selectListItems = new();
-                var inId = xdoc.Descendants("Row")
+                var taskId = xdoc.Descendants("Row")
                             .Where(row => row.Elements("Value")
                                     .Any(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NAME" && e.Value == "CIFWMS-OrderUid"))
                             .Select(row => row.Elements("Value")
@@ -289,7 +290,7 @@ namespace WMSBrokerProject.Repositories
                             .Select(row => row.Elements("Value")
                                     .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_PATH")?.Value)
                             .FirstOrDefault();
-                selectListItems.Add(key: "inId", value: inId);
+                selectListItems.Add(key: "taskId", value: taskId);
                 selectListItems.Add(key: "updateCount", value: updateCount);
                 selectListItems.Add(key: "priority", value: priority);
 
@@ -317,7 +318,7 @@ namespace WMSBrokerProject.Repositories
                
                 responseModel.Result = new OPRES4aModel
                 {
-                    InID = inId ?? string.Empty,
+                    InID = taskId ?? string.Empty,
                     Res4ARowFields = res4ARowFields,
                     SelectListItems = selectListItems
                 };
@@ -520,13 +521,13 @@ namespace WMSBrokerProject.Repositories
             var responseModel = new ResponseModel<TaskIndicationResponseModel>();
             try
             {
-                Random rand = new Random();
-                var correlationID = rand.Next(10000, 1000001).ToString();
+                var correlationID = Guid.NewGuid().ToString();
 
-                correlationServices.inId = model.taskId;
-                correlationServices.CorrelationID = correlationID;
-                //correlationServices.Pro_Id = model.; Pro_Id Resp 7 se milenga 
-                
+                correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
+                {
+                    TaskId = model.taskId,
+                    CorrelationID = correlationID
+                });
 
                 using HttpClient httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri(baseAddress); //Url form wmssetteing

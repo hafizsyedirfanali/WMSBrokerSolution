@@ -39,22 +39,22 @@ namespace WMSBrokerProject.Controllers
 
             foreach (var template in templates)
             {
-                var res7Result = await orderProgressService.REQ7GetTaskIDs(new REQ7Model
+                var res7Result = await orderProgressService.REQ7GetPro_IDs(new REQ7Model
                 {
                     RequestId = requestId,
                     TemplateId = template.TemplateID
                 }).ConfigureAwait(false);
                 if (!res7Result.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res7Result); }
-                var taskIds = res7Result.Result!.TaskIdList;
-                if (taskIds is not null && taskIds.Any())
+                var pro_Ids = res7Result.Result!.Pro_IdList;
+                if (pro_Ids is not null && pro_Ids.Any())
                 {
-                    foreach (var taskId in taskIds)
+                    foreach (var pro_Id in pro_Ids)
                     {
                         var res4aResult = await orderProgressService.REQ4a_GetInID(
                             new OrderProcessingREQ4aModel
                             {
                                 RequestId = requestId,
-                                ProId = taskId.ProIdDESC,
+                                ProId = pro_Id.ProIdDESC,
                                 Template = template,
                             }).ConfigureAwait(false);
                         if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
@@ -69,17 +69,24 @@ namespace WMSBrokerProject.Controllers
                         var res5Result = await orderProgressService.REQ05_UpdateInstantiatedAttachmentsRequest(new UIAREQ5Model
                         {
                             RequestId = requestId,
-                            ProId = taskId.ProIdDESC,
+                            ProId = pro_Id.ProIdDESC,
                             Status = template.GoEfficientStatus
                         }).ConfigureAwait(false);
                         if (!res5Result.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res5Result); }
 
                         if (dataDictionary is not null)
                         {
-                            dataDictionary.SelectListItems.TryGetValue("inId", out object? inId);
+                            dataDictionary.SelectListItems.TryGetValue("taskId", out object? taskId);
                             dataDictionary.SelectListItems.TryGetValue("updateCount", out object? updateCount);
                             dataDictionary.SelectListItems.TryGetValue("priority", out object? priority);
                             var count = Convert.ToInt64(updateCount);
+
+                            correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
+                            {
+                                TaskId = taskId?.ToString() ?? "",
+                                Pro_Id = pro_Id.ProIdDESC
+                            });
+
                             var taskSyncResponse = await orderProgressService.RequestTaskIndication(new TaskIndicationRequestModel
                             {
                                 header = new TaskIndicationRequestModel.Header
@@ -93,7 +100,7 @@ namespace WMSBrokerProject.Controllers
                                     created = DateTime.Now,
                                     priority = priority?.ToString() ?? ""
                                 },
-                                taskId = inId?.ToString() ?? ""
+                                taskId = taskId?.ToString() ?? ""
                             }).ConfigureAwait(false);
                             if (!taskSyncResponse.IsSuccess) { }
                         }
@@ -114,17 +121,19 @@ namespace WMSBrokerProject.Controllers
         [Route("TaskFetchProcess")]
         public async Task<IActionResult> BeginTaskFetch(
             [FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId,
-            [FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId,
+            [FromRoute][Required][StringLength(36, MinimumLength = 1)] string taskId,
             [FromHeader][StringLength(36, MinimumLength = 1)] string xRequestID,
             [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
             [FromHeader] bool? xWMSTest,
             [FromHeader][StringLength(8, MinimumLength = 1)] string xWMSAPIVersion)
         {
-
+            var correlationItem = correlationServices.GetCorrelationItemByTaskId(taskId);
+            if (correlationItem is null) return NotFound($"TaskId = {taskId} not found");
+            if(correlationItem.Pro_Id is null) return NotFound("Pro_Id not found");
             var res4aResult = await orderProgressService.REQ4a_GetTemplateData(new REQ4aGetTemplateModel
             {
                 RequestId = xRequestID,
-                ProId = inId
+                ProId = correlationItem.Pro_Id
             }).ConfigureAwait(false);
             if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
 
