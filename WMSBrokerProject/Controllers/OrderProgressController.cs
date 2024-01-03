@@ -69,6 +69,7 @@ namespace WMSBrokerProject.Controllers
                         var res5Result = await orderProgressService.REQ05_UpdateInstantiatedAttachmentsRequest(new UIAREQ5Model
                         {
                             RequestId = requestId,
+                            ProId = taskId.ProIdDESC,
                             Status = template.GoEfficientStatus
                         }).ConfigureAwait(false);
                         if (!res5Result.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res5Result); }
@@ -77,6 +78,7 @@ namespace WMSBrokerProject.Controllers
                         {
                             dataDictionary.SelectListItems.TryGetValue("inId", out object? inId);
                             dataDictionary.SelectListItems.TryGetValue("updateCount", out object? updateCount);
+                            dataDictionary.SelectListItems.TryGetValue("priority", out object? priority);
                             var count = Convert.ToInt64(updateCount);
                             var taskSyncResponse = await orderProgressService.RequestTaskIndication(new TaskIndicationRequestModel
                             {
@@ -89,7 +91,7 @@ namespace WMSBrokerProject.Controllers
                                     },
                                     updateCount = (int)count, //Comming form 4a CIFWMS-UpdateCount Finmane
                                     created = DateTime.Now,
-                                    priority = "BASIC"
+                                    priority = priority?.ToString() ?? ""
                                 },
                                 taskId = inId?.ToString() ?? ""
                             }).ConfigureAwait(false);

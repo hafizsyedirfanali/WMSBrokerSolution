@@ -283,8 +283,15 @@ namespace WMSBrokerProject.Repositories
                             .Select(row => row.Elements("Value")
                                     .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NUMBER")?.Value)
                             .FirstOrDefault();
+                var priority = xdoc.Descendants("Row")
+                            .Where(row => row.Elements("Value")
+                                    .Any(e => e.Attribute("FieldName")!.Value == "FIN.FIN_NAME" && e.Value == "CIFWMS-Urgency"))
+                            .Select(row => row.Elements("Value")
+                                    .FirstOrDefault(e => e.Attribute("FieldName")!.Value == "FIN.FIN_PATH")?.Value)
+                            .FirstOrDefault();
                 selectListItems.Add(key: "inId", value: inId);
                 selectListItems.Add(key: "updateCount", value: updateCount);
+                selectListItems.Add(key: "priority", value: priority);
 
                 var firstRowFields = (from row in xdoc.Descendants("Row")
                                                 let description = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_START")?.Value                                                
@@ -349,6 +356,12 @@ namespace WMSBrokerProject.Repositories
 				                                        <Field>FIN.FIN_PATH</Field>
 				                                        <Field>FIN.FIN_DATE</Field>
 				                                        <Field>FIN.FIN_NUMBER</Field>
+				                                        <Field>FIN.FIN_ADRESS_ID</Field>
+				                                        <Field>ADRESS.ADRESS_HOUSNR_SFX</Field>
+				                                        <Field>ADRESS.ADRESS_TOWN</Field>
+				                                        <Field>ADRESS.ADRESS_STREET</Field>
+				                                        <Field>ADRESS.ADRESS_ZIPCODE</Field>
+				                                        <Field>ADRESS.ADRESS_HOUSNR</Field>
 				                                        <Field>FIN.FIN_MEMO</Field>
 				                                        <Field>FIN.FIN_FILE_EXT</Field>
 				                                        <Field>UDF.UDF_TYPEINFO</Field>
@@ -458,12 +471,12 @@ namespace WMSBrokerProject.Repositories
 	                                        {GetXMLHeader(model.RequestId)}
                                             <Body>
 		                                        <UpdateOperation>
-                                                    <OperationName>PRO_UPDATE_V1</OperationName>
+                                                    <OperationName>PRO_FIN_UPDATE</OperationName>
                                                     <Values>
-                                                        <Value FieldName=""CIFWMS-AFT"">{model.Status}</Value>
+                                                        <Value FieldName=""CIFWMS-Aft-Status"">{model.Status}</Value>
                                                     </Values>
                                                     <Conditions>
-                                                        <Condition FieldName=""PRO.PRO_ID"">9440957</Condition>
+                                                        <Condition FieldName=""PRO.PRO_ID"">{model.ProId}</Condition>
                                                     </Conditions>
                                                 </UpdateOperation>
 	                                        </Body>
