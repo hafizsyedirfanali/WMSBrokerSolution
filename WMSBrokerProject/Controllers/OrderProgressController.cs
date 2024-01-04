@@ -129,7 +129,7 @@ namespace WMSBrokerProject.Controllers
         {
             var correlationItem = correlationServices.GetCorrelationItemByTaskId(taskId);
             if (correlationItem is null) return NotFound($"TaskId = {taskId} not found");
-            if(correlationItem.Pro_Id is null) return NotFound("Pro_Id not found");
+            if (correlationItem.Pro_Id is null) return NotFound("Pro_Id not found");
             var res4aResult = await orderProgressService.REQ4a_GetTemplateData(new REQ4aGetTemplateModel
             {
                 RequestId = xRequestID,
