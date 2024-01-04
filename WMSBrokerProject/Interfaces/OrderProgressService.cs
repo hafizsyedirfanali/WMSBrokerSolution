@@ -6,7 +6,7 @@ namespace WMSBrokerProject.Interfaces
     public interface IOrderProgressService
     {
         Task<ResponseModel<OrderProcessingTemplateResponse>> GetTemplateIds();
-        
+        Task<ResponseModel<WMSBeheerderRES2MappingClass>> GetWMSBeheerderRES2Mapping(string actionName);
         Task<ResponseModel<RES7Model>> REQ7GetPro_IDs(REQ7Model model);//GoEfficient_Request07_ReadOpenTasksByTemplateID_REQ7
         Task<ResponseModel<OPRES4aModel>> REQ4a_GetInID(OrderProcessingREQ4aModel model);
         Task<ResponseModel<Res4aGetTemplateModel>> REQ4a_GetTemplateData(REQ4aGetTemplateModel model);

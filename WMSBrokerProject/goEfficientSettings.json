@@ -6,6 +6,14 @@
   //Don't use colon : in keys
   //Destination : Mapping Name
   "GoEfficientAttributes": {
+    "CIFWMS-OrderUid": "inId",
+    "CIFWMS-UpdateCount": "updateCount",
+    //"CIFWMS-Aft-Status": "status",
+    //"CIFWMS-Aft-SubStatus": "subStatus",
+    //"CIFWMS-Aft-Action": "action",
+    "CIFWMS-reason": "reason",
+    "CIFWMS-clarification": "clarification",
+    "CIFWMS-AreaNetworkType": "areaNetworkType"
     //"cifwms-huurderid": "inId",
     //"cifwms-dhid": "DHid",
     //"connFiberNumber": "fiberNumber",

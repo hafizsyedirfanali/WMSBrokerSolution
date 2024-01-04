@@ -119,26 +119,27 @@ namespace WMSBrokerProject.Controllers
 
         [HttpGet]
         [Route("TaskFetchProcess")]
-        public async Task<IActionResult> BeginTaskFetch(
-            [FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId,
-            [FromRoute][Required][StringLength(36, MinimumLength = 1)] string taskId,
-            [FromHeader][StringLength(36, MinimumLength = 1)] string xRequestID,
-            [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
-            [FromHeader] bool? xWMSTest,
-            [FromHeader][StringLength(8, MinimumLength = 1)] string xWMSAPIVersion)
+        public async Task<IActionResult> BeginTaskFetch(string taskId)
+        //[FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId,
+
+        //[FromHeader][StringLength(36, MinimumLength = 1)] string xRequestID,
+        //[FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
+        //[FromHeader] bool? xWMSTest,
+        //[FromHeader][StringLength(8, MinimumLength = 1)] string xWMSAPIVersion)
         {
-            var correlationItem = correlationServices.GetCorrelationItemByTaskId(taskId);
-            if (correlationItem is null) return NotFound($"TaskId = {taskId} not found");
-            if (correlationItem.Pro_Id is null) return NotFound("Pro_Id not found");
+            //var correlationItem = correlationServices.GetCorrelationItemByTaskId(taskId);
+            //if (correlationItem is null) return NotFound($"TaskId = {taskId} not found");
+            //if (correlationItem.Pro_Id is null) return NotFound("Pro_Id not found");
             var res4aResult = await orderProgressService.REQ4a_GetTemplateData(new REQ4aGetTemplateModel
             {
-                RequestId = xRequestID,
-                ProId = correlationItem.Pro_Id
+                RequestId = "14523",
+                //ProId = correlationItem.Pro_Id
+                ProId = "9440957"
             }).ConfigureAwait(false);
             if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
 
             var jsonResultForTaskFetchResponse = await orderProgressService.GetJsonResultForTaskFetchResponse(
-                res4aResult.Result!, "PATCH").ConfigureAwait(false);
+                res4aResult.Result!, "CONNECTION_INCIDENT").ConfigureAwait(false);
             if (!jsonResultForTaskFetchResponse.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, jsonResultForTaskFetchResponse); }
 
             //Json to be passed with OK Status

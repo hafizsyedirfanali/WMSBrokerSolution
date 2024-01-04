@@ -189,4 +189,9 @@ namespace WMSBrokerProject.Models
         public Dictionary<string, object?> GoEfficientAddressTemplateValues { get; set; }
        
     }
+    public class WMSBeheerderRES2MappingClass
+    {
+        public Dictionary<string, object?> WMSBeheerderRES2MappingDictionary { get; set; }
+
+    }
 }

@@ -358,11 +358,7 @@ namespace WMSBrokerProject.Repositories
 				                                        <Field>FIN.FIN_DATE</Field>
 				                                        <Field>FIN.FIN_NUMBER</Field>
 				                                        <Field>FIN.FIN_ADRESS_ID</Field>
-				                                        <Field>ADRESS.ADRESS_HOUSNR_SFX</Field>
-				                                        <Field>ADRESS.ADRESS_TOWN</Field>
-				                                        <Field>ADRESS.ADRESS_STREET</Field>
-				                                        <Field>ADRESS.ADRESS_ZIPCODE</Field>
-				                                        <Field>ADRESS.ADRESS_HOUSNR</Field>
+				                                        
 				                                        <Field>FIN.FIN_MEMO</Field>
 				                                        <Field>FIN.FIN_FILE_EXT</Field>
 				                                        <Field>UDF.UDF_TYPEINFO</Field>
@@ -797,7 +793,7 @@ namespace WMSBrokerProject.Repositories
             return result;
         }
         private async Task<ResponseModel<List<TaskFetchResponseMappedModel>>> MapDataForTaskFetchResponse(List<RES4aTemplateFields> dataList, 
-            Dictionary<string,string> goEfficientAttributes, Dictionary<string,string> wmsBeheerderAttributes)
+            Dictionary<string,object?> wmsBeheerderMapping, Dictionary<string,string> wmsBeheerderAttributes)
         {
             var responseModel = new ResponseModel<List<TaskFetchResponseMappedModel>>();
             try
@@ -805,9 +801,9 @@ namespace WMSBrokerProject.Repositories
                 var mappedList = new List<TaskFetchResponseMappedModel>();
                 foreach (var item in dataList)
                 {
-                    if (goEfficientAttributes.TryGetValue(item.FIN_NAME, out var goEfficientValue))
+                    if (wmsBeheerderMapping.TryGetValue(item.FIN_NAME, out var value))
                     {
-                        if (wmsBeheerderAttributes.TryGetValue(goEfficientValue, out var wmsBeheerderActionPath))
+                        if (value is not null && wmsBeheerderAttributes.TryGetValue(value.ToString(), out var wmsBeheerderActionPath))
                         {
                             mappedList.Add(new TaskFetchResponseMappedModel
                             {
@@ -828,24 +824,66 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
+        public async Task<ResponseModel<WMSBeheerderRES2MappingClass>> GetWMSBeheerderRES2Mapping(string actionName)
+        {
+            var responseModel = new ResponseModel<WMSBeheerderRES2MappingClass>();
+            try
+            {
+                var section = _configuration.GetSection($"WMSBeheerderRES2Mapping:Generic");
+                var mappedValues = new Dictionary<string, object?>();
+                foreach (var config in section.GetChildren())
+                {
+                    mappedValues.Add(config.Key, config.Value);
+                }
+
+                section = _configuration.GetSection($"WMSBeheerderRES2Mapping:{actionName}");
+                foreach (var config in section.GetChildren())
+                {
+                    mappedValues.Add(config.Key, config.Value);
+                }
+                section = _configuration.GetSection($"WMSBeheerderRES2FCMapping");
+                foreach (var config in section.GetChildren())
+                {
+                    mappedValues.Add(config.Key, config.Value);
+                }
+                
+                responseModel.Result = new WMSBeheerderRES2MappingClass
+                {
+                    WMSBeheerderRES2MappingDictionary = mappedValues
+                };
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 10004;
+            }
+            return responseModel;
+        }
+
+
         public async Task<ResponseModel<JObject>> GetJsonResultForTaskFetchResponse(Res4aGetTemplateModel templateModel, string actionName)
         {
             var responseModel = new ResponseModel<JObject>();
+            int i = 0;
             try
             {
                 var wmsBeheerderAttributesResponse = await GetWMSBeheerderAttributesByActionName(actionName).ConfigureAwait(false);
                 if (!wmsBeheerderAttributesResponse.IsSuccess) { throw new Exception($"Error Code: {wmsBeheerderAttributesResponse.ErrorCode}; Error Message: {wmsBeheerderAttributesResponse.ErrorMessage}"); }
                 
-                var goEfficientAttributesResponse = await GetGoEfficientAttributes().ConfigureAwait(false);
-                if(!goEfficientAttributesResponse.IsSuccess) { throw new Exception($"Error Code: {goEfficientAttributesResponse.ErrorCode}; Error Message: {goEfficientAttributesResponse.ErrorMessage}"); }
-                
+                var wmsBeheerderMappingResponse = await GetWMSBeheerderRES2Mapping(actionName).ConfigureAwait(false);
+                //var goEfficientAttributesResponse = await GetGoEfficientAttributes().ConfigureAwait(false);
+                if(!wmsBeheerderMappingResponse.IsSuccess) { throw new Exception($"Error Code: {wmsBeheerderMappingResponse.ErrorCode}; Error Message: {wmsBeheerderMappingResponse.ErrorMessage}"); }
+
                 var mapDataForTaskFetchResponse = await MapDataForTaskFetchResponse(
-                    templateModel.Templates, goEfficientAttributesResponse.Result!, 
+                    templateModel.Templates, wmsBeheerderMappingResponse.Result.WMSBeheerderRES2MappingDictionary!, 
                     wmsBeheerderAttributesResponse.Result!).ConfigureAwait(false);
                 if(!mapDataForTaskFetchResponse.IsSuccess) { throw new Exception($"Error Code: {mapDataForTaskFetchResponse.ErrorCode}; Error Message: {mapDataForTaskFetchResponse.ErrorMessage}"); }
                 JObject resultObject = new JObject();
                 foreach (var item in mapDataForTaskFetchResponse.Result)
                 {
+                    i++;
+                    if (item.Value is null || item.Value == "") continue;
                     var propertyNames = item.WMSBeheerderActionPath.Split('.');
                     BuildJsonStructure(resultObject, propertyNames, item.Value);
                 }
