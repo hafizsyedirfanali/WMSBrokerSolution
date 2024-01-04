@@ -9,7 +9,7 @@ using WMSBrokerProject.Models;
 
 namespace WMSBrokerProject.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("contractor")]
     [ApiController]
     public class TaskSyncController : AppBaseController
     {
@@ -20,17 +20,20 @@ namespace WMSBrokerProject.Controllers
         {
         }
 
-        [HttpGet]
+        [HttpPut]
+        [Route("{orgId}/tasks/{taskId}")]
         public async Task<IActionResult> BeginTaskSyncProcess([FromBody] TaskSyncOPRequestModel model,
-            [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID)
-        //[FromRoute][Required][StringLength(36, MinimumLength = 1)] string inId,
-        //[FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
+            [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
+            [FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId,
+            [FromRoute][Required][StringLength(36, MinimumLength = 1)] string taskId)
 
         {
-            var correlationItem = correlationServices.GetCorrelationItemByCorrelationId(xCorrelationID);
-            if (correlationItem is null) return NotFound($"CorrelationID = {xCorrelationID} not found");
 
-            if (model.taskId == correlationItem.TaskId)
+            //var correlationItem = correlationServices.GetCorrelationItemByCorrelationId(xCorrelationID);
+            //if (correlationItem is null) return NotFound($"CorrelationID = {xCorrelationID} not found");
+
+            //if (model.taskId == correlationItem.TaskId)
+            if (model.taskId == taskId)
             {
                 if (string.IsNullOrEmpty(model.status.reason))
                 {

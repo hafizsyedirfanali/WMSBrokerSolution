@@ -359,6 +359,11 @@ namespace WMSBrokerProject.Repositories
 				                                        <Field>FIN.FIN_NUMBER</Field>
 				                                        <Field>FIN.FIN_ADRESS_ID</Field>
 				                                        
+                                                        <Field>ADRESS.ADRESS_HOUSNR_SFX</Field>
+                                                        <Field>ADRESS.ADRESS_TOWN</Field>
+                                                        <Field>ADRESS.ADRESS_STREET</Field>
+                                                        <Field>ADRESS.ADRESS_ZIPCODE</Field>
+                                                        <Field>ADRESS.ADRESS_HOUSNR</Field>
 				                                        <Field>FIN.FIN_MEMO</Field>
 				                                        <Field>FIN.FIN_FILE_EXT</Field>
 				                                        <Field>UDF.UDF_TYPEINFO</Field>

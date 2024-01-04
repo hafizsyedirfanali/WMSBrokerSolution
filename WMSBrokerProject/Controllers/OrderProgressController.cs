@@ -10,7 +10,7 @@ using WMSBrokerProject.Models;
 
 namespace WMSBrokerProject.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("contractor")]
     [ApiController]
     public class OrderProgressController : AppBaseController
     {
@@ -79,7 +79,7 @@ namespace WMSBrokerProject.Controllers
                             dataDictionary.SelectListItems.TryGetValue("taskId", out object? taskId);
                             dataDictionary.SelectListItems.TryGetValue("updateCount", out object? updateCount);
                             dataDictionary.SelectListItems.TryGetValue("priority", out object? priority);
-                            var count = Convert.ToInt64(updateCount);
+                            //var count = Convert.ToInt64(updateCount);
 
                             correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
                             {
@@ -96,7 +96,7 @@ namespace WMSBrokerProject.Controllers
                                         orgId = orgId,
                                         systemId = systemId //Json
                                     },
-                                    updateCount = (int)count, //Comming form 4a CIFWMS-UpdateCount Finmane
+                                    updateCount = 2, //Comming form 4a CIFWMS-UpdateCount Finmane
                                     created = DateTime.Now,
                                     priority = priority?.ToString() ?? ""
                                 },
@@ -118,23 +118,19 @@ namespace WMSBrokerProject.Controllers
 
 
         [HttpGet]
-        [Route("TaskFetchProcess")]
-        public async Task<IActionResult> BeginTaskFetch(string taskId)
-        //[FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId,
-
-        //[FromHeader][StringLength(36, MinimumLength = 1)] string xRequestID,
-        //[FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
-        //[FromHeader] bool? xWMSTest,
-        //[FromHeader][StringLength(8, MinimumLength = 1)] string xWMSAPIVersion)
+        [Route("{orgId}/tasks/{taskId}")]
+        public async Task<IActionResult> BeginTaskFetch(
+        [FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId,
+        [FromRoute][Required][StringLength(36, MinimumLength = 1)] string taskId)
         {
             //var correlationItem = correlationServices.GetCorrelationItemByTaskId(taskId);
             //if (correlationItem is null) return NotFound($"TaskId = {taskId} not found");
             //if (correlationItem.Pro_Id is null) return NotFound("Pro_Id not found");
             var res4aResult = await orderProgressService.REQ4a_GetTemplateData(new REQ4aGetTemplateModel
             {
-                RequestId = "14523",
+                  RequestId = "14523",
                 //ProId = correlationItem.Pro_Id
-                ProId = "9440957"
+                  ProId = "9440957"
             }).ConfigureAwait(false);
             if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
 
