@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
@@ -29,6 +30,8 @@ namespace WMSBrokerProject.Controllers
         [Route("OrderProgress")]
         public async Task<IActionResult> BeginOrderProgress()
         {
+            
+
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();
             var templateResponse = await orderProgressService.GetTemplateIds().ConfigureAwait(false);
@@ -79,13 +82,14 @@ namespace WMSBrokerProject.Controllers
                             dataDictionary.SelectListItems.TryGetValue("taskId", out object? taskId);
                             dataDictionary.SelectListItems.TryGetValue("updateCount", out object? updateCount);
                             dataDictionary.SelectListItems.TryGetValue("priority", out object? priority);
-                            //var count = Convert.ToInt64(updateCount);
-
-                            correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
-                            {
-                                TaskId = taskId?.ToString() ?? "",
-                                Pro_Id = pro_Id.ProIdDESC
-                            });
+                            //var count = Convert.ToString(updateCount);
+                            //var valueArray = count.Split(',');
+                            //var item = valueArray[0];
+                            //correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
+                            //{
+                            //    TaskId = taskId?.ToString() ?? "",
+                            //    Pro_Id = pro_Id.ProIdDESC
+                            //});
 
                             var taskSyncResponse = await orderProgressService.RequestTaskIndication(new TaskIndicationRequestModel
                             {
@@ -123,12 +127,14 @@ namespace WMSBrokerProject.Controllers
         [FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId,
         [FromRoute][Required][StringLength(36, MinimumLength = 1)] string taskId)
         {
+            Random rand = new Random();
+            var requestId = rand.Next(10000, 1000001).ToString();
             //var correlationItem = correlationServices.GetCorrelationItemByTaskId(taskId);
             //if (correlationItem is null) return NotFound($"TaskId = {taskId} not found");
             //if (correlationItem.Pro_Id is null) return NotFound("Pro_Id not found");
             var res4aResult = await orderProgressService.REQ4a_GetTemplateData(new REQ4aGetTemplateModel
             {
-                  RequestId = "14523",
+                  RequestId = requestId,
                 //ProId = correlationItem.Pro_Id
                   ProId = "9440957"
             }).ConfigureAwait(false);

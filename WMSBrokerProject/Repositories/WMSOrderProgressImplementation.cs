@@ -524,11 +524,11 @@ namespace WMSBrokerProject.Repositories
             {
                 var correlationID = Guid.NewGuid().ToString();
 
-                correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
-                {
-                    TaskId = model.taskId,
-                    CorrelationID = correlationID
-                });
+                //correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
+                //{
+                //    TaskId = model.taskId,
+                //    CorrelationID = correlationID
+                //});
 
                 using HttpClient httpClient = new HttpClient();
                 httpClient.BaseAddress = new Uri(baseAddress); //Url form wmssetteing
