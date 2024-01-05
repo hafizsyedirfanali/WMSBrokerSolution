@@ -147,8 +147,8 @@ namespace WMSBrokerProject.Controllers
             var res4aResult = await orderProgressService.REQ4a_GetTemplateData(new REQ4aGetTemplateModel
             {
                   RequestId = requestId,
-                //ProId = correlationItem.Pro_Id
-                  ProId = "9440957"
+                  ProId = correlationItem.Pro_Id
+                  //ProId = "9440957"
             }).ConfigureAwait(false);
             if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
 
