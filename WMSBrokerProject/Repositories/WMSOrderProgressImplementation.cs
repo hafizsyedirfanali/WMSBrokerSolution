@@ -62,7 +62,7 @@ namespace WMSBrokerProject.Repositories
             //        _orderProgressMappingOptions.OrderProgressMapping[item.Key] = item.Value;
             //    }
             //}
-
+            this.correlationServices = correlationServices;
             _configuration = configuration;
             this.hostEnvironment = hostEnvironment;
             this.goEfficientCredentials = goEfficientCredentials.Value;
