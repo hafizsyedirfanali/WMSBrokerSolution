@@ -30,7 +30,17 @@ namespace WMSBrokerProject.Controllers
         [Route("OrderProgress")]
         public async Task<IActionResult> BeginOrderProgress()
         {
-            
+            //correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
+            //{
+            //    TaskId = "45126",
+            //    Pro_Id = "fh4521"
+            //});
+
+            //correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
+            //{
+            //    TaskId = "45126",
+            //    CorrelationID = "fdbshcjc"
+            //});
 
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();
@@ -85,11 +95,12 @@ namespace WMSBrokerProject.Controllers
                             //var count = Convert.ToString(updateCount);
                             //var valueArray = count.Split(',');
                             //var item = valueArray[0];
-                            //correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
-                            //{
-                            //    TaskId = taskId?.ToString() ?? "",
-                            //    Pro_Id = pro_Id.ProIdDESC
-                            //});
+                            correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
+                            {
+                                TaskId = taskId?.ToString() ?? "",
+                                Pro_Id = pro_Id.ProIdDESC,
+                                Action = template.ActionType
+                            });
 
                             var taskSyncResponse = await orderProgressService.RequestTaskIndication(new TaskIndicationRequestModel
                             {
@@ -129,9 +140,10 @@ namespace WMSBrokerProject.Controllers
         {
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();
-            //var correlationItem = correlationServices.GetCorrelationItemByTaskId(taskId);
-            //if (correlationItem is null) return NotFound($"TaskId = {taskId} not found");
-            //if (correlationItem.Pro_Id is null) return NotFound("Pro_Id not found");
+            var correlationItem = correlationServices.GetCorrelationItemByTaskId(taskId);
+            if (correlationItem is null) return NotFound($"TaskId = {taskId} not found");
+            if (correlationItem.Pro_Id is null) return NotFound("Pro_Id not found");
+            if (correlationItem.Action is null) return NotFound("Action not found");
             var res4aResult = await orderProgressService.REQ4a_GetTemplateData(new REQ4aGetTemplateModel
             {
                   RequestId = requestId,
@@ -141,7 +153,7 @@ namespace WMSBrokerProject.Controllers
             if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
 
             var jsonResultForTaskFetchResponse = await orderProgressService.GetJsonResultForTaskFetchResponse(
-                res4aResult.Result!, "CONNECTION_INCIDENT").ConfigureAwait(false);
+                res4aResult.Result!, correlationItem.Action).ConfigureAwait(false);
             if (!jsonResultForTaskFetchResponse.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, jsonResultForTaskFetchResponse); }
 
             //Json to be passed with OK Status

@@ -5,6 +5,10 @@ namespace WMSBrokerProject.Repositories
 {
     public class CorrelationImplementation : ICorrelationServices
     {
+        public CorrelationImplementation()
+        {
+            this.CorrelationItems = new List<CorrelationItem>();
+        }
         public List<CorrelationItem> CorrelationItems { get; set; }
 
         public CorrelationItem? GetCorrelationItemByCorrelationId(string correlationId)
@@ -38,6 +42,7 @@ namespace WMSBrokerProject.Repositories
                 CorrelationItem selectedItem = this.CorrelationItems.FirstOrDefault(s=>s.TaskId == correlationItem.TaskId)!;
                 if(!string.IsNullOrEmpty(correlationItem.CorrelationID)) selectedItem.CorrelationID = correlationItem.CorrelationID;
                 if (!string.IsNullOrEmpty(correlationItem.Pro_Id)) selectedItem.Pro_Id = correlationItem.Pro_Id;
+                if (!string.IsNullOrEmpty(correlationItem.Action)) selectedItem.Action = correlationItem.Action;
             }
             else
             {
@@ -50,5 +55,6 @@ namespace WMSBrokerProject.Repositories
         public string TaskId { get; set; }
         public string? CorrelationID { get; set; }
         public string? Pro_Id { get; set; }
+        public string? Action { get; set; }
     }
 }
