@@ -29,11 +29,11 @@ namespace WMSBrokerProject.Controllers
 
         {
 
-            //var correlationItem = correlationServices.GetCorrelationItemByCorrelationId(xCorrelationID);
-            //if (correlationItem is null) return NotFound($"CorrelationID = {xCorrelationID} not found");
+            var correlationItem = correlationServices.GetCorrelationItemByCorrelationId(xCorrelationID);
+            if (correlationItem is null) return NotFound($"CorrelationID = {xCorrelationID} not found");
 
-            //if (model.taskId == correlationItem.TaskId)
-            if (model.taskId == taskId)
+            if (model.taskId == correlationItem.TaskId)
+            //if (model.taskId == taskId)
             {
                 if (string.IsNullOrEmpty(model.status.reason))
                 {

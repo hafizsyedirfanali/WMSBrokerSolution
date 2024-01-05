@@ -30,18 +30,6 @@ namespace WMSBrokerProject.Controllers
         [Route("OrderProgress")]
         public async Task<IActionResult> BeginOrderProgress()
         {
-            //correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
-            //{
-            //    TaskId = "45126",
-            //    Pro_Id = "fh4521"
-            //});
-
-            //correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
-            //{
-            //    TaskId = "45126",
-            //    CorrelationID = "fdbshcjc"
-            //});
-
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();
             var templateResponse = await orderProgressService.GetTemplateIds().ConfigureAwait(false);
@@ -101,7 +89,7 @@ namespace WMSBrokerProject.Controllers
                                 Pro_Id = pro_Id.ProIdDESC,
                                 Action = template.ActionType
                             });
-
+                            
                             var taskSyncResponse = await orderProgressService.RequestTaskIndication(new TaskIndicationRequestModel
                             {
                                 header = new TaskIndicationRequestModel.Header
