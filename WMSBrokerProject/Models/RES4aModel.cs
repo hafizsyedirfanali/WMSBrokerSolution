@@ -168,6 +168,13 @@ namespace WMSBrokerProject.Models
         public string UDF_TYPEINFO { get; set; }
         public string UDF_LABEL { get; set; }
         public string PRO_ID { get; set; }
+        public string FIN_ADRESS_ID { get; set; }
+    }
+    public class Fin_AddressClass
+    {
+        public string FIN_ID { get; set; }
+        public string FIN_NAME { get; set; }
+        public string FIN_ADRESS_ID { get; set; }
     }
     public class GoEfficientTemplateAttributesClass
     {

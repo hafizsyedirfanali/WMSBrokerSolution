@@ -414,6 +414,7 @@ namespace WMSBrokerProject.Repositories
                                                 let udfTypeInfoValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value
                                                 let udfLabelValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_LABEL")?.Value
                                                 let proIdValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_ID")?.Value
+                                                let fin_Address_Id = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_ADRESS_ID")?.Value
 
                                                 select new RES4aTemplateFields
                                                 {
@@ -428,15 +429,22 @@ namespace WMSBrokerProject.Repositories
                                                     FIN_FILE_EXT = finFileExtValue,
                                                     UDF_TYPEINFO = udfTypeInfoValue,
                                                     UDF_LABEL = udfLabelValue,
-                                                    PRO_ID = proIdValue
-
+                                                    PRO_ID = proIdValue,
+                                                    FIN_ADRESS_ID = fin_Address_Id
                                                 }).ToList();
 
-               
+                List<Fin_AddressClass> addresses = templates.Where(s => s.UDF_TYPE == "A" && !string.IsNullOrEmpty(s.FIN_ADRESS_ID))
+                                .Select(s=> new Fin_AddressClass
+                                {
+                                    FIN_ADRESS_ID = s.FIN_ADRESS_ID,
+                                    FIN_ID = s.FIN_ID,
+                                    FIN_NAME = s.FIN_NAME
+                                }).ToList();
 
                 responseModel.Result = new Res4aGetTemplateModel
                 {
-                    Templates = templates
+                    Templates = templates,
+                    Addresses = addresses
                 };
                 responseModel.IsSuccess = true;
             }
@@ -528,7 +536,7 @@ namespace WMSBrokerProject.Repositories
                                                 <Fields>
                                                 </Fields>
                                                 <Conditions>
-                                                    <Condition RightVariableType=""LiteralValue"" RightValue=""1145918"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""ADRESS.ADRESS_ID""/>
+                                                    <Condition RightVariableType=""LiteralValue"" RightValue=""{model.AddressId}"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""ADRESS.ADRESS_ID""/>
                                                 </Conditions>
                                                 <OperationName>ADRESS_READ_M_V1</OperationName>
                                             </ReadOperation>
@@ -549,9 +557,30 @@ namespace WMSBrokerProject.Repositories
                     xmlResponse = File.ReadAllText(xmlResponseFilePath);
                 }
 
-                XDocument doc = XDocument.Parse(xmlResponse);
+                XDocument xdoc = XDocument.Parse(xmlResponse);
 
-                responseModel.Result = new RES8Model { };
+                var templates = (from row in xdoc.Descendants("Row")
+                                 let streetNameValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "ADRESS_STREET")?.Value
+                                 let cityNameValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "ADRESS_TOWN")?.Value
+                                 let countryValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "COUNTR_ISO3166_A3")?.Value
+                                 let houseNumberValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "ADRESS_HOUSNR")?.Value
+                                 let houseNumberExtensionValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "ADRESS_HOUSNR_SFX")?.Value
+                                 let postalCodeValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "ADRESS_ZIPCODE")?.Value
+
+                                 select new RES48AddressFields
+                                 {
+                                     StreetName = streetNameValue,
+                                     CityName = cityNameValue,
+                                     Country = countryValue,
+                                     HouseNumber = houseNumberValue,
+                                     HouseNumberExtension = houseNumberExtensionValue,
+                                     PostalCode = postalCodeValue
+                                 }).ToList();
+
+                responseModel.Result = new RES8Model
+                {
+                    AddressFields = templates
+                };
                 responseModel.IsSuccess = true;
             }
             catch (HttpRequestException ex)

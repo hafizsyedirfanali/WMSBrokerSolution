@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.Metrics;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
@@ -140,6 +141,32 @@ namespace WMSBrokerProject.Controllers
             }).ConfigureAwait(false);
             if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
 
+            var addresses = res4aResult.Result!.Addresses;
+            var listItem = new List<AddressFieldsList>();
+           
+            foreach (var address in addresses)
+            {
+                var addressResponse = await orderProgressService.REQ08_ReadAddress(new REQ8Model
+                {
+                    RequestId = requestId,
+                    AddressId = address.FIN_ADRESS_ID
+                }).ConfigureAwait(false);
+                if (addressResponse.IsSuccess)
+                {
+                    var addressField = addressResponse.Result!.AddressFields.FirstOrDefault();
+                    listItem.Add(new AddressFieldsList
+                    {
+                        Fin_Name = address.FIN_NAME,
+                        CityName = addressField.CityName,
+                        StreetName = addressField.StreetName,
+                        Country = addressField.Country,
+                        HouseNumber = addressField.HouseNumber,
+                        PostalCode = addressField.PostalCode,
+                        HouseNumberExtension = addressField.HouseNumberExtension
+                    });
+                }
+            }
+            //
             var jsonResultForTaskFetchResponse = await orderProgressService.GetJsonResultForTaskFetchResponse(
                 res4aResult.Result!, correlationItem.Action).ConfigureAwait(false);
             if (!jsonResultForTaskFetchResponse.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, jsonResultForTaskFetchResponse); }

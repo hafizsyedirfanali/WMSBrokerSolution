@@ -14,6 +14,7 @@
     public class Res4aGetTemplateModel
     {
         public List<RES4aTemplateFields> Templates { get; set; }
+        public List<Fin_AddressClass> Addresses { get; set; }
     }
 
 }
