@@ -154,21 +154,25 @@ namespace WMSBrokerProject.Controllers
                 if (addressResponse.IsSuccess)
                 {
                     var addressField = addressResponse.Result!.AddressFields.FirstOrDefault();
-                    listItem.Add(new AddressFieldsList
+                    if (addressField is not null)
                     {
-                        Fin_Name = address.FIN_NAME,
-                        CityName = addressField.CityName,
-                        StreetName = addressField.StreetName,
-                        Country = addressField.Country,
-                        HouseNumber = addressField.HouseNumber,
-                        PostalCode = addressField.PostalCode,
-                        HouseNumberExtension = addressField.HouseNumberExtension
-                    });
+                        listItem.Add(new AddressFieldsList
+                        {
+                            Fin_Name = address.FIN_NAME,
+                            CityName = addressField.CityName,
+                            StreetName = addressField.StreetName,
+                            Country = addressField.Country,
+                            HouseNumber = addressField.HouseNumber,
+                            PostalCode = addressField.PostalCode,
+                            HouseNumberExtension = addressField.HouseNumberExtension
+                        }); 
+                    }
                 }
             }
-            //
-            var jsonResultForTaskFetchResponse = await orderProgressService.GetJsonResultForTaskFetchResponse(
-                res4aResult.Result!, correlationItem.Action).ConfigureAwait(false);
+            
+            var jsonResultForTaskFetchResponse = await orderProgressService
+                .GetJsonResultForTaskFetchResponse(res4aResult.Result!, 
+                correlationItem.Action).ConfigureAwait(false);
             if (!jsonResultForTaskFetchResponse.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, jsonResultForTaskFetchResponse); }
 
             //Json to be passed with OK Status
