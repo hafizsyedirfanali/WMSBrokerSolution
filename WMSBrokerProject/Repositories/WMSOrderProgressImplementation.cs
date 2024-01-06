@@ -511,6 +511,62 @@ namespace WMSBrokerProject.Repositories
             return responseModel;
         }
 
+        public async Task<ResponseModel<RES8Model>> REQ08_ReadAddress(REQ8Model model)
+        {
+            var responseModel = new ResponseModel<RES8Model>();
+            try
+            {
+                using HttpClient client = new HttpClient();
+                string? requestUri = _configuration.GetSection("GoEfficient:EndPointUrl").Value;
+                var date = DateTime.UtcNow.ToString("o", CultureInfo.InvariantCulture);
+
+                var xmlRequest5 = @$"<?xml version=""1.0"" encoding=""UTF-8""?>
+                                        <Request>
+	                                        {GetXMLHeader(model.RequestId)}
+                                         <Body>
+                                            <ReadOperation>
+                                                <Fields>
+                                                </Fields>
+                                                <Conditions>
+                                                    <Condition RightVariableType=""LiteralValue"" RightValue=""1145918"" Operator=""Equal"" LeftVariableType=""Field"" LeftValue=""ADRESS.ADRESS_ID""/>
+                                                </Conditions>
+                                                <OperationName>ADRESS_READ_M_V1</OperationName>
+                                            </ReadOperation>
+                                          </Body>
+                                        </Request>";
+
+                var content = new StringContent(xmlRequest5, Encoding.UTF8, "application/xml");
+                string xmlResponse;
+                if (!string.IsNullOrEmpty(requestUri))
+                {
+                    var response = await client.PostAsync(requestUri, content);
+                    response.EnsureSuccessStatusCode();
+                    xmlResponse = await response.Content.ReadAsStringAsync();
+                }
+                else
+                {
+                    var xmlResponseFilePath = Path.Combine(templateFolder!, $"");
+                    xmlResponse = File.ReadAllText(xmlResponseFilePath);
+                }
+
+                XDocument doc = XDocument.Parse(xmlResponse);
+
+                responseModel.Result = new RES8Model { };
+                responseModel.IsSuccess = true;
+            }
+            catch (HttpRequestException ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 30008;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 30009;
+            }
+            return responseModel;
+        }
+
         public async Task<ResponseModel<TaskIndicationResponseModel>> RequestTaskIndication(TaskIndicationRequestModel model)
         {
             var responseModel = new ResponseModel<TaskIndicationResponseModel>();
