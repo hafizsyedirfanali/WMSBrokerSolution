@@ -949,7 +949,7 @@ namespace WMSBrokerProject.Repositories
         public async Task<ResponseModel<JObject>> GetJsonResultForTaskFetchResponse(Res4aGetTemplateModel templateModel, string actionName)
         {
             var responseModel = new ResponseModel<JObject>();
-            int i = 0;
+      
             try
             {
                 var wmsBeheerderAttributesResponse = await GetWMSBeheerderAttributesByActionName(actionName).ConfigureAwait(false);
@@ -966,7 +966,7 @@ namespace WMSBrokerProject.Repositories
                 JObject resultObject = new JObject();
                 foreach (var item in mapDataForTaskFetchResponse.Result)
                 {
-                    i++;
+                    
                     if (item.Value is null || item.Value == "") continue;
                     var propertyNames = item.WMSBeheerderActionPath.Split('.');
                     BuildJsonStructure(resultObject, propertyNames, item.Value);
