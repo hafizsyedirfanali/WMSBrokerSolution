@@ -14,7 +14,8 @@ namespace WMSBrokerProject.Interfaces
         Task<ResponseModel<TaskIndicationResponseModel>> RequestTaskIndication(TaskIndicationRequestModel model);
         Task<ResponseModel<CTRES7aModel>> REQ7a(CTREQ7aModel model);
         Task<ResponseModel<RES8Model>> REQ08_ReadAddress(REQ8Model model);
-        Task<ResponseModel<JObject>> GetJsonResultForTaskFetchResponse(Res4aGetTemplateModel templateModel, string actionName);
+        Task<ResponseModel<JObject>> GetJsonResultForTaskFetchResponse(Res4aGetTemplateModel templateModel, string actionName, List<TaskFetchResponseAddressMappedModel> addressMappedPaths);
+        Task<ResponseModel<Dictionary<string, object?>>> GetWMSBeheerderAddressPaths(string addressKeyName);
 
 
     }

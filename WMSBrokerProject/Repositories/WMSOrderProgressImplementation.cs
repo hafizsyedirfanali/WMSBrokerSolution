@@ -944,9 +944,62 @@ namespace WMSBrokerProject.Repositories
             }
             return responseModel;
         }
-
-
-        public async Task<ResponseModel<JObject>> GetJsonResultForTaskFetchResponse(Res4aGetTemplateModel templateModel, string actionName)
+        private string? GetValueForKeyFromSection(string keyName, string sectionName, bool isCaseSensitive = false)
+        {
+            string? value = null;
+            var section = _configuration.GetSection(sectionName);
+            if (section != null)
+            {
+                if (isCaseSensitive)
+                {
+                    value = section.GetValue<string>(keyName);
+                }
+                else
+                {
+                    var lowercaseKeyToCheck = keyName.ToLower();
+                    if (section.GetChildren().Any(kv => kv.Key.ToLower() == lowercaseKeyToCheck))
+                    {
+                        value = section.GetValue<string>(keyName);
+                    }
+                }
+            }
+            return value;
+        }
+        private Dictionary<string, object?> GetKeyValueAsDictionary(string sectionName, bool ignoreNullValue = true)
+        {
+            var sectionDictionary = new Dictionary<string, object?>();
+            var section = _configuration.GetSection(sectionName);
+            if (section != null)
+            {
+                foreach (var config in section.GetChildren())
+                {
+                    if (!ignoreNullValue || config.Value != null)
+                    {
+                        sectionDictionary.Add(config.Key, config.Value);
+                    }
+                } 
+            }
+            return sectionDictionary;
+        }
+        public async Task<ResponseModel<Dictionary<string, object?>>> GetWMSBeheerderAddressPaths(string addressKeyName)
+        {
+            var responseModel = new ResponseModel<Dictionary<string, object?>>();
+            try
+            {
+                var addressValue = GetValueForKeyFromSection(addressKeyName, "WMSBeheerderRES4AddressMapping");
+                var addressPaths = GetKeyValueAsDictionary($"WMSBeheerderAddresses:{addressValue}");
+                responseModel.Result = addressPaths;
+                responseModel.IsSuccess = true;
+            }
+            catch (Exception ex)
+            {
+                responseModel.ErrorMessage = ex.Message;
+                responseModel.ErrorCode = 30020;
+            }
+            return responseModel;
+        }
+        public async Task<ResponseModel<JObject>> GetJsonResultForTaskFetchResponse(
+            Res4aGetTemplateModel templateModel, string actionName, List<TaskFetchResponseAddressMappedModel> addressMappedPaths)
         {
             var responseModel = new ResponseModel<JObject>();
       
@@ -956,7 +1009,7 @@ namespace WMSBrokerProject.Repositories
                 if (!wmsBeheerderAttributesResponse.IsSuccess) { throw new Exception($"Error Code: {wmsBeheerderAttributesResponse.ErrorCode}; Error Message: {wmsBeheerderAttributesResponse.ErrorMessage}"); }
                 
                 var wmsBeheerderMappingResponse = await GetWMSBeheerderRES2Mapping(actionName).ConfigureAwait(false);
-                //var goEfficientAttributesResponse = await GetGoEfficientAttributes().ConfigureAwait(false);
+                
                 if(!wmsBeheerderMappingResponse.IsSuccess) { throw new Exception($"Error Code: {wmsBeheerderMappingResponse.ErrorCode}; Error Message: {wmsBeheerderMappingResponse.ErrorMessage}"); }
 
                 var mapDataForTaskFetchResponse = await MapDataForTaskFetchResponse(
@@ -966,11 +1019,17 @@ namespace WMSBrokerProject.Repositories
                 JObject resultObject = new JObject();
                 foreach (var item in mapDataForTaskFetchResponse.Result)
                 {
-                    
                     if (item.Value is null || item.Value == "") continue;
                     var propertyNames = item.WMSBeheerderActionPath.Split('.');
                     BuildJsonStructure(resultObject, propertyNames, item.Value);
                 }
+                foreach (var item in addressMappedPaths)
+                {
+                    if (item.Value is null || item.Value == "") continue;
+                    var propertyNames = item.WMSBeheerderAddressPath.Split('.');
+                    BuildJsonStructure(resultObject, propertyNames, item.Value);
+                }
+
                 responseModel.Result = resultObject;
                 responseModel.IsSuccess = true;
             }

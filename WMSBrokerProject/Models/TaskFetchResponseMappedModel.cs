@@ -6,4 +6,10 @@
         public string FIN_NAME { get; set; }
         public string Value { get; set; }
     }
+    public class TaskFetchResponseAddressMappedModel
+    {
+        public string WMSBeheerderAddressPath { get; set; }
+        public string Value { get; set; }
+
+    }
 }

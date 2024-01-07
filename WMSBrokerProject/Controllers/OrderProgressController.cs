@@ -169,10 +169,40 @@ namespace WMSBrokerProject.Controllers
                     }
                 }
             }
-            
+            var addressMappedPaths = new List<TaskFetchResponseAddressMappedModel>();
+            foreach (var item in listItem)
+            {
+                var responseAddressPaths = await orderProgressService.GetWMSBeheerderAddressPaths(item.Fin_Name).ConfigureAwait(false);
+                if (!responseAddressPaths.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, responseAddressPaths); }
+                Dictionary<string, object?> addressDictionary = responseAddressPaths.Result!;
+               
+                addressDictionary.TryGetValue("postalCode", out object? postalCodePath);
+                if (postalCodePath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel 
+                { WMSBeheerderAddressPath = postalCodePath.ToString(), Value = item.PostalCode });
+
+                addressDictionary.TryGetValue("houseNumber", out object? houseNumberPath);
+                if (houseNumberPath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel 
+                { WMSBeheerderAddressPath = houseNumberPath.ToString(), Value = item.HouseNumber });
+                
+                addressDictionary.TryGetValue("houseNumberExtension", out object? houseNumberExtensionPath);
+                if (houseNumberExtensionPath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel 
+                { WMSBeheerderAddressPath = houseNumberExtensionPath.ToString(), Value = item.HouseNumberExtension });
+                
+                addressDictionary.TryGetValue("city", out object? cityPath);
+                if (cityPath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel 
+                { WMSBeheerderAddressPath = cityPath.ToString(), Value = item.CityName});
+
+                addressDictionary.TryGetValue("streetName", out object? streetNamePath);
+                if (streetNamePath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel 
+                { WMSBeheerderAddressPath = streetNamePath.ToString(), Value = item.StreetName});
+                
+                addressDictionary.TryGetValue("country", out object? countryPath);
+                if (countryPath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel 
+                { WMSBeheerderAddressPath = countryPath.ToString(), Value = item.Country });
+            }
+
             var jsonResultForTaskFetchResponse = await orderProgressService
-                .GetJsonResultForTaskFetchResponse(res4aResult.Result!, 
-                correlationItem.Action).ConfigureAwait(false);
+                .GetJsonResultForTaskFetchResponse(res4aResult.Result!, correlationItem.Action, addressMappedPaths).ConfigureAwait(false);
             if (!jsonResultForTaskFetchResponse.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, jsonResultForTaskFetchResponse); }
 
             //Json to be passed with OK Status
