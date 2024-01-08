@@ -89,7 +89,8 @@ namespace WMSBrokerProject.Controllers
                             {
                                 TaskId = taskId?.ToString() ?? "",
                                 Pro_Id = pro_Id.ProIdDESC,
-                                Action = template.ActionType
+                                //Action = template.ActionType
+                                Action = res4aResult.Result.ActionName
                             });
                             
                             var taskSyncResponse = await orderProgressService.RequestTaskIndication(new TaskIndicationRequestModel

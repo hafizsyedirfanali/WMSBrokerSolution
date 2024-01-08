@@ -1,18 +1,13 @@
-﻿using Microsoft.AspNetCore.DataProtection.KeyManagement;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Globalization;
 using System.Net.Http.Headers;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
-using static System.Net.Mime.MediaTypeNames;
-using static WMSBrokerProject.Models.RES4aXMLResponseModel;
 
 namespace WMSBrokerProject.Repositories
 {
@@ -105,7 +100,7 @@ namespace WMSBrokerProject.Repositories
                     {
                         Templates = templates
                     };
-                    responseModel.IsSuccess = true; 
+                    responseModel.IsSuccess = true;
                 }
                 else
                 {
@@ -216,7 +211,7 @@ namespace WMSBrokerProject.Repositories
             }
             return null;
         }
-       
+
         public async Task<ResponseModel<OPRES4aModel>> REQ4a_GetInID(OrderProcessingREQ4aModel model)
         {
             var responseModel = new ResponseModel<OPRES4aModel>();
@@ -295,18 +290,18 @@ namespace WMSBrokerProject.Repositories
                 selectListItems.Add(key: "priority", value: priority);
 
                 var firstRowFields = (from row in xdoc.Descendants("Row")
-                                                let description = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_START")?.Value                                                
-                                                let templateId = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_DEADLINE")?.Value
-                                                select new Res4aRowFields
-                                                {
-                                                    Pro_Description = description,
-                                                    Pro_Template_Id = templateId
-                                                }).FirstOrDefault();
+                                      let description = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_START")?.Value
+                                      let templateId = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_DEADLINE")?.Value
+                                      select new Res4aRowFields
+                                      {
+                                          Pro_Description = description,
+                                          Pro_Template_Id = templateId
+                                      }).FirstOrDefault();
                 Res4aRowFields? res4ARowFields;
-                if (firstRowFields is null || 
+                if (firstRowFields is null ||
                     (firstRowFields is not null &&
                     ((string.IsNullOrEmpty(firstRowFields.Pro_Description) ||
-                    string.IsNullOrEmpty(firstRowFields.Pro_Template_Id)) && 
+                    string.IsNullOrEmpty(firstRowFields.Pro_Template_Id)) &&
                     model.Template.WMSStatus.ToLower() == "wip")))
                 {
                     res4ARowFields = null;
@@ -315,18 +310,56 @@ namespace WMSBrokerProject.Repositories
                 {
                     res4ARowFields = firstRowFields;
                 }
+                var actionContainingRow = (from row in xdoc.Descendants("Row")
+                                      let finName = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value
+                                      where finName == "CIFWMS-Aft-Action"
+                                      let finPath = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_PATH")?.Value
+                                      let udfTypeInfo = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value
+                                      select new Res4aActionFields
+                                      {
+                                          FIN_NAME = finName,
+                                          FIN_PATH = finPath,
+                                          UDF_TYPEINFO = udfTypeInfo
+                                      }).FirstOrDefault();
 
-				//Find CIFWMS-Aft-Action value in FinName field in one of the row
-				//Get the value (number) from FinPath Field
-				//Also get the value from UDF.UDF_TYPEINF field as follows
-				///<Value FieldName="UDF.UDF_TYPEINFO">SEL:<0>=PATCH;<1>=DEPATCH;<2>=NETWORK_INCIDENT;<3>=CONNECTION_INCIDENT;<4>=FTU_REPLACEMENT;<5>=NEW_CONNECTION;<6>=AFTERCARE;<7>=AFTER_CONNECT;<8>=FTU_DISPLACEMENT;<9>=TELCO_MIGRATION;<10>=TELCO_DONOR;<11>=PORT_MIGRATION;</Value>
-                ///Get the Action Name by matching the value from FinPath
-                ///Goefficent Line no.833 FC
-				responseModel.Result = new OPRES4aModel
+                string? actionName = null;
+                if (actionContainingRow != null)
+                {
+                    Dictionary<string, string> selectOptions = new();
+                    var decodedUDFTypeInfo = System.Net.WebUtility.HtmlDecode(actionContainingRow.UDF_TYPEINFO);
+                    if (decodedUDFTypeInfo.StartsWith("SEL:", StringComparison.OrdinalIgnoreCase))
+                    {
+                        decodedUDFTypeInfo = decodedUDFTypeInfo.Substring("SEL:".Length);
+                    }
+                    var keyValuePairs = decodedUDFTypeInfo.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                            .Select(s => s.Split('=')).ToList();
+                    foreach (var keyValuePair in keyValuePairs)
+                    {
+                        if (keyValuePair.Length == 2)
+                        {
+                            var value = keyValuePair[0].Trim();
+                            value = value.Replace("<", "").Replace(">", "").Trim();
+                            var text = keyValuePair[1].Trim();
+                            if (selectOptions.Keys.Contains(text) && selectOptions.Values.Contains(value))
+                            {
+                                continue;
+                            }
+                            else
+                            {
+                                selectOptions.Add(key: value, value: text);
+                            }
+                        }
+                    }
+                    selectOptions.TryGetValue(actionContainingRow.FIN_PATH, out actionName);
+                }
+                
+                
+                responseModel.Result = new OPRES4aModel
                 {
                     InID = taskId ?? string.Empty,
                     Res4ARowFields = res4ARowFields,
-                    SelectListItems = selectListItems
+                    SelectListItems = selectListItems,
+                    ActionName = actionName
                 };
                 responseModel.IsSuccess = true;
             }
@@ -394,7 +427,7 @@ namespace WMSBrokerProject.Repositories
                     xmlResponse = File.ReadAllText(xmlResponseFilePath);
                 }
 
-                
+
                 XDocument xdoc = XDocument.Parse(xmlResponse);
                 //var templateDictionary = new Dictionary<string, string>();
                 //var dataRows = xdoc.Descendants("Row")
@@ -408,39 +441,39 @@ namespace WMSBrokerProject.Repositories
 
 
                 var templates = (from row in xdoc.Descendants("Row")
-                                                let udfFIN_IDValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_ID")?.Value
-                                                let udfTypeValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value
-                                                let finNameValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value
-                                                let finRecordIdValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_RECORD_ID")?.Value
-                                                let finPathValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_PATH")?.Value
-                                                let finDateValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_DATE")?.Value
-                                                let finNumberValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NUMBER")?.Value
-                                                let finMemoValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_MEMO")?.Value
-                                                let finFileExtValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_FILE_EXT")?.Value
-                                                let udfTypeInfoValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value
-                                                let udfLabelValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_LABEL")?.Value
-                                                let proIdValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_ID")?.Value
-                                                let fin_Address_Id = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_ADRESS_ID")?.Value
+                                 let udfFIN_IDValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_ID")?.Value
+                                 let udfTypeValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPE")?.Value
+                                 let finNameValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NAME")?.Value
+                                 let finRecordIdValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_RECORD_ID")?.Value
+                                 let finPathValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_PATH")?.Value
+                                 let finDateValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_DATE")?.Value
+                                 let finNumberValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_NUMBER")?.Value
+                                 let finMemoValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_MEMO")?.Value
+                                 let finFileExtValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_FILE_EXT")?.Value
+                                 let udfTypeInfoValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_TYPEINFO")?.Value
+                                 let udfLabelValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "UDF.UDF_LABEL")?.Value
+                                 let proIdValue = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "PRO.PRO_ID")?.Value
+                                 let fin_Address_Id = row.Elements("Value").FirstOrDefault(e => e.Attribute("FieldName")?.Value == "FIN.FIN_ADRESS_ID")?.Value
 
-                                                select new RES4aTemplateFields
-                                                {
-                                                   FIN_ID = udfFIN_IDValue,
-                                                   UDF_TYPE = udfTypeValue,
-                                                   FIN_NAME = finNameValue,
-                                                    FIN_RECORD_ID = finRecordIdValue,
-                                                    FIN_PATH = finPathValue,
-                                                    FIN_DATE = finDateValue,
-                                                    FIN_NUMBER = finNumberValue,
-                                                    FIN_MEMO = finMemoValue,
-                                                    FIN_FILE_EXT = finFileExtValue,
-                                                    UDF_TYPEINFO = udfTypeInfoValue,
-                                                    UDF_LABEL = udfLabelValue,
-                                                    PRO_ID = proIdValue,
-                                                    FIN_ADRESS_ID = fin_Address_Id
-                                                }).ToList();
+                                 select new RES4aTemplateFields
+                                 {
+                                     FIN_ID = udfFIN_IDValue,
+                                     UDF_TYPE = udfTypeValue,
+                                     FIN_NAME = finNameValue,
+                                     FIN_RECORD_ID = finRecordIdValue,
+                                     FIN_PATH = finPathValue,
+                                     FIN_DATE = finDateValue,
+                                     FIN_NUMBER = finNumberValue,
+                                     FIN_MEMO = finMemoValue,
+                                     FIN_FILE_EXT = finFileExtValue,
+                                     UDF_TYPEINFO = udfTypeInfoValue,
+                                     UDF_LABEL = udfLabelValue,
+                                     PRO_ID = proIdValue,
+                                     FIN_ADRESS_ID = fin_Address_Id
+                                 }).ToList();
 
                 List<Fin_AddressClass> addresses = templates.Where(s => s.UDF_TYPE == "A" && !string.IsNullOrEmpty(s.FIN_ADRESS_ID))
-                                .Select(s=> new Fin_AddressClass
+                                .Select(s => new Fin_AddressClass
                                 {
                                     FIN_ADRESS_ID = s.FIN_ADRESS_ID,
                                     FIN_ID = s.FIN_ID,
@@ -806,14 +839,14 @@ namespace WMSBrokerProject.Repositories
             {
                 var resultDictionary = new Dictionary<string, string>();
                 var wMSBeheerderAttributesSection = _configuration.GetSection("WMSBeheerderAttributes");
-                if(wMSBeheerderAttributesSection != null)
+                if (wMSBeheerderAttributesSection != null)
                 {
                     var actionSection = wMSBeheerderAttributesSection.GetSection(actionName.ToLowerInvariant());
-                    if(actionSection != null)
+                    if (actionSection != null)
                     {
                         foreach (var child in actionSection.GetChildren())
                         {
-                            resultDictionary[child.Key] = child.Value??"";
+                            resultDictionary[child.Key] = child.Value ?? "";
                         }
                     }
                 }
@@ -882,8 +915,8 @@ namespace WMSBrokerProject.Repositories
             }
             return result;
         }
-        private async Task<ResponseModel<List<TaskFetchResponseMappedModel>>> MapDataForTaskFetchResponse(List<RES4aTemplateFields> dataList, 
-            Dictionary<string,object?> wmsBeheerderMapping, Dictionary<string,string> wmsBeheerderAttributes)
+        private async Task<ResponseModel<List<TaskFetchResponseMappedModel>>> MapDataForTaskFetchResponse(List<RES4aTemplateFields> dataList,
+            Dictionary<string, object?> wmsBeheerderMapping, Dictionary<string, string> wmsBeheerderAttributes)
         {
             var responseModel = new ResponseModel<List<TaskFetchResponseMappedModel>>();
             try
@@ -936,7 +969,7 @@ namespace WMSBrokerProject.Repositories
                 {
                     mappedValues.Add(config.Key, config.Value);
                 }
-                
+
                 responseModel.Result = new WMSBeheerderRES2MappingClass
                 {
                     WMSBeheerderRES2MappingDictionary = mappedValues
@@ -983,7 +1016,7 @@ namespace WMSBrokerProject.Repositories
                     {
                         sectionDictionary.Add(config.Key, config.Value);
                     }
-                } 
+                }
             }
             return sectionDictionary;
         }
@@ -1008,20 +1041,20 @@ namespace WMSBrokerProject.Repositories
             Res4aGetTemplateModel templateModel, string actionName, List<TaskFetchResponseAddressMappedModel> addressMappedPaths)
         {
             var responseModel = new ResponseModel<JObject>();
-      
+
             try
             {
                 var wmsBeheerderAttributesResponse = await GetWMSBeheerderAttributesByActionName(actionName).ConfigureAwait(false);
                 if (!wmsBeheerderAttributesResponse.IsSuccess) { throw new Exception($"Error Code: {wmsBeheerderAttributesResponse.ErrorCode}; Error Message: {wmsBeheerderAttributesResponse.ErrorMessage}"); }
-                
+
                 var wmsBeheerderMappingResponse = await GetWMSBeheerderRES2Mapping(actionName).ConfigureAwait(false);
-                
-                if(!wmsBeheerderMappingResponse.IsSuccess) { throw new Exception($"Error Code: {wmsBeheerderMappingResponse.ErrorCode}; Error Message: {wmsBeheerderMappingResponse.ErrorMessage}"); }
+
+                if (!wmsBeheerderMappingResponse.IsSuccess) { throw new Exception($"Error Code: {wmsBeheerderMappingResponse.ErrorCode}; Error Message: {wmsBeheerderMappingResponse.ErrorMessage}"); }
 
                 var mapDataForTaskFetchResponse = await MapDataForTaskFetchResponse(
-                    templateModel.Templates, wmsBeheerderMappingResponse.Result.WMSBeheerderRES2MappingDictionary!, 
+                    templateModel.Templates, wmsBeheerderMappingResponse.Result.WMSBeheerderRES2MappingDictionary!,
                     wmsBeheerderAttributesResponse.Result!).ConfigureAwait(false);
-                if(!mapDataForTaskFetchResponse.IsSuccess) { throw new Exception($"Error Code: {mapDataForTaskFetchResponse.ErrorCode}; Error Message: {mapDataForTaskFetchResponse.ErrorMessage}"); }
+                if (!mapDataForTaskFetchResponse.IsSuccess) { throw new Exception($"Error Code: {mapDataForTaskFetchResponse.ErrorCode}; Error Message: {mapDataForTaskFetchResponse.ErrorMessage}"); }
                 JObject resultObject = new JObject();
                 foreach (var item in mapDataForTaskFetchResponse.Result)
                 {

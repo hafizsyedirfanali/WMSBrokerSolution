@@ -835,7 +835,7 @@ namespace WMSBrokerProject.Repositories
                 {
                     try
                     {
-						Dictionary<string, string> selectOptions = new();
+						//Dictionary<string, string> selectOptions = new();
 						var decodedUDFTypeInfo = System.Net.WebUtility.HtmlDecode(fc.UdfTypeInfo);
 						//SEL:
 						//<A>=Aansluitingen.nl;
@@ -865,7 +865,7 @@ namespace WMSBrokerProject.Repositories
                                 }
                                 else
                                 {
-								selectListItems.Add(key: text, value: value);
+								    selectListItems.Add(key: text, value: value);
                                 }
 							}
 						}
