@@ -315,8 +315,13 @@ namespace WMSBrokerProject.Repositories
                 {
                     res4ARowFields = firstRowFields;
                 }
-               
-                responseModel.Result = new OPRES4aModel
+
+				//Find CIFWMS-Aft-Action value in FinName field in one of the row
+				//Get the value (number) from FinPath Field
+				//Also get the value from UDF.UDF_TYPEINF field as follows
+				///<Value FieldName="UDF.UDF_TYPEINFO">SEL:<0>=PATCH;<1>=DEPATCH;<2>=NETWORK_INCIDENT;<3>=CONNECTION_INCIDENT;<4>=FTU_REPLACEMENT;<5>=NEW_CONNECTION;<6>=AFTERCARE;<7>=AFTER_CONNECT;<8>=FTU_DISPLACEMENT;<9>=TELCO_MIGRATION;<10>=TELCO_DONOR;<11>=PORT_MIGRATION;</Value>
+                ///Get the Action Name by matching the value from FinPath
+				responseModel.Result = new OPRES4aModel
                 {
                     InID = taskId ?? string.Empty,
                     Res4ARowFields = res4ARowFields,
