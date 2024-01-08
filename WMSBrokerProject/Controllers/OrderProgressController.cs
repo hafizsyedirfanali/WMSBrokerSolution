@@ -9,6 +9,7 @@ using System.Diagnostics.Metrics;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
+using WMSBrokerProject.Repositories;
 
 namespace WMSBrokerProject.Controllers
 {
@@ -124,26 +125,24 @@ namespace WMSBrokerProject.Controllers
         [HttpGet]
         [Route("{orgId}/tasks/{taskId}")]
         public async Task<IActionResult> BeginTaskFetch(
+        [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
         [FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId,
         [FromRoute][Required][StringLength(36, MinimumLength = 1)] string taskId)
         {
             Random rand = new Random();
             var requestId = rand.Next(10000, 1000001).ToString();
-            var correlationItem = correlationServices.GetCorrelationItemByTaskId(taskId);
-            if (correlationItem is null) return NotFound($"TaskId = {taskId} not found");
-            if (correlationItem.Pro_Id is null) return NotFound("Pro_Id not found");
-            if (correlationItem.Action is null) return NotFound("Action not found");
+
             var res4aResult = await orderProgressService.REQ4a_GetTemplateData(new REQ4aGetTemplateModel
             {
-                  RequestId = requestId,
-                  ProId = correlationItem.Pro_Id
-                  //ProId = "9440957"
+                RequestId = requestId,
+                //ProId = correlationItem.Pro_Id
+                ProId = "9440957"
             }).ConfigureAwait(false);
             if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
 
             var addresses = res4aResult.Result!.Addresses;
             var listItem = new List<AddressFieldsList>();
-           
+
             foreach (var address in addresses)
             {
                 var addressResponse = await orderProgressService.REQ08_ReadAddress(new REQ8Model
@@ -165,7 +164,7 @@ namespace WMSBrokerProject.Controllers
                             HouseNumber = addressField.HouseNumber,
                             PostalCode = addressField.PostalCode,
                             HouseNumberExtension = addressField.HouseNumberExtension
-                        }); 
+                        });
                     }
                 }
             }
@@ -175,34 +174,34 @@ namespace WMSBrokerProject.Controllers
                 var responseAddressPaths = await orderProgressService.GetWMSBeheerderAddressPaths(item.Fin_Name).ConfigureAwait(false);
                 if (!responseAddressPaths.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, responseAddressPaths); }
                 Dictionary<string, object?> addressDictionary = responseAddressPaths.Result!;
-               
+
                 addressDictionary.TryGetValue("postalCode", out object? postalCodePath);
-                if (postalCodePath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel 
+                if (postalCodePath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel
                 { WMSBeheerderAddressPath = postalCodePath.ToString(), Value = item.PostalCode });
 
                 addressDictionary.TryGetValue("houseNumber", out object? houseNumberPath);
-                if (houseNumberPath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel 
+                if (houseNumberPath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel
                 { WMSBeheerderAddressPath = houseNumberPath.ToString(), Value = item.HouseNumber });
-                
+
                 addressDictionary.TryGetValue("houseNumberExtension", out object? houseNumberExtensionPath);
-                if (houseNumberExtensionPath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel 
+                if (houseNumberExtensionPath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel
                 { WMSBeheerderAddressPath = houseNumberExtensionPath.ToString(), Value = item.HouseNumberExtension });
-                
+
                 addressDictionary.TryGetValue("city", out object? cityPath);
-                if (cityPath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel 
-                { WMSBeheerderAddressPath = cityPath.ToString(), Value = item.CityName});
+                if (cityPath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel
+                { WMSBeheerderAddressPath = cityPath.ToString(), Value = item.CityName });
 
                 addressDictionary.TryGetValue("streetName", out object? streetNamePath);
-                if (streetNamePath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel 
-                { WMSBeheerderAddressPath = streetNamePath.ToString(), Value = item.StreetName});
-                
+                if (streetNamePath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel
+                { WMSBeheerderAddressPath = streetNamePath.ToString(), Value = item.StreetName });
+
                 addressDictionary.TryGetValue("country", out object? countryPath);
-                if (countryPath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel 
+                if (countryPath != null) addressMappedPaths.Add(new TaskFetchResponseAddressMappedModel
                 { WMSBeheerderAddressPath = countryPath.ToString(), Value = item.Country });
             }
 
             var jsonResultForTaskFetchResponse = await orderProgressService
-                .GetJsonResultForTaskFetchResponse(res4aResult.Result!, correlationItem.Action, addressMappedPaths).ConfigureAwait(false);
+                .GetJsonResultForTaskFetchResponse(res4aResult.Result!, "CONNECTION_INCIDENT", addressMappedPaths).ConfigureAwait(false);
             if (!jsonResultForTaskFetchResponse.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, jsonResultForTaskFetchResponse); }
 
             //Json to be passed with OK Status
