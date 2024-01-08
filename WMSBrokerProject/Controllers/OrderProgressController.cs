@@ -125,7 +125,7 @@ namespace WMSBrokerProject.Controllers
         [HttpGet]
         [Route("{orgId}/tasks/{taskId}")]
         public async Task<IActionResult> BeginTaskFetch(
-        [FromHeader][StringLength(36, MinimumLength = 1)] string xCorrelationID,
+        [FromHeader][StringLength(36, MinimumLength = 1)] string? xCorrelationID,
         [FromRoute][Required][StringLength(15, MinimumLength = 3)] string orgId,
         [FromRoute][Required][StringLength(36, MinimumLength = 1)] string taskId)
         {
