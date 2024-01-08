@@ -20,22 +20,7 @@ namespace WMSBrokerProject.Controllers
         [HttpGet]
         public async Task<IActionResult> BeginTestProcess()
         {
-            Random rand = new Random();
-            var requestId = rand.Next(10000, 1000001).ToString();
-            var inId = "1452";
-            var res4aResult = await orderProgressService.REQ4a_GetTemplateData(new REQ4aGetTemplateModel
-            {
-                RequestId = requestId,
-                ProId = inId
-            }).ConfigureAwait(false);
-            if (!res4aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res4aResult); }
-            var templates = res4aResult.Result!.Templates;
-            
-            var jsonResultForTaskFetchResponse = await orderProgressService.GetJsonResultForTaskFetchResponse(
-                res4aResult.Result!, "PATCH").ConfigureAwait(false);
-            if (!jsonResultForTaskFetchResponse.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, jsonResultForTaskFetchResponse); }
-            string jsonString = jsonResultForTaskFetchResponse.Result.ToString(Formatting.None);
-            return new JsonResult(JsonDocument.Parse(jsonString).RootElement);
+            return Ok();
         }
     }
 }
