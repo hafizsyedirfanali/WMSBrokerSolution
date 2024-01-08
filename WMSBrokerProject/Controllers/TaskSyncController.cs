@@ -39,7 +39,7 @@ namespace WMSBrokerProject.Controllers
                 {
                     var res7aResult = await orderProgressService.REQ7a(new CTREQ7aModel
                     {
-
+                        ProId = correlationItem.Pro_Id
                     }).ConfigureAwait(false);
                     if (!res7aResult.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, res7aResult.ErrorMessage); }
                     return Ok("Task Sync Process Completed Successfully");
