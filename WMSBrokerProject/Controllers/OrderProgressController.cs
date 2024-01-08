@@ -206,9 +206,9 @@ namespace WMSBrokerProject.Controllers
             var jsonResultForTaskFetchResponse = await orderProgressService
                 .GetJsonResultForTaskFetchResponse(res4aResult.Result!, "CONNECTION_INCIDENT", addressMappedPaths).ConfigureAwait(false);
             if (!jsonResultForTaskFetchResponse.IsSuccess) { return StatusCode(StatusCodes.Status500InternalServerError, jsonResultForTaskFetchResponse); }
-
-            //Json to be passed with OK Status
-            return Ok(jsonResultForTaskFetchResponse.Result);
+			var jsonString = JsonConvert.SerializeObject(jsonResultForTaskFetchResponse.Result);
+			//Json to be passed with OK Status
+			return Ok(jsonString);
         }
     }
 }
