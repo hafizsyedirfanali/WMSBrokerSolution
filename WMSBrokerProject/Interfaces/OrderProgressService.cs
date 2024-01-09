@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using WMSBrokerProject.Models;
+using WMSBrokerProject.TaskIndicationModels;
 
 namespace WMSBrokerProject.Interfaces
 {

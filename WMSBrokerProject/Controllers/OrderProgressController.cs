@@ -11,6 +11,7 @@ using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
 using WMSBrokerProject.Repositories;
+using WMSBrokerProject.TaskIndicationModels;
 
 namespace WMSBrokerProject.Controllers
 {
@@ -96,9 +97,9 @@ namespace WMSBrokerProject.Controllers
                             
                             var taskSyncResponse = await orderProgressService.RequestTaskIndication(new TaskIndicationRequestModel
                             {
-                                header = new TaskIndicationRequestModel.Header
+                                header = new WMSBrokerProject.TaskIndicationModels.Header
                                 {
-                                    from = new TaskIndicationRequestModel.From
+                                    from = new WMSBrokerProject.TaskIndicationModels.From
                                     {
                                         orgId = orgId,
                                         systemId = systemId //Json

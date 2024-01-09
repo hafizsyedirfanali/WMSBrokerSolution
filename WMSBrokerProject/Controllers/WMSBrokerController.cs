@@ -8,6 +8,7 @@ using System.Text.RegularExpressions;
 using WMSBrokerProject.ConfigModels;
 using WMSBrokerProject.Interfaces;
 using WMSBrokerProject.Models;
+using WMSBrokerProject.TaskIndicationModels;
 
 namespace WMSBrokerProject.Controllers
 {
