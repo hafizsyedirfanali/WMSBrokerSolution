@@ -83,10 +83,10 @@ namespace WMSBrokerProject.Controllers
                             dataDictionary.SelectListItems.TryGetValue("taskId", out object? taskId);
                             dataDictionary.SelectListItems.TryGetValue("updateCount", out object? updateCount);
                             dataDictionary.SelectListItems.TryGetValue("priority", out object? priority);
-                            //var count = Convert.ToString(updateCount);
-                            //var valueArray = count.Split(',');
-                            //var item = valueArray[0];
-                            correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
+							var count = Convert.ToString(updateCount);
+							var valueArray = count.Split(',');
+							int updateCountValue = (int)Convert.ToInt64(valueArray[0]);
+							correlationServices.SaveCorrelationItem(new Repositories.CorrelationItem
                             {
                                 TaskId = taskId?.ToString() ?? "",
                                 Pro_Id = pro_Id.ProIdDESC,
@@ -103,7 +103,7 @@ namespace WMSBrokerProject.Controllers
                                         orgId = orgId,
                                         systemId = systemId //Json
                                     },
-                                    updateCount = 2, //Comming form 4a CIFWMS-UpdateCount Finmane
+                                    updateCount = updateCountValue, //Comming form 4a CIFWMS-UpdateCount Finmane
                                     created = DateTime.Now,
                                     priority = priority?.ToString() ?? ""
                                 },
